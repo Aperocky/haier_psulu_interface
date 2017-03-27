@@ -48,5 +48,8 @@ public class ColorfulMap extends Painter{
         return nodeToSquare(current, ColorfulPath.CURRCOLOR, SQUARE_SIZE);
     }
 
+    public Shape drawPlanned(Node planned) {
+        return nodeToSquare(planned, ColorfulPath.PREVCOLOR, SQUARE_SIZE);
+    }
     
 }

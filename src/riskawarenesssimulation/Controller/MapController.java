@@ -103,6 +103,7 @@ public class MapController implements Initializable, GameConstants {
 
     // Model/Game related
     private int[][] mDangers;
+    private Node mPlannedStopNode;
     private Node mCurrentStartNode;
     private Node mDestinationNode;
 
@@ -126,6 +127,7 @@ public class MapController implements Initializable, GameConstants {
 
     // Clean up
     private Shape mPrevStart;
+    private Shape mPrevPlanned;
     private Group mPrevPathGroup;
     private Group mCurrPlanGroup;
     private Group mPrevPlanGroup;
@@ -455,6 +457,7 @@ public class MapController implements Initializable, GameConstants {
         mScoreBuilder.addDistance(executeEdgeStepPath.length());
         updateCurrentNode(executeNodeStepPath);
         mPrevStart = mColorfulMap.drawCurrent(mCurrentStartNode);
+        mPrevPlanned = mColorfulMap.drawPlanned(mPlannedStopNode);
         mRiskConsumption = mCurrAttemptConsumption;
         mSurfacing--;
         // Cache all possible planned paths
@@ -505,7 +508,8 @@ public class MapController implements Initializable, GameConstants {
                     }
                     showSuccessPanel();
                 }
-                // Update the UI
+                // Update the UI 
+                canvas.getChildren().add(mPrevPlanned); // Draw the planned Node
                 canvas.getChildren().add(mPrevStart); // Draw the current Node
                 updateRiskBudgetBar(mRiskConsumption, mRiskConsumption, mRiskConsumption);
                 updateSurfacingBudget(mSurfacing);
@@ -568,7 +572,7 @@ public class MapController implements Initializable, GameConstants {
      * Clean all previously drawn paths and current node
      */
     private void cleanStep() {
-        canvas.getChildren().removeAll(mCurrPlanGroup, mPrevPlanGroup, mPrevStart);
+        canvas.getChildren().removeAll(mCurrPlanGroup, mPrevPlanGroup, mPrevStart, mPrevPlanned);
         mCurrPlanGroup.getChildren().clear();
         mPrevPlanGroup.getChildren().clear();
         if (mCurrPlanEdges != null) {
@@ -618,6 +622,7 @@ public class MapController implements Initializable, GameConstants {
         UncertainNodes.add((Node) mCacheService.getUncertainNode(mRiskLevel, SINGLE_STEP * 3));
         mCurrPlanGroup.getChildren().addAll(mColorfulPath.drawCurrAttemptPath(mCurrPlanEdges));
         mCurrPlanGroup.getChildren().addAll(mColorfulPath.drawUncertainty(mTimeStep, UncertainNodes));
+        mPlannedStopNode = (Node) mCacheService.getUncertainNode(mRiskLevel, mTimeStep);
 
         canvas.getChildren().addAll(mPrevPlanGroup, mCurrPlanGroup);
         mPrevAttemptConsumption = mCurrAttemptConsumption;

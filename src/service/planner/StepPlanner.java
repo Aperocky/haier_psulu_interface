@@ -34,7 +34,7 @@ public class StepPlanner {
             values[i] = (double) steps[i] / minDist;
             // Sanity Check
             if (riskbudget <= 0) {
-                riskbudget = risks[i];
+                riskbudget = risks[i] == 0 ? 1 : risks[i];
             }
             if (surfacebgt <= 0) {
                 surfacebgt = 1;
@@ -56,9 +56,7 @@ public class StepPlanner {
                 highest = values[i] / weights[i];
             }
         }
-
         return optimalStep;
-
     }
 
 
