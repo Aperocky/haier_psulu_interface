@@ -24,7 +24,7 @@ public interface GameConstants {
     // Risk Budget
     public static final Double RISK_BUDGET = 0.055;
     // Number of nodes per small step
-    public static final Integer SINGLE_STEP = 5;
+    public static final Integer SINGLE_STEP = 3;
     // Score calculation scaling factor
     public static final Integer SCORE_SCALE = 25;
     // Risk Budget Bar alert threshold
