@@ -233,7 +233,7 @@
                                         <children>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="10">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="10%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -246,7 +246,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="9">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="9%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -263,7 +263,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="8">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="8%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -276,7 +276,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="7">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="7%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -289,7 +289,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="6">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="6%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -302,7 +302,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="5%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -315,7 +315,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="4">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="4%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -328,7 +328,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="3">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="3%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -341,7 +341,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="2">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="2%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -354,7 +354,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="1%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>
@@ -367,7 +367,7 @@
                                             </VBox>
                                             <VBox prefHeight="200.0" prefWidth="15.0">
                                                 <children>
-                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                                    <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="0%">
                                                         <VBox.margin>
                                                             <Insets left="-3.0" />
                                                         </VBox.margin>

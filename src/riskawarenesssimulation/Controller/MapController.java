@@ -224,7 +224,7 @@ public class MapController implements Initializable, GameConstants {
         mUser = Context.getInstance().getUser();
         mGame = Context.getInstance().getGame();
         Integer userID = (Integer) mUser.get(User.UID);
-        Integer groupID = (Integer) mUser.get(User.GROUPID);
+        Integer groupID = (Integer) mUser.get(User.CONDITIONID);
         Integer gameID = (Integer) mGame.get(Game.GID);
         mIsControlGroup = (groupID == 3 || groupID == 4);
         mIsObserveGroup = (groupID == 2 || groupID == 4);

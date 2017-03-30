@@ -1,7 +1,7 @@
 
 CREATE TABLE User (
-    uid INTEGER NOT NULL PRIMARY KEY,
-    group_id INTEGER NOT NULL CHECK ( group_id > 0 && group_id < 5)
+    uid INTEGER NOT NULL,
+    condition_id INTEGER NOT NULL CHECK ( condition_id > 0 && condition_id < 5)
 );
 
 CREATE TABLE Game (
@@ -53,14 +53,3 @@ CREATE TABLE Turn_Expectation (
     expectation INTEGER CHECK (expectation >= 0 AND expectation <= 5),
     time DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)
 );
-
-/* Retrieve 
-SELECT DISTINCT u.uid, u.group_id, g.map_id, g.`result`, g.score, t.tid, tc.pos_x, tc.pos_y, tc.risk_choice, tc.step_choice, tc.curr_risk_remain, tc.atmp_risk_remain, tc.surface_remain, 
-tc.same_path, t.`time`
-FROM User u, Game g, Turn t, Turn_control tc, Turn_Confidence tcf, Turn_Expectation te
-WHERE u.uid = 7
-AND g.uid = u.uid
-AND t.gid = g.gid
-AND t.uid = u.uid
-AND tc.tid = t.tid
-*/

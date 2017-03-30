@@ -33,7 +33,7 @@
             </HBox>
             <HBox layoutX="-1100.0" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
                <children>
-                  <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="Group ID:">
+                  <Text fill="#fafafa" strokeType="OUTSIDE" strokeWidth="0.0" text="Condition ID:">
                      <font>
                         <Font name="Lucida Sans Regular" size="28.0" />
                      </font>

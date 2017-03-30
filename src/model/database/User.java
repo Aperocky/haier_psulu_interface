@@ -13,16 +13,16 @@ import java.util.HashMap;
  */
 public class User extends DBModel{
     public static final String UID = "uid";
-    public static final String GROUPID = "group_id";  
+    public static final String CONDITIONID = "condition_id";  
     // 1: w/o Control+ w/o Observe
     // 2: w/o Control+ w/ Observe
     // 3: w/ Control+ w/o Observe
     // 4: w/ Control+ w/ Observe
     
-    public User(Integer uid, Integer groupid){
+    public User(Integer uid, Integer conditionid){
         NAME = "User";
         this.put(UID, uid);
-        this.put(GROUPID, groupid);
+        this.put(CONDITIONID, conditionid);
     }
     
 }
