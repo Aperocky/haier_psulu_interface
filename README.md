@@ -1,4 +1,4 @@
-# risk_awareness_simulation_javafx
+# haier_psulu_interface
 ## Introduction
 In the field of robotic control, one of the most challenging problems faced by all controllers is called receding horizon. 
 This phenomenon is when the robot loses contact with its controllers for a brief moment of time due to environmental obstacles 
