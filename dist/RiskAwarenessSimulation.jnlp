@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="RiskAwarenessSimulation.jar" size="2483498" download="eager" />
+    <jar href="RiskAwarenessSimulation.jar" size="2483496" download="eager" />
     <jar href="lib/commons-math3-3.0.jar" size="1285617" download="eager" />
     <jar href="lib/controlsfx-8.40.12.jar" size="996389" download="eager" />
     <jar href="lib/guava.jar" size="2521113" download="eager" />
