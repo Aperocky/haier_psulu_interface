@@ -20,7 +20,6 @@ public class Game {
 	private Environment environment;
 	private Planner planner;
 	private Executor executor;
-	// TODO: a Timeline class that helps with counting elapsed time step
 	
 	/**
 	 * Given the user input of riskBudget limitation and receding horizon radius(step size),
@@ -36,12 +35,22 @@ public class Game {
 		environment.getGameStats().setPlannedPath(plannedPath);
 	}
 	
+	/**
+	 * Store a pre-calculated execution time path
+	 */
 	public void execute() {
 		List<Point2D> plannedPath = environment.getGameStats().getPlannedPath();
 		if(plannedPath.isEmpty())
 			return;
 		List<Point2D> executedPath = executor.getExecutedPath(plannedPath);
 		environment.getGameStats().setExecutedPath(executedPath);
+	}
+	
+	/**
+	 * Execute next step of the path based on the pre-calculated execution path OR path calculated on the fly
+	 */
+	public void executeStep() {
+		
 	}
 	
 	

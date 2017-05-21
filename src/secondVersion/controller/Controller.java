@@ -1,5 +1,7 @@
 package secondVersion.controller;
 
+import secondVersion.frontend.general.EditorPanel;
+import secondVersion.frontend.general.GamePanel;
 import secondVersion.model.general.Game;
 
 public class Controller {

@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
  * p-sulu implementation of receding-horizon path finding.
  * Calculates the shortest path between start and end point in
  * continuous space using the idea of receding horizon. 
+ * 
+ * This part will probably use Jython to call p-sulu implemented in Python
  * @author Feng
  *
  */

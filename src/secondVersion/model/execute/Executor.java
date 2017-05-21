@@ -19,6 +19,9 @@ public class Executor implements IExecutor {
 
 	}
 
+	/**
+	 * TODO: Need to discuss with Hiro on how to calculate the deviation function
+	 */
 	@Override
 	public void setDeviationFunction() {
 
