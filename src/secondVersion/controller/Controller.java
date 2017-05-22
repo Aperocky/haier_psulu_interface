@@ -9,12 +9,23 @@ public class Controller {
 	private EditorPanel editorPanel;
 	private GamePanel gamePanel;
 	
+	public Controller() {
+		
+		
+		initialize();
+	}
+	
+	
 	public void launchEditor() {
 		
 	}
 	
 	public void launchGame() {
 		
+	}
+	
+	private void initialize() {
+		game.p
 	}
 
 }

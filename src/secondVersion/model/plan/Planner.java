@@ -20,10 +20,18 @@ public class Planner implements IPlanner {
 
 	}
 
+	/**
+	 * Called whenever the user changes risk budget in ControlPanel
+	 * @param riskBudget
+	 */
 	public void setRiskBudget(double riskBudget) {
 
 	}
 
+	/**
+	 * Called whenver user changes receding horizon radius in ControlPanel
+	 * @param horizonRadius
+	 */
 	public void setRecedingHorizon(double horizonRadius) {
 
 	}

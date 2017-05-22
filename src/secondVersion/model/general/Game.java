@@ -2,6 +2,7 @@ package secondVersion.model.general;
 
 import java.util.List;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Point2D;
 import secondVersion.model.execute.Executor;
 import secondVersion.model.gamedata.Environment;
@@ -51,6 +52,27 @@ public class Game {
 	 */
 	public void executeStep() {
 		
+	}
+	
+	/**
+	 * Observe the risk budget property set in the ControlPanel by user
+	 * @param riskProperty risk budget property to be observed
+	 */
+	public void observeRiskBudgetProperty(DoubleProperty riskProperty) {
+		riskProperty.addListener((observable, oldv, newv) -> {
+			planner.setRiskBudget(newv.doubleValue());
+		});
+
+	}
+
+	/**
+	 * Observe the receding horizon property set in the ControlPanel by user
+	 * @param horizonProperty receding horizon property to be observed
+	 */
+	public void observeRecedingHorizonProperty(DoubleProperty horizonProperty) {
+		horizonProperty.addListener((observable, oldv, newv) -> {
+			planner.setRecedingHorizon(newv.doubleValue());
+		});
 	}
 	
 	
