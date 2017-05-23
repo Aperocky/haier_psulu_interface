@@ -6,7 +6,7 @@ import java.util.List;
 
 import javafx.geometry.Point2D;
 import secondVersion.frontend.model.canvas.layers.LayerMaster;
-import secondVersion.frontend.model.canvas.layers.LayerType;
+import secondVersion.frontend.model.canvas.layers.base.LayerType;
 import secondVersion.util.ObservableBase;
 
 /**

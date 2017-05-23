@@ -12,7 +12,7 @@ public class Controller {
 	public Controller() {
 		
 		
-		initialize();
+		observeRiskAndHorizon();
 	}
 	
 	
@@ -24,8 +24,11 @@ public class Controller {
 		
 	}
 	
-	private void initialize() {
-		game.p
+	private void observeRiskAndHorizon() {
+		game.observeRecedingHorizonProperty(gamePanel.getHorizonProperty());
+		game.observeRiskBudgetProperty(gamePanel.getRiskProperty());
 	}
+	
+	
 
 }

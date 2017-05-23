@@ -1,12 +1,12 @@
 package secondVersion.model.plan.algorithm.Dijkstra;
 
 
-public class Connection {
+public class Neighbor {
 	public int A;
 	public int B;
 	public double distance;
 
-	Connection(int a, int b, double dist) {
+	Neighbor(int a, int b, double dist) {
 		A = a;
 		B = b;
 		distance = dist;
@@ -16,9 +16,9 @@ public class Connection {
 	public boolean equals(Object other) {
 		if(other == this)
 			return true;
-		if(!(other instanceof Connection))
+		if(!(other instanceof Neighbor))
 			return false;
-		Connection conn = (Connection) other;
+		Neighbor conn = (Neighbor) other;
 		
 		return conn.distance == this.distance && 
 				((conn.A == this.A && conn.B == this.B) 

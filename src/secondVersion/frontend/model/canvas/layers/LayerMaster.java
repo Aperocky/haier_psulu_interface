@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.layout.StackPane;
-import secondVersion.frontend.model.canvas.layers.concrete.ObstacleLayer;
-import secondVersion.frontend.model.canvas.layers.concrete.PathLayer;
+import secondVersion.frontend.model.canvas.layers.base.ILayer;
+import secondVersion.frontend.model.canvas.layers.base.LayerType;
+import secondVersion.frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleLayer;
+import secondVersion.frontend.model.canvas.layers.concrete.pathlayer.PathLayer;
 
 public class LayerMaster extends StackPane {
 

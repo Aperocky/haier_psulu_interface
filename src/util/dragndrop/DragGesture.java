@@ -1,5 +1,7 @@
 package util.dragndrop;
 
+import java.util.function.Consumer;
+
 import com.google.common.base.Predicate;
 
 import javafx.event.EventHandler;
@@ -17,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 public class DragGesture {
 	
 	private DragContext dragContext = new DragContext();
+	private Runnable dragRunnable;
 	private Node parent;
 	private Node current;
 	
@@ -24,6 +27,10 @@ public class DragGesture {
 	public DragGesture(Node parent, Node current) {
 		this.current = current;
 		this.parent = parent;
+	}
+	
+	public void setOnDragged(Runnable runnable) {
+		dragRunnable = runnable;
 	}
 	
 	
@@ -54,14 +61,15 @@ public class DragGesture {
 	private EventHandler<MouseEvent> mouseDraggedHandler(Predicate<MouseEvent> mouseTest) {
 		return event -> {
 			if (!mouseTest.test(event))
-				return;
-			
+				return;	
 			Node node = (Node) event.getSource();
 			Point2D anchorInParent = parent.sceneToLocal(event.getSceneX(), event.getSceneY());
 			node.setTranslateX(
 					dragContext.nodeAnchorX + (anchorInParent.getX() - dragContext.mouseAnchorX));
 			node.setTranslateY(
 					dragContext.nodeAnchorY + (anchorInParent.getY() - dragContext.mouseAnchorY));
+			if(dragRunnable != null)
+				dragRunnable.run();
 			event.consume();
 		};
 	}	

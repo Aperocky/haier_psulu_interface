@@ -1,4 +1,4 @@
-package secondVersion.frontend.model.canvas.layers.concrete;
+package secondVersion.frontend.model.canvas.layers.concrete.pathlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,8 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
-import secondVersion.frontend.model.canvas.layers.LayerBase;
-import secondVersion.frontend.model.canvas.layers.LayerType;
+import secondVersion.frontend.model.canvas.layers.base.LayerBase;
+import secondVersion.frontend.model.canvas.layers.base.LayerType;
 import secondVersion.model.gamedata.game.GameStats;
 
 public class PathLayer extends LayerBase {

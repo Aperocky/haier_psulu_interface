@@ -22,7 +22,7 @@ import java.util.Stack;
 public class Dijkstra {
 	// Each set of connections represents all connections the node at current
 	// index has
-	private Map<Integer, HashSet<Connection>> neighbors;
+	private Map<Integer, HashSet<Neighbor>> neighbors;
 	private Map<Integer, Integer> previous;
 	private Map<Integer, Double> minDist;
 	private PriorityQueue<Integer> unvisited;
@@ -54,9 +54,10 @@ public class Dijkstra {
 			int current = unvisited.poll();
 			System.out.println("Current Index of Minimum Distance: " + current);
 			System.out.println("Current Distance from Target: " + minDist.get(current));
+			System.out.println();
 			if (current == targetIndex)
 				break;
-			for (Connection conn : neighbors.get(current)) {
+			for (Neighbor conn : neighbors.get(current)) {
 				int neighbor = conn.A == current ? conn.B : conn.A;
 				double dist = conn.distance;
 				double alter = dist + minDist.get(current);
@@ -138,18 +139,18 @@ public class Dijkstra {
 			double weight = weights[index];
 			int a = conn[0];
 			int b = conn[1];
-			Connection connection = new Connection(a, b, weight);
+			Neighbor connection = new Neighbor(a, b, weight);
 			addToMapConnection(a, connection);
 			addToMapConnection(b, connection);
 		}
 	}
 
-	private void addToMapConnection(int index, Connection conn) {
+	private void addToMapConnection(int index, Neighbor conn) {
 		if (neighbors.containsKey(index)) {
-			HashSet<Connection> conns = neighbors.get(index);
+			HashSet<Neighbor> conns = neighbors.get(index);
 			conns.add(conn);
 		} else {
-			HashSet<Connection> conns = new HashSet<>();
+			HashSet<Neighbor> conns = new HashSet<>();
 			conns.add(conn);
 			neighbors.put(index, conns);
 		}

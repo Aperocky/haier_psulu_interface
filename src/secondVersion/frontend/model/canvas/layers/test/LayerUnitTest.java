@@ -2,17 +2,15 @@ package secondVersion.frontend.model.canvas.layers.test;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import secondVersion.frontend.model.canvas.layers.LayerMaster;
-import secondVersion.frontend.model.canvas.layers.LayerType;
+import secondVersion.frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleLayer;
 
 public class LayerUnitTest extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		LayerMaster layerMaster = new LayerMaster(500, 500);
-		layerMaster.activateLayer(LayerType.ObstacleLayer);
+		ObstacleLayer layerMaster = new ObstacleLayer(500, 500);
+		layerMaster.activate();
 		Scene scene = new Scene(layerMaster, 500, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();

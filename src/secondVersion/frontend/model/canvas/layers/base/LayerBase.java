@@ -1,4 +1,4 @@
-package secondVersion.frontend.model.canvas.layers;
+package secondVersion.frontend.model.canvas.layers.base;
 
 import com.jfoenix.controls.JFXMasonryPane;
 
