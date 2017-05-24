@@ -14,10 +14,10 @@ public class TransformerUnitTest {
 		polygon.add(new Point2D(16, 23));
 		polygon.add(new Point2D(25, 11));
 
-		for(Point2D point : transformer.toDiscretePolygon(100, 100, polygon)){
-			System.out.println("Polygon represented in discrete space");
-			System.out.println("Point X: " + point.getX() + " ,Point Y: " + point.getY());
-		}
+//		for(Point2D point : transformer.toDiscretePolygon(100, 100, polygon)){
+//			System.out.println("Polygon represented in discrete space");
+//			System.out.println("Point X: " + point.getX() + " ,Point Y: " + point.getY());
+//		}
 	}
 
 }

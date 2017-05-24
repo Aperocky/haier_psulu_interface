@@ -1,7 +1,4 @@
-package util.dragndrop;
-
-
-import java.util.function.Function;
+package secondVersion.frontend.util.usercontrol.drag;
 
 import com.google.common.base.Predicate;
 
@@ -9,6 +6,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+
+import java.util.function.Function;
+
 import secondVersion.frontend.util.BiConsumer;
 
 /**
@@ -92,3 +92,4 @@ public class DragGesture {
 	}
 
 }
+

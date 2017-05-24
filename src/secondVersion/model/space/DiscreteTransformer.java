@@ -28,8 +28,9 @@ public class DiscreteTransformer {
 	/**
 	 * Turn a polygon in continuous space into one in discrete space
 	 * 
-	 * Time Complexity: O(V * E) where V is the number of nodes in discrete space and E is number of edges
-	 * for the polygon 
+	 * Time Complexity: O(V * E) where V is the number of nodes in discrete
+	 * space and E is number of edges for the polygon
+	 * 
 	 * @param width
 	 * @param height
 	 * @param polygon
@@ -38,7 +39,7 @@ public class DiscreteTransformer {
 	public List<Point2D> toDiscretePolygon(List<Point2D> polygon) {
 		List<Point2D> discretePoints = new ArrayList<>();
 		double unit = unitProperty.get();
-		if(unit == 0)
+		if (unit == 0)
 			throw new IllegalArgumentException("Unit of the discrete space is not properly set.");
 		RectBoundary boundary = boundary(polygon);
 		for (double x = boundary.getMinX(); x < boundary.getMaxX(); x += unit) {
@@ -99,13 +100,13 @@ public class DiscreteTransformer {
 		}
 		return result;
 	}
-	
+
 	private RectBoundary boundary(List<Point2D> polygon) {
 		double minX = Double.MAX_VALUE;
 		double minY = Double.MAX_VALUE;
 		double maxX = Double.MIN_VALUE;
 		double maxY = Double.MIN_VALUE;
-		for(Point2D point : polygon) {
+		for (Point2D point : polygon) {
 			minX = Math.min(point.getX(), minX);
 			minY = Math.min(point.getY(), minY);
 			maxX = Math.max(point.getX(), maxX);
@@ -113,13 +114,13 @@ public class DiscreteTransformer {
 		}
 		return new RectBoundary(minX, maxX, minY, maxY);
 	}
-	
-	private class RectBoundary{
+
+	private class RectBoundary {
 		private final double minX;
 		private final double minY;
 		private final double maxX;
 		private final double maxY;
-		
+
 		private RectBoundary(double minx, double maxx, double miny, double maxy) {
 			minX = minx;
 			minY = miny;
@@ -142,8 +143,7 @@ public class DiscreteTransformer {
 		public double getMaxY() {
 			return maxY;
 		}
-		
-		
+
 	}
 
 }
