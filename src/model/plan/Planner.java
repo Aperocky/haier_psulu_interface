@@ -1,5 +1,6 @@
-package secondVersion.model.plan;
+package model.plan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.geometry.Point2D;
@@ -38,7 +39,7 @@ public class Planner implements IPlanner {
 
 	@Override
 	public List<Point2D> getPlannedPath(Point2D start, Point2D end, List<List<Point2D>> obstacles) {
-		return null;
+		return new ArrayList<>();
 	}
 
 }

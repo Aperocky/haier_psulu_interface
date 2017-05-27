@@ -112,7 +112,6 @@ public class KeyboardControl {
 	};
 
 	private EventHandler<KeyEvent> keyHandler = e -> {
-		System.out.println("Key Pressed on LayerBase.");
 		if (!active)
 			return;
 		KeyCode key = e.getCode();

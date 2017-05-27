@@ -12,6 +12,7 @@ public abstract class LayerBase extends JFXMasonryPane implements ILayer {
 
 	public LayerBase(double width, double height) {
 		this.setPrefSize(width, height);
+		keyboardControl = new KeyboardControl(this);
 		keyboardControl.setPrimaryHandler(event -> primaryPressed(event));
 		keyboardControl.setSecondaryHandler(event -> secondaryPressed(event));
 		keyboardControl.setCtlZHandler(event -> ctlZPressed(event));

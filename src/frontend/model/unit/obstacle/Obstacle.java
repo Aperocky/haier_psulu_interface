@@ -21,9 +21,14 @@ public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 	private Node parent;
 
 	public Obstacle(Node parent) {
+		this(parent, new ArrayList<Point2D>());
+	}
+	
+	public Obstacle(Node parent, List<Point2D> vertices) {
 		super();
 		this.parent = parent;
-		vertices = new ArrayList<>();
+		this.vertices = vertices;
+		vertices.forEach(vertex -> addVertex(vertex));
 		userControl = new ObstacleUserControl(this, point -> {
 			return parent.sceneToLocal(point.getX(), point.getY());
 		});

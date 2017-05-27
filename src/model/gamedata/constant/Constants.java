@@ -1,4 +1,4 @@
-package secondVersion.model.gamedata.constant;
+package model.gamedata.constant;
 
 public enum Constants {
 	Surfacing(7d),

@@ -1,4 +1,4 @@
-package secondVersion.frontend.model.operation.control;
+package frontend.model.operation.control;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

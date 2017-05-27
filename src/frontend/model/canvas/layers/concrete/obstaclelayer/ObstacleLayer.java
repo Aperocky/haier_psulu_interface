@@ -32,7 +32,11 @@ public class ObstacleLayer extends LayerBase {
 	
 	@Override
 	public void update(GameStats gameStats) {
-		
+		this.clear();
+		gameStats.getObstacles().stream().peek(obstaclepoints -> {
+			Obstacle obstacle = new Obstacle(this,obstaclepoints);
+			this.getChildren().add(obstacle);
+		});
 	}
 
 	@Override
@@ -43,11 +47,13 @@ public class ObstacleLayer extends LayerBase {
 
 	@Override
 	public void activate() {
+		super.activate();
 		obstacles.forEach(obstacle -> obstacle.activate());
 	}
 
 	@Override
 	public void deactivate() {
+		super.deactivate();
 		obstacles.forEach(obstacle -> obstacle.deactivate());
 	}
 

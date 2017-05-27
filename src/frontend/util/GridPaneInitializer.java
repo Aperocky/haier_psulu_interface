@@ -1,4 +1,4 @@
-package secondVersion.frontend.util;
+package frontend.util;
 
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;

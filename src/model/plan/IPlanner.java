@@ -1,4 +1,4 @@
-package secondVersion.model.plan;
+package model.plan;
 
 import java.util.List;
 

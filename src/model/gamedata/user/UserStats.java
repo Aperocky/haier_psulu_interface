@@ -1,4 +1,4 @@
-package secondVersion.model.gamedata.user;
+package model.gamedata.user;
 
 import java.time.LocalDate;
 import java.util.Date;

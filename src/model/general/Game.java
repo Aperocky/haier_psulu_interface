@@ -23,6 +23,12 @@ public class Game {
 	private Environment environment;
 	private Planner planner;
 	private Executor executor;
+	
+	public Game() {
+		environment = new Environment();
+		planner = new Planner();
+		executor = new Executor();
+	}
 
 	public void setControlProperty(ControlProperty control) {
 		this.controlProperty = control;

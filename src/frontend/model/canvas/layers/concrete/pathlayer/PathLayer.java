@@ -12,7 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
 import model.gamedata.game.GameStats;
-import util.Observer;
 
 public class PathLayer extends LayerBase {
 
@@ -32,15 +31,17 @@ public class PathLayer extends LayerBase {
 		super.clear();
 		segments.clear();
 	}
-	
+
 	@Override
 	public LayerType getType() {
 		return LayerType.PathLayer;
 	}
-	
+
 	@Override
 	public void update(GameStats game) {
-		// TODO draw the planned path accordingly
+		this.clear();
+		start = game.getCurrentPosition();
+		game.getPlannedPath().stream().forEach(landmark -> addLandmark(landmark));
 	}
 
 	public void setStart(Point2D start) {
@@ -53,19 +54,21 @@ public class PathLayer extends LayerBase {
 
 	@Override
 	protected void primaryPressed(MouseEvent event) {
-		System.out.println("Primary Mouse Pressed on PathLayer.");
+//		System.out.println("Primary Mouse Pressed on PathLayer.");
 		if (planning) {
 			// Add one more landmark to the plan
-			addLandmark(event);
+			Point2D end = this.sceneToLocal(event.getSceneX(), event.getSceneY());
+			addLandmark(end);
 		}
 	}
 
 	@Override
 	protected void secondaryPressed(MouseEvent event) {
-		System.out.println("Secondary Mouse Pressed on PathLayer.");
+//		System.out.println("Secondary Mouse Pressed on PathLayer.");
 		if (!planning) {
 			planning = true;
-			addLandmark(event);
+			Point2D end = this.sceneToLocal(event.getSceneX(), event.getSceneY());
+			addLandmark(end);
 		} else {
 			planning = false;
 		}
@@ -78,20 +81,15 @@ public class PathLayer extends LayerBase {
 			start = new Point2D(seg.getStartX(), seg.getStartY());
 			segments.remove(seg);
 			getChildren().remove(seg);
-			if(!segments.isEmpty()) {
-				// Request focus for the next line segment in case there are more
-				// undo actions
+			if (!segments.isEmpty()) {
+				// Request focus for the next line segment in case there are
+				// more undo actions
 				Line nextSeg = segments.get(segments.size() - 1);
 				nextSeg.setFocusTraversable(true);
 				nextSeg.requestFocus();
 			}
 		}
-		
-	}
 
-	private void addLandmark(MouseEvent event) {
-		Point2D end = this.sceneToLocal(event.getSceneX(), event.getSceneY());
-		addLandmark(end);
 	}
 
 	private void addLandmark(Point2D landmark) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import frontend.model.canvas.layers.concrete.pathlayer.PathLayer;
 import javafx.geometry.Point2D;
 import util.ObservableBase;
 
@@ -35,8 +34,16 @@ public class GameStats extends ObservableBase<GameStats>{
     	return currentPosition;
     }
     
+    public void setCurrentPosition(Point2D current) {
+    	currentPosition = current;
+    }
+    
     public Point2D getDestination() {
     	return finalDestination;
+    }
+    
+    public void setDestination(Point2D destination) {
+    	finalDestination = destination;
     }
     
     public double getCurrentRiskBudget() {

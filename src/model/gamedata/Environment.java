@@ -16,7 +16,8 @@ public class Environment {
 	//private Constants constants;
 
 	public Environment() {
-
+		gameStats = new GameStats();
+		userStats = new UserStats();
 	}
 	
 	public GameStats getGameStats() {

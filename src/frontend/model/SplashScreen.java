@@ -1,4 +1,4 @@
-package secondVersion.frontend.model;
+package frontend.model;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXMasonryPane;
@@ -8,7 +8,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import secondVersion.model.gamedata.user.UserStats;
+import model.gamedata.user.UserStats;
 
 public class SplashScreen extends JFXMasonryPane {
 	private static final String TITLE = "Haier/p-sulu interface";
@@ -36,11 +36,6 @@ public class SplashScreen extends JFXMasonryPane {
 
 		RequiredFieldValidator validator = new RequiredFieldValidator();
 		validator.setMessage("Input Required");
-		// validator.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class)
-		// .glyph(FontAwesomeIcon.WARNING)
-		// .size(EM1)
-		// .styleClass(ERROR)
-		// .build());
 		idField.getValidators().add(validator);
 		idField.textProperty().addListener((o, oldVal, newVal) -> {
 			if(newVal != null) {

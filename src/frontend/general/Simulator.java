@@ -4,21 +4,25 @@ import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.operation.control.ControlPanel;
 import frontend.util.GridPaneInitializer;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 public class Simulator extends GridPane {
-	private static double COLUMN_RATIO1 = 0.7;
-	private static double COLUMN_RATIO2 = 0.3;
-	private static double ROW_RATIO1 = 0.1;
-	private static double ROW_RATIO2 = 0.4;
-	private static double ROW_RATIO3 = 0.5;
+	private static double COLUMN_CONSTRAINT1 = 70;
+	private static double COLUMN_CONSTRAINT2 = 30;
+	private static double ROW_CONSTRAINT1 = 10;
+	private static double ROW_CONSTRAINT2 = 40;
+	private static double ROW_CONSTRAINT3 = 50;
 
 	private LayerMaster layerMaster;
 	private ControlPanel controlPanel;
 
 	public Simulator(double width, double height) {
-		controlPanel = new ControlPanel(width * COLUMN_RATIO2, height * ROW_RATIO3);
+		this.setPrefSize(width, height);
+		layerMaster = new LayerMaster(width * COLUMN_CONSTRAINT1 / 100, height * (ROW_CONSTRAINT2 + ROW_CONSTRAINT3) / 100);
+		controlPanel = new ControlPanel(width * COLUMN_CONSTRAINT2 / 100, height * ROW_CONSTRAINT3 / 100);
 
 		initializeLayout();
+		fillGrid();
 	}
 
 	public LayerMaster getLayerMaster() {
@@ -31,9 +35,12 @@ public class Simulator extends GridPane {
 
 	private void initializeLayout() {
 		GridPaneInitializer initializer = new GridPaneInitializer(this);
-		initializer.columnRatios(COLUMN_RATIO1, COLUMN_RATIO2)
-		  		   .rowRatios(ROW_RATIO1, ROW_RATIO2, ROW_RATIO3)
-		           .build();
+		initializer.columnRatios(COLUMN_CONSTRAINT1, COLUMN_CONSTRAINT2).rowRatios(ROW_CONSTRAINT1, ROW_CONSTRAINT2, ROW_CONSTRAINT3).build();
+	}
+
+	private void fillGrid() {
+		this.add(layerMaster, 0, 1, 1, 2);
+		this.add(controlPanel, 1, 2);
 	}
 
 }

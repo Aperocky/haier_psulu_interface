@@ -1,4 +1,4 @@
-package secondVersion.frontend.util.grid;
+package frontend.util.grid;
 
 public abstract class GridPaintStyle implements IPaintStyle{
 	private final double width;

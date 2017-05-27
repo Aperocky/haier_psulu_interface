@@ -1,4 +1,4 @@
-package secondVersion.frontend.util.usercontrol.drag;
+package frontend.util.usercontrol.drag;
 
 import java.io.Serializable;
 

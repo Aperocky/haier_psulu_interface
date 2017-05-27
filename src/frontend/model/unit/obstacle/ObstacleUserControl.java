@@ -35,6 +35,8 @@ public class ObstacleUserControl {
 			}
 			obstacle.setVertices(altVertices);
 		});
+		this.dragGesture.primaryEnable();
+		
 		this.basicCommand = new BasicCommand<>();
 	}
 	

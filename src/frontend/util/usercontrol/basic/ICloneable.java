@@ -1,4 +1,4 @@
-package secondVersion.frontend.util.usercontrol.basic;
+package frontend.util.usercontrol.basic;
 
 public interface ICloneable<T> {
 	

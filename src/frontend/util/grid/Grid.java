@@ -1,4 +1,4 @@
-package secondVersion.frontend.util.grid;
+package frontend.util.grid;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.canvas.Canvas;

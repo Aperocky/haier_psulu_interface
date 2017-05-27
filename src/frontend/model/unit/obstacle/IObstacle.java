@@ -1,4 +1,4 @@
-package secondVersion.frontend.model.unit.obstacle;
+package frontend.model.unit.obstacle;
 
 import java.util.Collection;
 

@@ -1,10 +1,10 @@
-package secondVersion.frontend.model;
+package frontend.model;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import secondVersion.model.gamedata.user.UserStats;
+import model.gamedata.user.UserStats;
 
 public class SplashScreenUnitTest extends Application{
 
