@@ -6,7 +6,6 @@ public class DotStyle extends GridPaintStyle {
 
 	public DotStyle(double width, double height, double unit) {
 		super(width, height, unit);
-
 	}
 
 	@Override

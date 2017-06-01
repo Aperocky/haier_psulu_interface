@@ -5,6 +5,7 @@ import java.util.List;
 
 import frontend.model.canvas.layers.base.ILayer;
 import frontend.model.canvas.layers.base.LayerType;
+import frontend.model.canvas.layers.concrete.KeyComponentLayer;
 import frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleLayer;
 import frontend.model.canvas.layers.concrete.pathlayer.PathLayer;
 import javafx.scene.layout.StackPane;
@@ -18,15 +19,17 @@ public class LayerMaster extends StackPane {
 	public LayerMaster(double width, double height) {
 		ObstacleLayer obstacleLayer = new ObstacleLayer(width, height);
 		PathLayer pathLayer = new PathLayer(width, height);
+		KeyComponentLayer goalLayer = new KeyComponentLayer(width, height);
 		layers = new ArrayList<>();
 		layers.add(pathLayer);
 		layers.add(obstacleLayer);
-		getChildren().addAll(obstacleLayer, pathLayer);
+		layers.add(goalLayer);
+		getChildren().addAll(obstacleLayer, pathLayer, goalLayer);
 		//getChildren().add(obstacleLayer);
 	}
 
 	public void activateLayer(LayerType type) {
-		layers.stream().filter(layer -> layer.getType().equals(type)).peek(layer -> {
+		layers.stream().filter(layer -> layer.getType().equals(type)).forEach(layer -> {
 			layer.activate();
 			layer.toFront();
 		});

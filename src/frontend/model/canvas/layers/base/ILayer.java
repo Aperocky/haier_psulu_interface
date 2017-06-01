@@ -3,6 +3,11 @@ package frontend.model.canvas.layers.base;
 import model.gamedata.game.GameStats;
 import util.Observer;
 
+/**
+ * Basic layer interface that observes the GameStats
+ * @author Feng
+ *
+ */
 public interface ILayer extends Observer<GameStats>{
 	
 	public boolean isActive();

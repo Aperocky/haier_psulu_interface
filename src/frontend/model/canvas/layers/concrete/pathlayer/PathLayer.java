@@ -17,6 +17,7 @@ public class PathLayer extends LayerBase {
 
 	private List<PathSegment> segments;
 	private Point2D start;
+	//private Point2D start;
 	// True if currently setting landmarks
 	private boolean planning;
 
@@ -40,7 +41,6 @@ public class PathLayer extends LayerBase {
 	@Override
 	public void update(GameStats game) {
 		this.clear();
-		start = game.getCurrentPosition();
 		game.getPlannedPath().stream().forEach(landmark -> addLandmark(landmark));
 	}
 

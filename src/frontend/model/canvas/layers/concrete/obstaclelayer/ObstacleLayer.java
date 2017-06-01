@@ -1,8 +1,5 @@
 package frontend.model.canvas.layers.concrete.obstaclelayer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
 import frontend.model.unit.obstacle.Obstacle;
@@ -13,21 +10,15 @@ import model.gamedata.constant.Constants;
 import model.gamedata.game.GameStats;
 import util.Observer;
 
-public class ObstacleLayer extends LayerBase {
-	private List<Obstacle> obstacles;
+public class ObstacleLayer extends LayerBase{
+	private ObstacleMaster obstacleMaster;
 	private Obstacle creating;
 
 	public ObstacleLayer(double width, double height) {
 		super(width, height);
-		obstacles = new ArrayList<>();
+		obstacleMaster = new ObstacleMaster();
 
 		addGrid();
-	}
-
-	private void addGrid() {
-		Grid grid = new Grid(this.prefWidthProperty(), this.prefHeightProperty());
-		grid.setUnit(Constants.UNIT.value());
-		this.getChildren().add(grid.canvas());
 	}
 	
 	@Override
@@ -38,23 +29,27 @@ public class ObstacleLayer extends LayerBase {
 			this.getChildren().add(obstacle);
 		});
 	}
+	
+	public void addObserver(Observer<ObstacleMaster> observer) {
+		obstacleMaster.addObserver(observer);
+	}
 
 	@Override
 	public void clear() {
 		super.clear();
-		obstacles.clear();
+		obstacleMaster.clear();
 	}
 
 	@Override
 	public void activate() {
 		super.activate();
-		obstacles.forEach(obstacle -> obstacle.activate());
+		obstacleMaster.activateAll();
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		obstacles.forEach(obstacle -> obstacle.deactivate());
+		obstacleMaster.deactivateAll();
 	}
 
 	@Override
@@ -80,13 +75,13 @@ public class ObstacleLayer extends LayerBase {
 			creating.addVertex(vertex);
 			creating.deleteHandler(obstacle -> {
 				this.getChildren().remove(obstacle);
-				this.obstacles.remove(obstacle);
+				obstacleMaster.remove(obstacle);
 			});
 			creating.pasteHandler(obstacle -> {
 				this.getChildren().add(obstacle);
-				this.obstacles.add(obstacle);
+				obstacleMaster.add(obstacle);
 			});
-			this.obstacles.add(creating);
+			obstacleMaster.add(creating);
 			this.getChildren().add(creating);
 		}
 	}
@@ -100,5 +95,11 @@ public class ObstacleLayer extends LayerBase {
 			Point2D vertex = this.sceneToLocal(event.getSceneX(), event.getSceneY());
 			creating.addVertex(vertex);
 		}
+	}
+	
+	private void addGrid() {
+		Grid grid = new Grid(this.prefWidthProperty(), this.prefHeightProperty());
+		grid.setUnit(Constants.UNIT.value());
+		this.getChildren().add(grid.canvas());
 	}
 }
