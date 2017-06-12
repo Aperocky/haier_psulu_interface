@@ -1,5 +1,7 @@
 package frontend.model.canvas.layers.concrete.obstaclelayer;
 
+import java.util.List;
+
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
 import frontend.model.unit.obstacle.Obstacle;
@@ -28,6 +30,19 @@ public class ObstacleLayer extends LayerBase{
 			Obstacle obstacle = new Obstacle(this,obstaclepoints);
 			this.getChildren().add(obstacle);
 		});
+	}
+	
+	public void addObstacle(List<Point2D> vertices) {
+		Obstacle obs = new Obstacle(this);
+		vertices.forEach(point -> {
+			obs.addVertex(point);
+		});
+		this.addObstacle(obs);
+	}
+	
+	public void addObstacle(Obstacle obstacle) {
+		obstacleMaster.add(obstacle);
+		getChildren().add(obstacle);
 	}
 	
 	public void addObserver(Observer<ObstacleMaster> observer) {

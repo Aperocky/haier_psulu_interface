@@ -24,6 +24,7 @@ public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 		this(parent, new ArrayList<Point2D>());
 	}
 	
+	// TODO Potential bug with this constructor
 	public Obstacle(Node parent, List<Point2D> vertices) {
 		super();
 		this.parent = parent;

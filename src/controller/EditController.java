@@ -36,9 +36,9 @@ public class EditController {
 	 */
 	private void setUpObserver() {
 		LayerMaster layers = editor.getLayerMaster();
-		layers.activateLayer(LayerType.GoalLayer);
+		layers.activateLayer(LayerType.KeyComponentLayer);
 		layers.activateLayer(LayerType.ObstacleLayer);
-		KeyComponentLayer goalLayer = (KeyComponentLayer) layers.getLayer(LayerType.GoalLayer);
+		KeyComponentLayer goalLayer = (KeyComponentLayer) layers.getLayer(LayerType.KeyComponentLayer);
 		goalLayer.setGoalPositionListener(point -> gameStats.setDestination(point));
 		goalLayer.setVehiclePositionListener(point -> gameStats.setCurrentPosition(point));
 		
