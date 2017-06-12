@@ -32,8 +32,11 @@ public class Game {
 
 	public void setControlProperty(ControlProperty control) {
 		this.controlProperty = control;
-		this.controlProperty.setChangedHandler((riskBudget, horizonRadius) -> {
-			plan(riskBudget, horizonRadius);
+//		this.controlProperty.setChangedHandler((riskBudget, horizonRadius) -> {
+//			plan(riskBudget, horizonRadius);
+//		});
+		this.controlProperty.setOnChanged((chanceConstraint, wayPoints, maxVelocity) -> {
+			plan(chanceConstraint, wayPoints, maxVelocity);
 		});
 	}
 
@@ -48,9 +51,10 @@ public class Game {
 	 * @param riskBudget
 	 * @param horizonRadius
 	 */
-	public void plan(double riskBudget, double horizonRadius) {
-		planner.setRecedingHorizon(horizonRadius);
-		planner.setRiskBudget(riskBudget);
+	public void plan(double chanceConstraint, double wayPoints, double maxVelocity) {
+		planner.setChanceConstraint(chanceConstraint);
+		planner.setWayPoints((int)wayPoints);
+		planner.setMaxVelocity(maxVelocity);
 		List<Point2D> plannedPath = planner.getPlannedPath(environment.getGameStats().getCurrentPosition(),
 				environment.getGameStats().getDestination(), environment.getGameStats().getObstacles());
 		environment.getGameStats().setPlannedPath(plannedPath);

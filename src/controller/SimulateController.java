@@ -40,6 +40,8 @@ public class SimulateController {
 		GameStats gameStats = game.getEnvironment().getGameStats();
 		gameStats.addObserver(simulator.getLayerMaster().getLayer(LayerType.PathLayer));
 		gameStats.addObserver(simulator.getLayerMaster().getLayer(LayerType.ObstacleLayer));
+		
+		simulator.setOnExecute(evt -> game.execute());
 	}
 
 }
