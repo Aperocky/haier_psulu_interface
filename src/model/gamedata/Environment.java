@@ -13,7 +13,6 @@ public class Environment {
 
 	private GameStats gameStats;
 	private UserStats userStats;
-	//private Constants constants;
 
 	public Environment() {
 		gameStats = new GameStats();

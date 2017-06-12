@@ -3,8 +3,9 @@ package frontend.general;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.operation.control.ControlPanel;
 import frontend.util.GridPaneInitializer;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
 public class Simulator extends GridPane {
 	private static double COLUMN_CONSTRAINT1 = 70;
@@ -23,6 +24,10 @@ public class Simulator extends GridPane {
 
 		initializeLayout();
 		fillGrid();
+	}
+	
+	public void setOnExecute(EventHandler<ActionEvent> executeHandler){
+		controlPanel.setOnExecuted(executeHandler);
 	}
 
 	public LayerMaster getLayerMaster() {
