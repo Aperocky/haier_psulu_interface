@@ -2,6 +2,7 @@ package controller;
 
 import frontend.general.Simulator;
 import frontend.model.canvas.layers.base.LayerType;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.gamedata.game.GameStats;
@@ -23,6 +24,10 @@ public class SimulateController {
 		this.stage = stage;
 		this.simulator = simulator;
 		this.game = game;
+		
+		// TODO
+		this.game.getEnvironment().getGameStats().setCurrentPosition(new Point2D(0, 0));
+		this.game.getEnvironment().getGameStats().setDestination(new Point2D(500, 500));
 
 		setupObserver();
 	}
@@ -36,11 +41,12 @@ public class SimulateController {
 	private void setupObserver() {
 		// Let the game observe user's inputs in control panel
 		game.setControlProperty(simulator.getControlPanel().getControlProperty());
-		// Let path layer and obstacle layer observe game information in game stats
+		// Let path layer and obstacle layer observe game information in game
+		// stats
 		GameStats gameStats = game.getEnvironment().getGameStats();
 		gameStats.addObserver(simulator.getLayerMaster().getLayer(LayerType.PathLayer));
 		gameStats.addObserver(simulator.getLayerMaster().getLayer(LayerType.ObstacleLayer));
-		
+
 		simulator.setOnExecute(evt -> game.execute());
 	}
 

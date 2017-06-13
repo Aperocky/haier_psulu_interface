@@ -2,7 +2,7 @@ package model.general;
 
 import java.util.List;
 
-import javafx.beans.property.DoubleProperty;
+import frontend.model.operation.control.ControlType;
 import javafx.geometry.Point2D;
 import model.execute.Executor;
 import model.gamedata.Environment;
@@ -32,11 +32,10 @@ public class Game {
 
 	public void setControlProperty(ControlProperty control) {
 		this.controlProperty = control;
-//		this.controlProperty.setChangedHandler((riskBudget, horizonRadius) -> {
-//			plan(riskBudget, horizonRadius);
-//		});
-		this.controlProperty.setOnChanged((chanceConstraint, wayPoints, maxVelocity) -> {
-			plan(chanceConstraint, wayPoints, maxVelocity);
+		this.controlProperty.setOnChanged(() -> {
+			plan(controlProperty.getControlValue(ControlType.ChanceConstraint),
+				 controlProperty.getControlValue(ControlType.WayPoints),
+				 controlProperty.getControlValue(ControlType.MaxVelocity));
 		});
 	}
 

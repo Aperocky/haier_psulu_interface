@@ -12,7 +12,7 @@ import model.gamedata.constant.Constants;
 import model.gamedata.game.GameStats;
 import util.Observer;
 
-public class ObstacleLayer extends LayerBase{
+public class ObstacleLayer extends LayerBase {
 	private ObstacleMaster obstacleMaster;
 	private Obstacle creating;
 
@@ -20,18 +20,18 @@ public class ObstacleLayer extends LayerBase{
 		super(width, height);
 		obstacleMaster = new ObstacleMaster();
 
-		addGrid();
+		// addGrid();
 	}
-	
+
 	@Override
 	public void update(GameStats gameStats) {
 		this.clear();
 		gameStats.getObstacles().stream().peek(obstaclepoints -> {
-			Obstacle obstacle = new Obstacle(this,obstaclepoints);
+			Obstacle obstacle = new Obstacle(this, obstaclepoints);
 			this.getChildren().add(obstacle);
 		});
 	}
-	
+
 	public void addObstacle(List<Point2D> vertices) {
 		Obstacle obs = new Obstacle(this);
 		vertices.forEach(point -> {
@@ -39,12 +39,12 @@ public class ObstacleLayer extends LayerBase{
 		});
 		this.addObstacle(obs);
 	}
-	
+
 	public void addObstacle(Obstacle obstacle) {
 		obstacleMaster.add(obstacle);
 		getChildren().add(obstacle);
 	}
-	
+
 	public void addObserver(Observer<ObstacleMaster> observer) {
 		obstacleMaster.addObserver(observer);
 	}
@@ -111,7 +111,7 @@ public class ObstacleLayer extends LayerBase{
 			creating.addVertex(vertex);
 		}
 	}
-	
+
 	private void addGrid() {
 		Grid grid = new Grid(this.prefWidthProperty(), this.prefHeightProperty());
 		grid.setUnit(Constants.UNIT.value());
