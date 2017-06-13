@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.geometry.Point2D;
-import model.gamedata.game.ControlProperty;
 
 /**
  * Path planner that employs one of the algorithms(p-sulu or Dijkstra) for path
@@ -17,35 +16,42 @@ import model.gamedata.game.ControlProperty;
  *
  */
 public class Planner implements IPlanner {
-	private ControlProperty control;
+	private double chanceConstraint;
+	private double maxVelocity;
+	private double wayPoints;
 
 	public Planner() {
-		control = new ControlProperty();
+
 	}
 
 	/**
 	 * Called whenever the user changes chance constraint in ControlPanel
+	 * 
 	 * @param riskBudget
 	 */
 	public void setChanceConstraint(double constraint) {
-		control.setChanceConstraint(constraint);
+		this.chanceConstraint = constraint;
 	}
 
 	/**
 	 * Called whenver user changes maximum velocity in ControlPanel
+	 * 
 	 * @param horizonRadius
 	 */
 	public void setMaxVelocity(double maxVelocity) {
-		control.setMaxVelocity(maxVelocity);
+		this.maxVelocity = maxVelocity;
 	}
-	
-	public void setWayPoints(int waypoints) {
-		control.setWayPoints(waypoints);
-	} 
+
+	public void setWayPoints(int wayPoints) {
+		this.wayPoints = wayPoints;
+	}
 
 	@Override
 	public List<Point2D> getPlannedPath(Point2D start, Point2D end, List<List<Point2D>> obstacles) {
-		return new ArrayList<>();
+		ArrayList<Point2D> result = new ArrayList<>();
+		result.add(new Point2D(20, 20));
+		result.add(new Point2D(100, 100));
+		return result;
 	}
 
 }

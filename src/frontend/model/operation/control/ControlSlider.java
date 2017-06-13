@@ -1,14 +1,18 @@
 package frontend.model.operation.control;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Slider;
 
-public class ControlSlider extends Slider{
+/**
+ * Customized Slider that bind to a specific type of {@code ControlType}
+ * 
+ * @author Feng
+ *
+ */
+public class ControlSlider extends Slider {
 
-	public ControlSlider(double width, double height, double min, double max, DoubleProperty boundProperty) {
-		super(min, max, (min + max) / 2);
+	public ControlSlider(ControlType type, double width, double height) {
+		super(type.min(), type.max(), (type.min() + type.max()) / 2);
 		this.setPrefSize(width, height);
-		boundProperty.bind(this.valueProperty());
 	}
 
 }

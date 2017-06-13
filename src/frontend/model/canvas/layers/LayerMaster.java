@@ -25,7 +25,6 @@ public class LayerMaster extends StackPane {
 		layers.add(obstacleLayer);
 		layers.add(goalLayer);
 		getChildren().addAll(obstacleLayer, pathLayer, goalLayer);
-		//getChildren().add(obstacleLayer);
 	}
 
 	public void activateLayer(LayerType type) {

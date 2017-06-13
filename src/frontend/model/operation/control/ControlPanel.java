@@ -2,28 +2,24 @@ package frontend.model.operation.control;
 
 import com.jfoenix.controls.JFXButton;
 
+import frontend.util.GridPaneInitializer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import model.gamedata.game.ControlProperty;
 
-public class ControlPanel extends Pane {
+public class ControlPanel extends GridPane {
+	private static final double ROW_CONSTRAINT1 = 80;
+	private static final double ROW_CONSTRAINT2 = 20;
 	private static final double WIDTH_RATIO = 0.8d;
 	private static final double HEIGHT = 20;
-	private static final double SPACING = 20;
 
 	private ControlProperty controlProperty;
 	private ControlSliderFactory sliderFactory;
 	private VBox vbox;
-	private Label chanceLabel;
-	private Label wayPointLabel;
-	private Label velocityLabel;
-	private ControlSlider chanceConstraintSlider;
-	private ControlSlider wayPointSlider;
-	private ControlSlider maxVelocitySlider;
 	private JFXButton executeButton;
 
 	public ControlPanel(double width, double height) {
@@ -32,24 +28,19 @@ public class ControlPanel extends Pane {
 		vbox.setPrefSize(width, height);
 		controlProperty = new ControlProperty();
 		sliderFactory = new ControlSliderFactory(this.getPrefWidth() * WIDTH_RATIO, HEIGHT);
-		chanceLabel = initLabel("Chance Constraint");
-		wayPointLabel = initLabel("Number of Waypoints");
-		velocityLabel = initLabel("Maximum Velocity");
 
-		chanceConstraintSlider = sliderFactory.getSlider(0, 0.5, controlProperty.getChanceConstraintProperty());
-		wayPointSlider = sliderFactory.getSlider(3, 15, controlProperty.getWayPointsProperty());
-		maxVelocitySlider = sliderFactory.getSlider(0, 5, controlProperty.getMaxVelocityProperty());
-
-		vbox.setSpacing(SPACING);
+		vbox.setSpacing(HEIGHT);
 		vbox.setAlignment(Pos.TOP_CENTER);
-		vbox.getChildren().addAll(chanceLabel, chanceConstraintSlider, wayPointLabel, wayPointSlider, velocityLabel,
-				maxVelocitySlider);
-		
+		for (ControlType type : ControlType.values()) {
+			Label label = initLabel(type.label());
+			ControlSlider slider = sliderFactory.getSlider(type, controlProperty.getControlProperty(type));
+			vbox.getChildren().addAll(label, slider);
+		}
+
 		executeButton = new JFXButton("Execute");
-		executeButton.setPrefSize(40, 10);
-		executeButton.setLayoutX(0.7d*this.getPrefWidth());
-		executeButton.setLayoutY(0.9d*this.getPrefHeight());
-		this.getChildren().addAll(vbox, executeButton);
+		executeButton.setPrefSize(80, 20);
+		initializeLayout();
+		fillGrid();
 	}
 
 	/**
@@ -60,7 +51,7 @@ public class ControlPanel extends Pane {
 	public ControlProperty getControlProperty() {
 		return controlProperty;
 	}
-	
+
 	/**
 	 * Fire the input action if the execute button is hit
 	 * 
@@ -68,6 +59,16 @@ public class ControlPanel extends Pane {
 	 */
 	public void setOnExecuted(EventHandler<ActionEvent> executeHandler) {
 		executeButton.setOnAction(executeHandler);
+	}
+	
+	private void initializeLayout() {
+		GridPaneInitializer initializer = new GridPaneInitializer(this);
+		initializer.rowRatios(ROW_CONSTRAINT1, ROW_CONSTRAINT2).build();
+	}
+
+	private void fillGrid() {
+		this.add(vbox, 0, 0);
+		this.add(executeButton, 0, 1);
 	}
 
 	private Label initLabel(String name) {

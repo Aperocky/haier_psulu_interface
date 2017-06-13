@@ -11,8 +11,9 @@ public class ControlSliderFactory {
 	    height = h;
 	}
 	
-	public ControlSlider getSlider(double min, double max, DoubleProperty property) {
-		ControlSlider slider = new ControlSlider(width, height, min, max, property);
+	public ControlSlider getSlider(ControlType controlType, DoubleProperty property) {
+		ControlSlider slider = new ControlSlider(controlType, width, height);
+		property.bind(slider.valueProperty());
 		return slider;
 	}
 
