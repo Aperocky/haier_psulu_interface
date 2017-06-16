@@ -1,0 +1,23 @@
+chance_constraint: 0.2
+horizon_cost_proportion: 0.9
+coVarX: 0.01
+coVarY: 0.01
+max_velocity: 0.075
+cleanMap: True
+waypoints: 15
+max_control: 0.075
+cleanDist: 0.1
+receding_horizon: False
+start_location: 
+- 0
+- 0
+- 0
+- 0
+environment: '[./config/newEnvi.yaml]'
+outFolder: '[./output/]'
+horizon_polygon_size: 50
+end_location: 
+- 1
+- 1
+- 0
+- 0
