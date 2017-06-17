@@ -37,6 +37,11 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	public boolean isExecuting() {
 		return executing;
 	}
+	
+	public void setObstacles(List<List<Point2D>> obstacles) {
+		this.obstacles = obstacles;
+		notifyObservers(this);
+	}
 
 	public Point2D getCurrentPosition() {
 		return currentPosition;

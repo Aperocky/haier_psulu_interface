@@ -19,6 +19,9 @@ import tempfile
 import math, os
 import mpmath as mp
 import numpy as np
+
+# Gurobi related environment variable paths
+os.environ["PATH"] += ':/usr/local/bin/'
 import pulp
 import argparse
 import sys, pdb, math
@@ -483,6 +486,7 @@ class PathSolver:
           # using temporary file to write log
           #self.prob.solve(pulp.GUROBI_CMD(msg=self.msg, options={"TimeLimit": 300}))
           self.prob.solve(pulp.GUROBI_CMD(msg=self.msg))
+
           ## Read log file to get number of nodes explored
           #fp.seek(0)
           #data = fp.read()
@@ -630,8 +634,8 @@ class IRA(pSulu):
     def __initTransformationParam(dt=1):
         # Optimization variables
         # Transition Parameters
-        A = [[1, 0, dt, 0],
-            [0, 1, 0, dt],
+        A = [[1, 0, 0, 0],
+            [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]]
         B = [[dt/2, 0], 
@@ -888,7 +892,7 @@ class IRA(pSulu):
           covar = self.__coVarMat
 
           for i, (pt1, pt2) in enumerate(zip(wayPt[:-1], wayPt[1:])):
-            if (i == len(wayPt)-1) and self.receding_horizon:
+            if (i == len(wayPt)-2) and self.receding_horizon:
                 # Receding horizon to not plot that last time step
                 break
 
@@ -1028,7 +1032,7 @@ def firstPassCommandLine():
     #                    help='Number of steps to the destination', dest='nSteps')
     #parser.add_argument('-i', type=str, default=None,
     #                    help='Input Obstacle Map (.mat file)', dest='obstMap')
-    parser.add_argument('-i', type=str, default='./config/param.yaml',
+    parser.add_argument('-i', type=str, default='./config/tmp/tmpParam.yaml',
                         help='Input File (Yaml Formal)', dest='inputFile')
     parser.add_argument('-o', type=str, default='path.yaml',
                         help='Output File containing the way points (Yaml Formal)', dest='outputFile')

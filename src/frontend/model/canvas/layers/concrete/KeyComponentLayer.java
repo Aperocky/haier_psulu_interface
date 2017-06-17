@@ -4,20 +4,21 @@ import java.util.function.Consumer;
 
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
-import frontend.model.unit.Goal;
-import frontend.model.unit.Vehicle;
+import frontend.model.unit.keycomponent.KeyComponent;
 import javafx.geometry.Point2D;
 import model.gamedata.game.GameStats;
 
 public class KeyComponentLayer extends LayerBase {
 
-	private Vehicle vehicle;
-	private Goal goal;
+	private static final String GOAL_IMG = "flag.png";
+	private static final String TARGET_IMG = "submarine.png";
+	private KeyComponent vehicle;
+	private KeyComponent goal;
 
 	public KeyComponentLayer(double width, double height) {
 		super(width, height);
-		vehicle = new Vehicle();
-		goal = new Goal();
+		vehicle = new KeyComponent(TARGET_IMG);
+		goal = new KeyComponent(GOAL_IMG);
 		this.getChildren().addAll(vehicle, goal);
 	}
 
@@ -46,13 +47,12 @@ public class KeyComponentLayer extends LayerBase {
 
 	@Override
 	public void update(GameStats gameStats) {
-		this.clear();
-		Point2D start = gameStats.getCurrentPosition();
-		Point2D end = gameStats.getFinalDestination();
-		vehicle.setLayoutX(start.getX());
-		vehicle.setLayoutY(start.getY());
-		goal.setLayoutX(end.getX());
-		goal.setLayoutY(end.getY());
+		Point2D start = transform(gameStats.getCurrentPosition());
+		Point2D end = transform(gameStats.getFinalDestination());
+		vehicle.setLayoutX(start.getX() - vehicle.getFitWidth() / 2);
+		vehicle.setLayoutY(start.getY() - vehicle.getFitHeight() / 2);
+		goal.setLayoutX(end.getX() - goal.getFitWidth() /2);
+		goal.setLayoutY(end.getY() - goal.getFitHeight() / 2);
 	}
 
 	public void setGoalPositionListener(Consumer<Point2D> handler) {

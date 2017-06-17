@@ -1,9 +1,14 @@
 package model.plan;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.geometry.Point2D;
+import util.YamlIO;
 
 /**
  * Path planner that employs one of the algorithms(p-sulu or Dijkstra) for path
@@ -16,42 +21,43 @@ import javafx.geometry.Point2D;
  *
  */
 public class Planner implements IPlanner {
-	private double chanceConstraint;
-	private double maxVelocity;
-	private double wayPoints;
+	private YamlIO yamlIO;
 
 	public Planner() {
+		yamlIO = new YamlIO();
 
 	}
 
 	/**
-	 * Called whenever the user changes chance constraint in ControlPanel
-	 * 
-	 * @param riskBudget
+	 * Return the list of points that represents the way points of the path.
+	 * Coordinates for the points are normalized, although potentially they can
+	 * go outside of 0 or 1.
 	 */
-	public void setChanceConstraint(double constraint) {
-		this.chanceConstraint = constraint;
-	}
-
-	/**
-	 * Called whenver user changes maximum velocity in ControlPanel
-	 * 
-	 * @param horizonRadius
-	 */
-	public void setMaxVelocity(double maxVelocity) {
-		this.maxVelocity = maxVelocity;
-	}
-
-	public void setWayPoints(int wayPoints) {
-		this.wayPoints = wayPoints;
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Point2D> getPlannedPath(Point2D start, Point2D end, List<List<Point2D>> obstacles) {
-		ArrayList<Point2D> result = new ArrayList<>();
-		result.add(new Point2D(20, 20));
-		result.add(new Point2D(100, 100));
-		return result;
+	public List<Point2D> getPlannedPath() throws IOException, InterruptedException {
+
+		Runtime r = Runtime.getRuntime();
+		Process p = r.exec("./PuLPpSulu.py", null,
+				new File("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/"));
+		// Test
+		BufferedReader stdOut = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		String s;
+		while ((s = stdOut.readLine()) != null) {
+			System.out.println(s);
+		}
+
+		ArrayList<ArrayList<String>> raw = (ArrayList<ArrayList<String>>) yamlIO
+				.loadArray("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/output/path.yaml");
+		List<Point2D> vertices = new ArrayList<>();
+		for (ArrayList<String> v : raw) {
+			double x = Double.valueOf(v.get(0));
+			double y = Double.valueOf(v.get(1));
+			Point2D vertice = new Point2D(x, y);
+			vertices.add(vertice);
+		}
+
+		return vertices;
 	}
 
 }

@@ -24,7 +24,7 @@ public class Controller {
 	}
 
 	public void launchSimulator() {
-		Simulator simulator = new Simulator(500, 500);
+		Simulator simulator = new Simulator(600, 600);
 		simulateController = new SimulateController(stage, simulator, game);
 		simulateController.launch();
 	}

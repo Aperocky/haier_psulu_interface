@@ -6,10 +6,11 @@ import java.util.List;
 
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
-import frontend.model.unit.PathSegment;
+import frontend.model.unit.path.PathSegment;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.gamedata.game.GameStats;
 
@@ -30,6 +31,7 @@ public class PathLayer extends LayerBase {
 	public void clear() {
 		super.clear();
 		segments.clear();
+		start = new Point2D(0, this.getPrefHeight());
 	}
 
 	@Override
@@ -40,10 +42,10 @@ public class PathLayer extends LayerBase {
 	@Override
 	public void update(GameStats game) {
 		this.clear();
-		if(game.isExecuting())
-			game.getExecutedPath().stream().forEach(landmark -> addLandmark(landmark));
+		if (game.isExecuting())
+			game.getExecutedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
 		else
-			game.getPlannedPath().stream().forEach(landmark -> addLandmark(landmark));
+			game.getPlannedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
 	}
 
 	public void setStart(Point2D start) {
@@ -56,7 +58,7 @@ public class PathLayer extends LayerBase {
 
 	@Override
 	protected void primaryPressed(MouseEvent event) {
-//		System.out.println("Primary Mouse Pressed on PathLayer.");
+		// System.out.println("Primary Mouse Pressed on PathLayer.");
 		if (planning) {
 			// Add one more landmark to the plan
 			Point2D end = this.sceneToLocal(event.getSceneX(), event.getSceneY());
@@ -66,7 +68,7 @@ public class PathLayer extends LayerBase {
 
 	@Override
 	protected void secondaryPressed(MouseEvent event) {
-//		System.out.println("Secondary Mouse Pressed on PathLayer.");
+		// System.out.println("Secondary Mouse Pressed on PathLayer.");
 		if (!planning) {
 			planning = true;
 			Point2D end = this.sceneToLocal(event.getSceneX(), event.getSceneY());
@@ -97,7 +99,11 @@ public class PathLayer extends LayerBase {
 	private void addLandmark(Point2D landmark) {
 		PathSegment path = new PathSegment(start, landmark);
 		segments.add(path);
-		getChildren().add(path);
+		Circle startC = new Circle(start.getX(), start.getY(), 5);
+		startC.setFill(path.getStroke());
+		Circle endC = new Circle(landmark.getX(), landmark.getY(), 5);
+		endC.setFill(path.getStroke());
+		getChildren().addAll(path, startC, endC);
 		start = landmark;
 	}
 
