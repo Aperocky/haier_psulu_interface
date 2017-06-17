@@ -5,25 +5,20 @@ import java.util.List;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.canvas.layers.base.LayerType;
 import frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleLayer;
-import frontend.model.unit.obstacle.Obstacle;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.gamedata.game.ObstacleFactory;
+import model.gamedata.game.obstacles.ObstacleFactory;
 
 public class LayerUnitTest extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		LayerMaster layerMaster = new LayerMaster(500, 500);
-		layerMaster.activateLayer(LayerType.ObstacleLayer);
-		
+
 		ObstacleLayer layer = new ObstacleLayer(500, 500);
 		ObstacleFactory factory = new ObstacleFactory();
-		factory.setCanvasSize(500, 500);
-		List<List<Point2D>> obstacles = factory
-				.loadObstacleFrom("[/Users/Feng/Documents/workspace/haier_psulu_interface/obstacleRsrc/newEnvi.yaml]");
+		List<List<Point2D>> obstacles = factory.loadObstacles();
 		obstacles.forEach(obstacle -> {
 			layer.addObstacle(obstacle);
 		});

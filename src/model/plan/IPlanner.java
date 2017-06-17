@@ -1,5 +1,6 @@
 package model.plan;
 
+import java.io.IOException;
 import java.util.List;
 
 import javafx.geometry.Point2D;
@@ -17,7 +18,8 @@ public interface IPlanner {
 	 * @param end final arrival position
 	 * @param obstacles list of polygon obstacles in the environment
 	 * @return planned path represented by a list of points on the map
+	 * @throws InterruptedException 
 	 */
-	public List<Point2D> getPlannedPath(Point2D start, Point2D end, List<List<Point2D>> obstacles);
+	public List<Point2D> getPlannedPath() throws IOException, InterruptedException;
 
 }

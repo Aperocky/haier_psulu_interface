@@ -12,8 +12,6 @@ import javafx.scene.layout.StackPane;
 
 public class LayerMaster extends StackPane {
 
-	// private ObstacleLayer obstacleLayer;
-	// private PathLayer pathLayer;
 	private List<ILayer> layers;
 
 	public LayerMaster(double width, double height) {

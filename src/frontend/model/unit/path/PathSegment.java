@@ -1,13 +1,14 @@
-package frontend.model.unit;
+package frontend.model.unit.path;
 
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 
 public class PathSegment extends Line{
-	public static final Color DEFAULT_COLOR = Color.RED;
+	public static final Color DEFAULT_COLOR = Color.YELLOWGREEN;
 	public static final double DEFAULT_WIDTH = 5;
 	
 	public PathSegment(Point2D a, Point2D b) {

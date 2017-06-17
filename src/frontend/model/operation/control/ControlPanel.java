@@ -2,18 +2,15 @@ package frontend.model.operation.control;
 
 import com.jfoenix.controls.JFXButton;
 
-import frontend.util.GridPaneInitializer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import model.gamedata.game.ControlProperty;
+import model.gamedata.game.control.ControlProperty;
 
-public class ControlPanel extends GridPane {
-	private static final double ROW_CONSTRAINT1 = 80;
-	private static final double ROW_CONSTRAINT2 = 20;
+public class ControlPanel extends Pane {
 	private static final double WIDTH_RATIO = 0.8d;
 	private static final double HEIGHT = 20;
 
@@ -39,8 +36,9 @@ public class ControlPanel extends GridPane {
 
 		executeButton = new JFXButton("Execute");
 		executeButton.setPrefSize(80, 20);
-		initializeLayout();
-		fillGrid();
+		executeButton.setTranslateY(20d);
+		vbox.getChildren().add(executeButton);
+		this.getChildren().add(vbox);
 	}
 
 	/**
@@ -59,16 +57,6 @@ public class ControlPanel extends GridPane {
 	 */
 	public void setOnExecuted(EventHandler<ActionEvent> executeHandler) {
 		executeButton.setOnAction(executeHandler);
-	}
-	
-	private void initializeLayout() {
-		GridPaneInitializer initializer = new GridPaneInitializer(this);
-		initializer.rowRatios(ROW_CONSTRAINT1, ROW_CONSTRAINT2).build();
-	}
-
-	private void fillGrid() {
-		this.add(vbox, 0, 0);
-		this.add(executeButton, 0, 1);
 	}
 
 	private Label initLabel(String name) {

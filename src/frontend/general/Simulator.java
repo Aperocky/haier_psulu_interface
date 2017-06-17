@@ -1,5 +1,6 @@
 package frontend.general;
 
+import frontend.model.canvas.layers.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.operation.control.ControlPanel;
 import frontend.util.GridPaneInitializer;
@@ -10,16 +11,16 @@ import javafx.scene.layout.GridPane;
 public class Simulator extends GridPane {
 	private static double COLUMN_CONSTRAINT1 = 70;
 	private static double COLUMN_CONSTRAINT2 = 30;
-	private static double ROW_CONSTRAINT1 = 10;
-	private static double ROW_CONSTRAINT2 = 40;
+	private static double ROW_CONSTRAINT1 = 30;
+	private static double ROW_CONSTRAINT2 = 20;
 	private static double ROW_CONSTRAINT3 = 50;
 
-	private LayerMaster layerMaster;
+	private Canvas canvas;
 	private ControlPanel controlPanel;
 
 	public Simulator(double width, double height) {
 		this.setPrefSize(width, height);
-		layerMaster = new LayerMaster(width * COLUMN_CONSTRAINT1 / 100, height * (ROW_CONSTRAINT2 + ROW_CONSTRAINT3) / 100);
+		canvas = new Canvas(width * COLUMN_CONSTRAINT1 / 100, height * (ROW_CONSTRAINT2 + ROW_CONSTRAINT3) / 100);
 		controlPanel = new ControlPanel(width * COLUMN_CONSTRAINT2 / 100, height * ROW_CONSTRAINT3 / 100);
 
 		initializeLayout();
@@ -31,7 +32,7 @@ public class Simulator extends GridPane {
 	}
 
 	public LayerMaster getLayerMaster() {
-		return layerMaster;
+		return canvas.getLayerMaster();
 	}
 
 	public ControlPanel getControlPanel() {
@@ -44,7 +45,7 @@ public class Simulator extends GridPane {
 	}
 
 	private void fillGrid() {
-		this.add(layerMaster, 0, 1, 1, 2);
+		this.add(canvas, 0, 1, 1, 2);
 		this.add(controlPanel, 1, 2);
 	}
 

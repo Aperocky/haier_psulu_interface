@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Obstacle extends Polygon implements ICloneable<Obstacle> {
-	public static final Color DEFAULT_COLOR = Color.GREENYELLOW;
+	public static final Color DEFAULT_COLOR = Color.RED;
 	public static final double DEFAULT_OPACITY = 0.6d;
 	public static final double STROKE_WIDTH = 3d;
 	private ObstacleUserControl userControl;
@@ -28,7 +28,7 @@ public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 	public Obstacle(Node parent, List<Point2D> vertices) {
 		super();
 		this.parent = parent;
-		this.vertices = vertices;
+		this.vertices = new ArrayList<>();
 		vertices.forEach(vertex -> addVertex(vertex));
 		userControl = new ObstacleUserControl(this, point -> {
 			return parent.sceneToLocal(point.getX(), point.getY());

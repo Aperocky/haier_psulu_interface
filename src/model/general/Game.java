@@ -1,12 +1,13 @@
 package model.general;
 
+import java.io.IOException;
 import java.util.List;
 
 import frontend.model.operation.control.ControlType;
 import javafx.geometry.Point2D;
 import model.execute.Executor;
 import model.gamedata.Environment;
-import model.gamedata.game.ControlProperty;
+import model.gamedata.game.control.ControlProperty;
 import model.plan.Planner;
 
 /**
@@ -31,11 +32,10 @@ public class Game {
 	}
 
 	public void setControlProperty(ControlProperty control) {
-		this.controlProperty = control;
-		this.controlProperty.setOnChanged(() -> {
-			plan(controlProperty.getControlValue(ControlType.ChanceConstraint),
-				 controlProperty.getControlValue(ControlType.WayPoints),
-				 controlProperty.getControlValue(ControlType.MaxVelocity));
+		controlProperty = control;
+		controlProperty.setOnChanged(() -> {
+			controlProperty.updateParamFile();
+			plan();
 		});
 	}
 
@@ -44,19 +44,20 @@ public class Game {
 	}
 	
 	/**
-	 * Given the user input of riskBudget limitation and receding horizon
-	 * radius(step size), plan and store the planned path into environment.
+	 * Plan and store the planned path into environment.Note that the planned path
+	 * here is not adapted to the canvas size yet
 	 * 
 	 * @param riskBudget
 	 * @param horizonRadius
 	 */
-	public void plan(double chanceConstraint, double wayPoints, double maxVelocity) {
-		planner.setChanceConstraint(chanceConstraint);
-		planner.setWayPoints((int)wayPoints);
-		planner.setMaxVelocity(maxVelocity);
-		List<Point2D> plannedPath = planner.getPlannedPath(environment.getGameStats().getCurrentPosition(),
-				environment.getGameStats().getDestination(), environment.getGameStats().getObstacles());
-		environment.getGameStats().setPlannedPath(plannedPath);
+	public void plan() {
+		List<Point2D> plannedPath;
+		try {
+			plannedPath = planner.getPlannedPath();
+			environment.getGameStats().setPlannedPath(plannedPath);
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

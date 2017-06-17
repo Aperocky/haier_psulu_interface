@@ -1,5 +1,6 @@
 package frontend.model.canvas.layers.concrete.obstaclelayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import frontend.model.canvas.layers.base.LayerBase;
@@ -20,15 +21,16 @@ public class ObstacleLayer extends LayerBase {
 		super(width, height);
 		obstacleMaster = new ObstacleMaster();
 
-		// addGrid();
+		addGrid();
 	}
 
 	@Override
 	public void update(GameStats gameStats) {
 		this.clear();
-		gameStats.getObstacles().stream().peek(obstaclepoints -> {
-			Obstacle obstacle = new Obstacle(this, obstaclepoints);
-			this.getChildren().add(obstacle);
+		gameStats.getObstacles().stream().forEach(obstacle -> {
+			List<Point2D> transformed = new ArrayList<>();
+			obstacle.forEach(point -> transformed.add(transform(point)));
+			addObstacle(transformed);
 		});
 	}
 
