@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
+import util.ResourceParser;
 import util.YamlIO;
 
 /**
@@ -23,9 +24,11 @@ import util.YamlIO;
 public class Planner implements IPlanner {
 
 	private YamlIO yamlIO;
+	private ResourceParser parser;
 
 	public Planner() {
 		yamlIO = new YamlIO();
+		parser = new ResourceParser("path");
 
 	}
 
@@ -41,8 +44,7 @@ public class Planner implements IPlanner {
 			@Override
 			protected List<Point2D> call() throws Exception {
 				Runtime r = Runtime.getRuntime();
-				Process p = r.exec("./PuLPpSulu.py", null,
-						new File("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/"));
+				Process p = r.exec("./PuLPpSulu.py", null, new File(parser.getString("psulu_planner")));
 				p.waitFor();
 				// Debug
 				// BufferedReader stdOut = new BufferedReader(new
@@ -52,7 +54,7 @@ public class Planner implements IPlanner {
 				// System.out.println(s);
 				// }
 				ArrayList<ArrayList<String>> raw = (ArrayList<ArrayList<String>>) yamlIO
-						.loadArray("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/output/path.yaml");
+						.loadArray(parser.getString("psulu_output"));
 				List<Point2D> vertices = new ArrayList<>();
 				for (ArrayList<String> v : raw) {
 					double x = Double.valueOf(v.get(0));

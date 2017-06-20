@@ -49,12 +49,10 @@ public class ProgressIndicator implements Observer<StatusManager> {
 	}
 
 	public void run() {
-		System.out.println("Progress Indicator shows up!");
 		stage.show();
 	}
 
 	public void close() {
-		System.out.println("Progress Indicator closes down!");
 		stage.close();
 	}
 
