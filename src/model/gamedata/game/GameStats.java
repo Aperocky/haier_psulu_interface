@@ -1,11 +1,14 @@
 package model.gamedata.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleMaster;
 import javafx.geometry.Point2D;
+import model.gamedata.game.param.ParamIO;
 import util.ObservableBase;
 import util.Observer;
 
@@ -18,6 +21,7 @@ import util.Observer;
  */
 public class GameStats extends ObservableBase<GameStats> implements Observer<ObstacleMaster> {
 
+	private ParamIO paramIO;
 	private List<Point2D> plannedPath;
 	private List<Point2D> executedPath;
 	private List<List<Point2D>> obstacles;
@@ -28,11 +32,12 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 
 	public GameStats() {
 		super();
+		paramIO = new ParamIO();
 		plannedPath = new ArrayList<>();
 		executedPath = new ArrayList<>();
 		obstacles = new ArrayList<>();
 	}
-	
+
 	public void setObstacles(List<List<Point2D>> obstacles) {
 		this.obstacles = obstacles;
 		notifyObservers(this);
@@ -47,9 +52,15 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	}
 
 	public void setCurrentPosition(Point2D current) {
-		// System.out.println("Set Current Starting Position: " + current.getX()
-		// + " , " + current.getY());
+		//System.out.println("Set Current Starting Position: " + current.getX() + " , " + current.getY());
 		currentPosition = current;
+		Map<String, Object> raw = paramIO.loadTemp();
+		if (raw == null)
+			raw = paramIO.loadOriginal();
+		List<Double> start = Arrays.asList((double) current.getX(), (double) current.getY(), 0d, 0d);
+		raw.put("start_location", start);
+		paramIO.writeTemp(raw);
+		notifyObservers(this);
 	}
 
 	public Point2D getDestination() {

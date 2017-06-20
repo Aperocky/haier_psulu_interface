@@ -2,8 +2,9 @@ package frontend.general;
 
 import frontend.model.canvas.layers.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
+import frontend.model.notification.ProgressIndicator;
+import frontend.model.notification.gameresult.SuccessMessage;
 import frontend.model.operation.control.ControlPanel;
-import frontend.model.operation.progress.ProgressIndicator;
 import frontend.util.GridPaneInitializer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,12 +20,15 @@ public class Simulator extends GridPane {
 	private Canvas canvas;
 	private ControlPanel controlPanel;
     private ProgressIndicator progressIndicator;
+    private SuccessMessage successMessage;
 
 	public Simulator(double width, double height) {
 		this.setPrefSize(width, height);
 		canvas = new Canvas(width * COLUMN_CONSTRAINT1 / 100, height * (ROW_CONSTRAINT2 + ROW_CONSTRAINT3) / 100);
 		controlPanel = new ControlPanel(width * COLUMN_CONSTRAINT2 / 100, height * ROW_CONSTRAINT3 / 100);
 		progressIndicator = new ProgressIndicator();
+		progressIndicator.setMessage("Planning path...");
+		successMessage = new SuccessMessage();
 		
 		initializeLayout();
 		fillGrid();
@@ -44,6 +48,10 @@ public class Simulator extends GridPane {
 	
 	public ProgressIndicator getProgressIndicator() {
 		return progressIndicator;
+	}
+	
+	public SuccessMessage getSuccessMessage() {
+		return successMessage;
 	}
 
 	private void initializeLayout() {

@@ -12,6 +12,7 @@ import model.gamedata.game.GameStats;
 import model.gamedata.game.obstacles.ObstacleFactory;
 import model.gamedata.game.param.ParamIO;
 import model.general.Game;
+import util.ResourceParser;
 
 /**
  * Pass ControlProperty from ControlPanel to Game so that game can observe
@@ -21,16 +22,17 @@ import model.general.Game;
  *
  */
 public class SimulateController {
-	
-	private static final String CSS_FILE = "frontend/css/dracula.css";
+
 	private Stage stage;
 	private Simulator simulator;
 	private Game game;
+	private ResourceParser parser;
 
 	public SimulateController(Stage stage, Simulator simulator, Game game) {
 		this.stage = stage;
 		this.simulator = simulator;
 		this.game = game;
+		this.parser = new ResourceParser("path");
 
 		initialize();
 
@@ -39,7 +41,7 @@ public class SimulateController {
 
 	public void launch() {
 		Scene scene = new Scene(simulator, simulator.getPrefWidth(), simulator.getPrefHeight());
-		scene.getStylesheets().add(CSS_FILE);
+		scene.getStylesheets().add(parser.getString("css"));
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -47,7 +49,7 @@ public class SimulateController {
 	private void setupObserver() {
 		// Game observes control panel
 		game.setControlProperty(simulator.getControlPanel().getControlProperty());
-		
+
 		// Layers observe game stats
 		GameStats gameStats = game.getEnvironment().getGameStats();
 		for (LayerType layer : LayerType.values()) {
@@ -55,9 +57,10 @@ public class SimulateController {
 		}
 		gameStats.notifyObservers(gameStats);
 
-		// Spinner observes StatusManager
-		game.getEnvironment().getStatusManager().addObserver(simulator.getProgressIndicator());
-		
+		// Spinner, GameResultMessage observe StatusManager
+		game.getEnvironment().getStatusManager().addObservers(simulator.getProgressIndicator(),
+				simulator.getSuccessMessage(), simulator.getControlPanel());
+
 		simulator.setOnExecute(evt -> game.execute());
 	}
 

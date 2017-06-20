@@ -1,10 +1,9 @@
 package model.general;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
-import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
 import model.execute.Executor;
 import model.gamedata.Environment;
@@ -67,10 +66,12 @@ public class Game {
 	 */
 	public void execute() {
 		List<Point2D> plannedPath = environment.getGameStats().getPlannedPath();
-		if (plannedPath.isEmpty())
-			return;
+		environment.getGameStats().setPlannedPath(new ArrayList<>());
 		List<Point2D> executedPath = executor.getExecutedPath(plannedPath);
 		environment.setExecutedPath(executedPath);
+		Point2D lastStep = executedPath.get(executedPath.size() - 1);
+		environment.getGameStats().setCurrentPosition(lastStep);
+		checkSuccess(lastStep);
 	}
 
 	/**
@@ -79,6 +80,14 @@ public class Game {
 	 */
 	public void executeStep() {
 
+	}
+
+	private void checkSuccess(Point2D lastStep) {
+		Point2D destination = environment.getGameStats().getDestination();
+		if (Math.abs(lastStep.getX() - destination.getX()) <= 0.001d
+				&& Math.abs(lastStep.getY() - destination.getY()) <= 0.001d) {
+			environment.getStatusManager().setSuccess();
+		}
 	}
 
 }

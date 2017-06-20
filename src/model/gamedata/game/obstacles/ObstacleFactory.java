@@ -42,12 +42,10 @@ public class ObstacleFactory {
 			ArrayList<ArrayList<String>> obstacle = (ArrayList<ArrayList<String>>) ((Map<String, ?>) obs)
 					.get("corners");
 			List<Point2D> single = new ArrayList<>();
-			System.out.println("Obstacle: ");
 			for (ArrayList<String> lis : obstacle) {
 				Double x = Double.valueOf(lis.get(0));
 				Double y = Double.valueOf(lis.get(1));
 				Point2D point = new Point2D(x, y);
-				System.out.println(x + ", " + y);
 				single.add(point);
 			}
 			result.add(single);

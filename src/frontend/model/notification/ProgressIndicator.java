@@ -1,9 +1,7 @@
-package frontend.model.operation.progress;
+package frontend.model.notification;
 
 import com.jfoenix.controls.JFXSpinner;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -13,11 +11,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.status.StatusManager;
 import util.Observer;
+import util.ResourceParser;
 
 public class ProgressIndicator implements Observer<StatusManager> {
 
+	private ResourceParser parser;
 	private static double DEFAULT_WIDTH = 200d;
-	private static double DEFAULT_HEIGHT = 200d;
+	private static double DEFAULT_HEIGHT = 150d;
 	private Stage stage;
 	private Scene scene;
 	private Pane pane;
@@ -25,6 +25,7 @@ public class ProgressIndicator implements Observer<StatusManager> {
 	private JFXSpinner spinner;
 
 	public ProgressIndicator() {
+		parser = new ResourceParser("path");
 		stage = new Stage();
 		stage.setAlwaysOnTop(true);
 		stage.initStyle(StageStyle.UNDECORATED);
@@ -35,11 +36,12 @@ public class ProgressIndicator implements Observer<StatusManager> {
 		spinner = new JFXSpinner();
 
 		vbox.setAlignment(Pos.CENTER);
-		vbox.setSpacing(DEFAULT_HEIGHT);
+		vbox.setSpacing(40d);
 		vbox.getChildren().addAll(spinner);
 		pane.getChildren().add(vbox);
 
 		scene = new Scene(pane);
+		scene.getStylesheets().add(parser.getString("css"));
 		stage.setScene(scene);
 
 	}

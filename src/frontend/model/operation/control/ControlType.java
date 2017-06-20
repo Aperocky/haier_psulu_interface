@@ -2,7 +2,7 @@ package frontend.model.operation.control;
 
 public enum ControlType {
 	ChanceConstraint("Chance Constraint", "chance_constraint", 0.1d, 0.3d),
-	MaxVelocity("Maximum Velocity", "max_velocity", 0d, 0.2d),
+	MaxVelocity("Maximum Velocity", "max_velocity", 0.1d, 0.2d),
 	WayPoints("Number Of Waypoints", "waypoints", 3d, 15d);
 	
 	private String label;

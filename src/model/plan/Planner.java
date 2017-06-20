@@ -71,6 +71,7 @@ public class Planner implements IPlanner {
 		});
 
 		Thread planThread = new Thread(planningTask);
+		planThread.setDaemon(true);
 		planThread.start();
 	}
 
