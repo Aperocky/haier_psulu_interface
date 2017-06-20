@@ -4,13 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
 import util.YamlIO;
 
@@ -24,14 +20,12 @@ import util.YamlIO;
  * @author Feng
  *
  */
-public class Planner implements IPlanner{
+public class Planner implements IPlanner {
 
-	private ExecutorService executor;
 	private YamlIO yamlIO;
 
 	public Planner() {
 		yamlIO = new YamlIO();
-		executor = Executors.newSingleThreadExecutor();
 
 	}
 
@@ -42,50 +36,40 @@ public class Planner implements IPlanner{
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Future<List<Point2D>> getPlannedPath() throws IOException, InterruptedException {
-		Callable<List<Point2D>> planTask = () -> {
-			Runtime r = Runtime.getRuntime();
-			Process p = r.exec("./PuLPpSulu.py", null,
-					new File("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/"));
-			p.waitFor();
-			// Debug
-			// BufferedReader stdOut = new BufferedReader(new
-			// InputStreamReader(p.getInputStream()));
-			// String s;
-			// while ((s = stdOut.readLine()) != null) {
-			// System.out.println(s);
-			// }
-			ArrayList<ArrayList<String>> raw = (ArrayList<ArrayList<String>>) yamlIO
-					.loadArray("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/output/path.yaml");
-			List<Point2D> vertices = new ArrayList<>();
-			for (ArrayList<String> v : raw) {
-				double x = Double.valueOf(v.get(0));
-				double y = Double.valueOf(v.get(1));
-				Point2D vertice = new Point2D(x, y);
-				vertices.add(vertice);
+	public void plan(Consumer<List<Point2D>> planningCallback) throws IOException, InterruptedException {
+		Task<List<Point2D>> planningTask = new Task<List<Point2D>>() {
+			@Override
+			protected List<Point2D> call() throws Exception {
+				Runtime r = Runtime.getRuntime();
+				Process p = r.exec("./PuLPpSulu.py", null,
+						new File("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/"));
+				p.waitFor();
+				// Debug
+				// BufferedReader stdOut = new BufferedReader(new
+				// InputStreamReader(p.getInputStream()));
+				// String s;
+				// while ((s = stdOut.readLine()) != null) {
+				// System.out.println(s);
+				// }
+				ArrayList<ArrayList<String>> raw = (ArrayList<ArrayList<String>>) yamlIO
+						.loadArray("/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/output/path.yaml");
+				List<Point2D> vertices = new ArrayList<>();
+				for (ArrayList<String> v : raw) {
+					double x = Double.valueOf(v.get(0));
+					double y = Double.valueOf(v.get(1));
+					Point2D vertice = new Point2D(x, y);
+					vertices.add(vertice);
+				}
+				return vertices;
 			}
-			return vertices;
 		};
 
-		Future<List<Point2D>> plannedPath = executor.submit(planTask);
-		//softShutDown();
-		return plannedPath;
-	}
+		planningTask.setOnSucceeded(evt -> {
+			planningCallback.accept(planningTask.getValue());
+		});
 
-	private void softShutDown() {
-		try {
-			System.out.println("Attempt to shutdown planning executor");
-			executor.shutdown();
-			executor.awaitTermination(6, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			System.err.println("Non-finished tasks interrupted");
-		} finally {
-			if (!executor.isTerminated()) {
-				System.err.println("Cancel non-finished tasks");
-			}
-			executor.shutdownNow();
-			System.out.println("Shutdown completed");
-		}
+		Thread planThread = new Thread(planningTask);
+		planThread.start();
 	}
 
 }

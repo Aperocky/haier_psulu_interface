@@ -25,7 +25,6 @@ public class Simulator extends GridPane {
 		canvas = new Canvas(width * COLUMN_CONSTRAINT1 / 100, height * (ROW_CONSTRAINT2 + ROW_CONSTRAINT3) / 100);
 		controlPanel = new ControlPanel(width * COLUMN_CONSTRAINT2 / 100, height * ROW_CONSTRAINT3 / 100);
 		progressIndicator = new ProgressIndicator();
-		//progressIndicator.run();
 		
 		initializeLayout();
 		fillGrid();
