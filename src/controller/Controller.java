@@ -11,10 +11,13 @@ public class Controller {
 	private EditController editController;
 	private SimulateController simulateController;
 
-	public Controller(Stage stage) {
-		this.stage = stage;
+	public Controller() {
+		stage = new Stage();
 		game = new Game();
+	}
 
+	public Game getGame() {
+		return game;
 	}
 
 	public void launchEditor() {
