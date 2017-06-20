@@ -3,6 +3,7 @@ package frontend.general;
 import frontend.model.canvas.layers.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.operation.control.ControlPanel;
+import frontend.model.operation.progress.ProgressIndicator;
 import frontend.util.GridPaneInitializer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,12 +18,15 @@ public class Simulator extends GridPane {
 
 	private Canvas canvas;
 	private ControlPanel controlPanel;
+    private ProgressIndicator progressIndicator;
 
 	public Simulator(double width, double height) {
 		this.setPrefSize(width, height);
 		canvas = new Canvas(width * COLUMN_CONSTRAINT1 / 100, height * (ROW_CONSTRAINT2 + ROW_CONSTRAINT3) / 100);
 		controlPanel = new ControlPanel(width * COLUMN_CONSTRAINT2 / 100, height * ROW_CONSTRAINT3 / 100);
-
+		progressIndicator = new ProgressIndicator();
+		//progressIndicator.run();
+		
 		initializeLayout();
 		fillGrid();
 	}
@@ -37,6 +41,10 @@ public class Simulator extends GridPane {
 
 	public ControlPanel getControlPanel() {
 		return controlPanel;
+	}
+	
+	public ProgressIndicator getProgressIndicator() {
+		return progressIndicator;
 	}
 
 	private void initializeLayout() {

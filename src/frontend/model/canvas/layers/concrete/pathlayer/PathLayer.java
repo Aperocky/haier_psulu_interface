@@ -42,10 +42,10 @@ public class PathLayer extends LayerBase {
 	@Override
 	public void update(GameStats game) {
 		this.clear();
-		if (game.isExecuting())
-			game.getExecutedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
-		else
-			game.getPlannedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
+//		if (game.isExecuting())
+//			game.getExecutedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
+//		else
+		game.getPlannedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
 	}
 
 	public void setStart(Point2D start) {

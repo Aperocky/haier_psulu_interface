@@ -2,6 +2,7 @@ package model.plan;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import javafx.geometry.Point2D;
 
@@ -20,6 +21,6 @@ public interface IPlanner {
 	 * @return planned path represented by a list of points on the map
 	 * @throws InterruptedException 
 	 */
-	public List<Point2D> getPlannedPath() throws IOException, InterruptedException;
+	public Future<List<Point2D>> getPlannedPath() throws IOException, InterruptedException;
 
 }

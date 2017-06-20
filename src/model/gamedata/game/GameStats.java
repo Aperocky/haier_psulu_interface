@@ -25,17 +25,12 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	private Point2D finalDestination;
 	private double currentRiskBudget;
 	private double currentSurfacingBudget;
-	private boolean executing;
 
 	public GameStats() {
 		super();
 		plannedPath = new ArrayList<>();
 		executedPath = new ArrayList<>();
 		obstacles = new ArrayList<>();
-	}
-
-	public boolean isExecuting() {
-		return executing;
 	}
 	
 	public void setObstacles(List<List<Point2D>> obstacles) {
@@ -80,13 +75,11 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	}
 
 	public void setPlannedPath(List<Point2D> plan) {
-		executing = false;
 		plannedPath = plan;
 		notifyObservers(this);
 	}
 
 	public void setExecutedPath(List<Point2D> executed) {
-		executing = true;
 		executedPath = executed;
 		notifyObservers(this);
 	}

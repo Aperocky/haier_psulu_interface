@@ -2,8 +2,9 @@ package model.general;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import frontend.model.operation.control.ControlType;
 import javafx.geometry.Point2D;
 import model.execute.Executor;
 import model.gamedata.Environment;
@@ -24,7 +25,7 @@ public class Game {
 	private Environment environment;
 	private Planner planner;
 	private Executor executor;
-	
+
 	public Game() {
 		environment = new Environment();
 		planner = new Planner();
@@ -34,7 +35,7 @@ public class Game {
 	public void setControlProperty(ControlProperty control) {
 		controlProperty = control;
 		controlProperty.setOnChanged(() -> {
-			controlProperty.updateParamFile();
+			environment.setPlanning(true);
 			plan();
 		});
 	}
@@ -42,10 +43,10 @@ public class Game {
 	public Environment getEnvironment() {
 		return environment;
 	}
-	
+
 	/**
-	 * Plan and store the planned path into environment.Note that the planned path
-	 * here is not adapted to the canvas size yet
+	 * Plan and store the planned path into environment.Note that the planned
+	 * path here is not adapted to the canvas size yet
 	 * 
 	 * @param riskBudget
 	 * @param horizonRadius
@@ -53,9 +54,12 @@ public class Game {
 	public void plan() {
 		List<Point2D> plannedPath;
 		try {
-			plannedPath = planner.getPlannedPath();
-			environment.getGameStats().setPlannedPath(plannedPath);
-		} catch (IOException | InterruptedException e) {
+			Future<List<Point2D>> futurePlan = planner.getPlannedPath();
+			plannedPath = futurePlan.get();
+			environment.setPlannedPath(plannedPath);
+			if (futurePlan.isDone())
+				environment.setPlanning(false);
+		} catch (IOException | InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
 	}
@@ -68,7 +72,7 @@ public class Game {
 		if (plannedPath.isEmpty())
 			return;
 		List<Point2D> executedPath = executor.getExecutedPath(plannedPath);
-		environment.getGameStats().setExecutedPath(executedPath);
+		environment.setExecutedPath(executedPath);
 	}
 
 	/**
