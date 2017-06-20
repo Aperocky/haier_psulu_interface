@@ -45,16 +45,19 @@ public class SimulateController {
 	}
 
 	private void setupObserver() {
-		// Let the game observe user's inputs in control panel
+		// Game observes control panel
 		game.setControlProperty(simulator.getControlPanel().getControlProperty());
-		// Let path layer and obstacle layer observe game information in game
-		// stats
+		
+		// Layers observe game stats
 		GameStats gameStats = game.getEnvironment().getGameStats();
 		for (LayerType layer : LayerType.values()) {
 			gameStats.addObserver(simulator.getLayerMaster().getLayer(layer));
 		}
 		gameStats.notifyObservers(gameStats);
 
+		// Spinner observes StatusManager
+		game.getEnvironment().getStatusManager().addObserver(simulator.getProgressIndicator());
+		
 		simulator.setOnExecute(evt -> game.execute());
 	}
 
