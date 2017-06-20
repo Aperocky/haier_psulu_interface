@@ -10,6 +10,7 @@ import org.python.util.PythonInterpreter;
 
 import javafx.geometry.Point2D;
 import model.gamedata.jython.VerticesSupplier;
+import util.ResourceParser;
 import util.YamlIO;
 
 /**
@@ -19,11 +20,12 @@ import util.YamlIO;
  *
  */
 public class ObstacleFactory {
-	private static final String DEFAULT_OBS_PATH = "/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/config/newEnvi.yaml";
+	private ResourceParser parser;
 	private YamlIO yamlIO;
 
 	public ObstacleFactory() {
 		yamlIO = new YamlIO();
+		parser = new ResourceParser("path");
 	}
 
 	/**
@@ -32,8 +34,8 @@ public class ObstacleFactory {
 	 * @return
 	 */
 	public List<List<Point2D>> loadObstacles() {
-		Map<String, Object> envi = (Map<String, Object>) ((Map<String, Object>) yamlIO.loadMap(DEFAULT_OBS_PATH))
-				.get("environment");
+		Map<String, Object> envi = (Map<String, Object>) ((Map<String, Object>) yamlIO
+				.loadMap(parser.getString("obstacles"))).get("environment");
 		Map<String, Object> obstacles = (Map<String, Object>) envi.get("obstacles");
 		List<List<Point2D>> result = new ArrayList<>();
 		for (Object obs : obstacles.values()) {

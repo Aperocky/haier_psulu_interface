@@ -2,9 +2,9 @@ package model.general;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
 import model.execute.Executor;
 import model.gamedata.Environment;
@@ -52,14 +52,12 @@ public class Game {
 	 * @param horizonRadius
 	 */
 	public void plan() {
-		List<Point2D> plannedPath;
 		try {
-			Future<List<Point2D>> futurePlan = planner.getPlannedPath();
-			plannedPath = futurePlan.get();
-			environment.setPlannedPath(plannedPath);
-			if (futurePlan.isDone())
+			planner.plan(plannedPath -> {
+				environment.setPlannedPath(plannedPath);
 				environment.setPlanning(false);
-		} catch (IOException | InterruptedException | ExecutionException e) {
+			});
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

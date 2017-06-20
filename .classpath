@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="resource/|resource/|resource/" kind="src" path="src"/>
 	<classpathentry kind="src" path="images"/>
+	<classpathentry kind="src" path="src/resource"/>
 	<classpathentry kind="lib" path="dist/lib/commons-math3-3.0.jar"/>
 	<classpathentry kind="lib" path="dist/lib/controlsfx-8.40.12.jar"/>
 	<classpathentry kind="lib" path="dist/lib/guava.jar"/>

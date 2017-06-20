@@ -3,7 +3,6 @@ package frontend.model.unit.path;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 

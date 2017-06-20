@@ -2,26 +2,29 @@ package model.gamedata.game.param;
 
 import java.util.Map;
 
+import util.ResourceParser;
 import util.YamlIO;
 
-public class ParamIO extends YamlIO{
-	public String ORIGINAL_PARAMETER_PATH = "/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/config/param.yaml";
-	public String TEMP_PARAMETER_PATH = "/Users/Feng/Documents/workspace/haier_psulu_interface/src/psulu/config/tmp/tmpParam.yaml";
+public class ParamIO extends YamlIO {
+
+	private ResourceParser parser;
+
+	public ParamIO() {
+		parser = new ResourceParser("path");
+	}
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> loadOriginal() {
-		return (Map<String, Object>)this.loadMap(ORIGINAL_PARAMETER_PATH);
+		return (Map<String, Object>) this.loadMap(parser.getString("original_param"));
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Map<String,Object> loadTemp() {
-		return (Map<String, Object>)this.loadMap(TEMP_PARAMETER_PATH);
+	public Map<String, Object> loadTemp() {
+		return (Map<String, Object>) this.loadMap(parser.getString("temp_param"));
 	}
-	
+
 	public void writeTemp(Map<String, Object> map) {
-		super.writeMap(map, TEMP_PARAMETER_PATH);
+		super.writeMap(map, parser.getString("temp_param"));
 	}
-	
-	
 
 }
