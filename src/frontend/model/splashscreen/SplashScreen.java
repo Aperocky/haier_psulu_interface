@@ -1,6 +1,7 @@
-package frontend.model;
+package frontend.model.splashscreen;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXButton.ButtonType;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.gamedata.user.UserStats;
@@ -61,7 +63,8 @@ public class SplashScreen extends BorderPane {
 
 	private void fillContents(UserStats userStats) {
 		title = new Label(TITLE);
-		title.setFont(new Font(16));
+		title.setFont(new Font("Lucida Sans Unicode", 18));
+		title.setTranslateY(-20);
 
 		idField = new JFXTextField();
 		idField.setMaxWidth(DEFAULT_WIDTH * 0.6d);
@@ -83,6 +86,7 @@ public class SplashScreen extends BorderPane {
 		});
 
 		datePicker = new JFXDatePicker();
+		//datePicker.setId("date-picker");
 		datePicker.setMaxWidth(DEFAULT_WIDTH * 0.6d);
 		datePicker.setPromptText(DATE_TEXTFIELD);
 		datePicker.valueProperty().addListener((o, oldVal, newVal) -> {
@@ -90,11 +94,13 @@ public class SplashScreen extends BorderPane {
 				userStats.setDate(newVal);
 			}
 		});
+		
 
 		HBox hbox = new HBox();
 		hbox.setSpacing(SPACING);
 		hbox.setAlignment(Pos.CENTER);
 		simulateButton = button("Simulator");
+		simulateButton.getStyleClass().add("button-raised");
 		editButton = button("Editor");
 		simulateButton.setDisable(true);
 		hbox.getChildren().addAll(editButton, simulateButton);

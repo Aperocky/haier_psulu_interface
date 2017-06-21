@@ -1,4 +1,4 @@
-package frontend.model;
+package frontend.model.splashscreen;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

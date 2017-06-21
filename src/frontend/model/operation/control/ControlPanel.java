@@ -9,14 +9,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import model.gamedata.game.control.ControlProperty;
 import model.status.StatusManager;
 import util.Observer;
 
 public class ControlPanel extends Pane implements Observer<StatusManager>{
-	private static final double WIDTH_RATIO = 0.8d;
+	private static final double WIDTH_RATIO = 0.6d;
 	private static final double HEIGHT = 20;
 
 	private ControlProperty controlProperty;
@@ -34,11 +36,19 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 		sliderMaster = new ArrayList<>();
 
 		vbox.setSpacing(HEIGHT);
-		vbox.setAlignment(Pos.TOP_CENTER);
+		vbox.setAlignment(Pos.CENTER);
 		for (ControlType type : ControlType.values()) {
+			HBox hbox = new HBox();
+			hbox.setSpacing(5d);
+			hbox.setAlignment(Pos.CENTER);
+			Label min = new Label(""+type.uiMin());
+			min.setFont(new Font(10));
+			Label max = new Label(""+type.uiMax());
+			max.setFont(new Font(10));
 			Label label = initLabel(type.label());
 			ControlSlider slider = sliderFactory.getSlider(type, controlProperty.getControlProperty(type));
-			vbox.getChildren().addAll(label, slider);
+			hbox.getChildren().addAll(min, slider, max);
+			vbox.getChildren().addAll(label, hbox);
 			sliderMaster.add(slider);
 		}
 
@@ -76,10 +86,12 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 
 	public void disable() {
 		sliderMaster.forEach(slider -> slider.setDisable(true));
+		executeButton.setDisable(true);
 	}
 	
 	public void enable() {
 		sliderMaster.forEach(slider -> slider.setDisable(false));
+		executeButton.setDisable(false);
 	}
 	
 	private Label initLabel(String name) {

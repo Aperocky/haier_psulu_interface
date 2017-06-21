@@ -1,5 +1,5 @@
 import controller.Controller;
-import frontend.model.SplashScreen;
+import frontend.model.splashscreen.SplashScreen;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,6 +14,7 @@ public class HaierPsuluInterface extends Application {
 		splash.setOnEdit(evt -> controller.launchEditor());
 		
 		splash.show(primaryStage);
+		//controller.launchSimulator();
 	}
 
 	public static void main(String[] args) {

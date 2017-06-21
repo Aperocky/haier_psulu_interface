@@ -25,8 +25,10 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	private List<Point2D> plannedPath;
 	private List<Point2D> executedPath;
 	private List<List<Point2D>> obstacles;
+	private Point2D startPosition;
 	private Point2D currentPosition;
 	private Point2D finalDestination;
+	private double totalRiskBudget;
 	private double currentRiskBudget;
 	private double currentSurfacingBudget;
 
@@ -36,10 +38,26 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 		plannedPath = new ArrayList<>();
 		executedPath = new ArrayList<>();
 		obstacles = new ArrayList<>();
+
 	}
 
 	public void setObstacles(List<List<Point2D>> obstacles) {
 		this.obstacles = obstacles;
+		notifyObservers(this);
+	}
+
+	public Point2D getStartPosition() {
+		return startPosition;
+	}
+
+	public void setStartPosition(Point2D startPosition) {
+		this.startPosition = startPosition;
+		this.currentPosition = startPosition;
+		notifyObservers(this);
+	}
+
+	public void resetStartPosition() {
+		setCurrentPosition(this.startPosition);
 		notifyObservers(this);
 	}
 
@@ -52,7 +70,8 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	}
 
 	public void setCurrentPosition(Point2D current) {
-		//System.out.println("Set Current Starting Position: " + current.getX() + " , " + current.getY());
+		// System.out.println("Set Current Starting Position: " + current.getX()
+		// + " , " + current.getY());
 		currentPosition = current;
 		Map<String, Object> raw = paramIO.loadTemp();
 		if (raw == null)
@@ -71,6 +90,26 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 		// System.out.println("Set Destination: " + destination.getX() + " , " +
 		// destination.getY());
 		finalDestination = destination;
+	}
+
+	public double getTotalRiskBudget() {
+		return totalRiskBudget;
+	}
+
+	public void setTotalRiskBudget(double totalRiskBudget) {
+		this.totalRiskBudget = totalRiskBudget;
+		this.currentRiskBudget = totalRiskBudget;
+		notifyObservers(this);
+	}
+
+	public void resetCurrentRiskBudget() {
+		this.currentRiskBudget = this.totalRiskBudget;
+		notifyObservers(this);
+	}
+
+	public void setCurrentRiskBudget(double riskBudget) {
+		currentRiskBudget = riskBudget;
+		notifyObservers(this);
 	}
 
 	public double getCurrentRiskBudget() {
