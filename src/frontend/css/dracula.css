@@ -21,7 +21,7 @@
 }
 
 .button {
-	-fx-background-color: transparent;
+	-fx-background-color: #252525;
 }
 
 .text-input {
@@ -56,3 +56,11 @@
     -fx-background-color: #4F89C8;
     -fx-text-fill: #1E2019;
 }
+
+.progress-bar {
+    -fx-box-border: transparent; 
+    -fx-accent: #001A7B;
+    -fx-foreground-color: blue;
+    -fx-progress-color: blue;
+}
+

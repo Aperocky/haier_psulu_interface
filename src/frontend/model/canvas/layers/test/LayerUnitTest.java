@@ -16,13 +16,14 @@ public class LayerUnitTest extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		ObstacleLayer layer = new ObstacleLayer(500, 500);
+		LayerMaster masterLayer = new LayerMaster(500, 500);
+		ObstacleLayer layer = (ObstacleLayer) masterLayer.getLayer(LayerType.ObstacleLayer);
 		ObstacleFactory factory = new ObstacleFactory();
 		List<List<Point2D>> obstacles = factory.loadObstacles();
 		obstacles.forEach(obstacle -> {
 			layer.addObstacle(obstacle);
 		});
-		Scene scene = new Scene(layer, 500, 500);
+		Scene scene = new Scene(masterLayer, 500, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

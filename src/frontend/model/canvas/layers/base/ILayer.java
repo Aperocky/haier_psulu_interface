@@ -1,6 +1,6 @@
 package frontend.model.canvas.layers.base;
 
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 import util.Observer;
 
 /**

@@ -4,11 +4,11 @@ import java.util.function.Function;
 
 import com.google.common.base.Predicate;
 
-import frontend.util.BiConsumer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import util.BiConsumer;
 
 /**
  * Enable either primary or secondary mouse to drag the node around in its

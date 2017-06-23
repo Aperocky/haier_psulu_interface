@@ -12,7 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 
 public class PathLayer extends LayerBase {
 
@@ -31,7 +31,7 @@ public class PathLayer extends LayerBase {
 	public void clear() {
 		super.clear();
 		segments.clear();
-		start = new Point2D(0, this.getPrefHeight());
+		start = null;
 	}
 
 	@Override
@@ -97,6 +97,10 @@ public class PathLayer extends LayerBase {
 	}
 
 	private void addLandmark(Point2D landmark) {
+		if(start == null){
+			start = landmark;
+			return;
+		}
 		PathSegment path = new PathSegment(start, landmark);
 		segments.add(path);
 		Circle startC = new Circle(start.getX(), start.getY(), 5);

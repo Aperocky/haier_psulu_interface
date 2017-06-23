@@ -32,7 +32,7 @@ public class Executor implements IExecutor {
 		// Make a copy first
 		List<Point2D> executed = new ArrayList<>(plannedPath);
 
-		return new ArrayList<>();
+		return plannedPath;
 	}
 
 }
