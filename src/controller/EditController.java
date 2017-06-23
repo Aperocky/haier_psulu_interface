@@ -7,7 +7,7 @@ import frontend.model.canvas.layers.concrete.KeyComponentLayer;
 import frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleLayer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 
 public class EditController {
 	

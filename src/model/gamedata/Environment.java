@@ -3,7 +3,7 @@ package model.gamedata;
 import java.util.List;
 
 import javafx.geometry.Point2D;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 import model.gamedata.user.UserStats;
 import model.status.StatusManager;
 

@@ -9,8 +9,8 @@ import frontend.model.operation.control.ControlType;
 import javafx.geometry.Point2D;
 import model.execute.Executor;
 import model.gamedata.Environment;
-import model.gamedata.game.GameStats;
 import model.gamedata.game.control.ControlProperty;
+import model.gamedata.game.gamestats.GameStats;
 import model.gamedata.game.obstacles.ObstacleFactory;
 import model.gamedata.game.param.ParamIO;
 import model.plan.Planner;
@@ -34,7 +34,7 @@ public class Game {
 		environment = new Environment();
 		planner = new Planner();
 		executor = new Executor();
-		
+
 		initialize();
 	}
 
@@ -42,6 +42,9 @@ public class Game {
 		controlProperty = control;
 		controlProperty.setOnChanged(() -> {
 			environment.setPlanning(true);
+			double expectedRiskBudget = environment.getGameStats().getCurrentRiskBudget()
+					- controlProperty.getControlValue(ControlType.ChanceConstraint);
+			environment.getGameStats().setExpectedRiskBudget(expectedRiskBudget);
 			plan();
 		});
 	}
@@ -78,8 +81,7 @@ public class Game {
 		environment.setExecutedPath(executedPath);
 		Point2D lastStep = executedPath.get(executedPath.size() - 1);
 		environment.getGameStats().setCurrentPosition(lastStep);
-		environment.getGameStats().setCurrentRiskBudget(environment.getGameStats().getCurrentRiskBudget()
-				- controlProperty.getControlValue(ControlType.ChanceConstraint));
+		environment.getGameStats().setCurrentRiskBudget(environment.getGameStats().getExpectedRiskBudget());
 		checkSuccess(lastStep);
 	}
 
@@ -90,7 +92,7 @@ public class Game {
 	public void executeStep() {
 
 	}
-	
+
 	private void initialize() {
 		GameStats gameStats = this.getEnvironment().getGameStats();
 		gameStats.setObstacles((new ObstacleFactory().loadObstacles()));
@@ -102,8 +104,8 @@ public class Game {
 		Point2D endP = new Point2D(Double.valueOf(end.get(0)), Double.valueOf(end.get(1)));
 		gameStats.setStartPosition(startP);
 		gameStats.setDestination(endP);
-		
-		gameStats.setTotalRiskBudget(0.4d); //TODO: hardcoded risk budget now
+
+		gameStats.setTotalRiskBudget(0.4d); // TODO: hardcoded risk budget now
 	}
 
 	private void checkSuccess(Point2D lastStep) {

@@ -1,4 +1,4 @@
-package frontend.util;
+package util;
 
 public interface BiConsumer<T, H> {
 	

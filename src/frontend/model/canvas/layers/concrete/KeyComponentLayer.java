@@ -6,7 +6,7 @@ import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
 import frontend.model.unit.keycomponent.KeyComponent;
 import javafx.geometry.Point2D;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 
 public class KeyComponentLayer extends LayerBase {
 

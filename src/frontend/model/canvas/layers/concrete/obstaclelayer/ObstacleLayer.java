@@ -10,7 +10,7 @@ import frontend.util.grid.Grid;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import model.gamedata.constant.Constants;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 import util.Observer;
 
 public class ObstacleLayer extends LayerBase {

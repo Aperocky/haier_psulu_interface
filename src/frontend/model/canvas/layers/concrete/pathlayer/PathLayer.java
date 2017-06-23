@@ -12,7 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 
 public class PathLayer extends LayerBase {
 

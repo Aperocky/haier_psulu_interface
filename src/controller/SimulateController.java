@@ -4,7 +4,7 @@ import frontend.general.Simulator;
 import frontend.model.canvas.layers.base.LayerType;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 import model.general.Game;
 import model.status.StatusManager;
 import util.ResourceParser;
@@ -30,6 +30,7 @@ public class SimulateController {
 		this.parser = new ResourceParser("path");
 
 		setupObserver();
+		setupMenu();
 	}
 
 	public void launch() {
@@ -53,15 +54,16 @@ public class SimulateController {
 
 		// Spinner, GameResultMessage observe StatusManager
 		StatusManager manager = game.getEnvironment().getStatusManager();
-		manager.addObservers(simulator.getProgressIndicator(),
-				simulator.getSuccessMessage(), simulator.getControlPanel());
+		manager.addObservers(simulator.getProgressIndicator(), simulator.getSuccessMessage(),
+				simulator.getControlPanel());
 		manager.notifyObservers(manager);
 
 		simulator.setOnExecute(evt -> game.execute());
-		
-		simulator.getMenu().fill(game.getEnvironment());
+
 	}
 
-	
+	private void setupMenu() {
+		simulator.getMenu().fill(game.getEnvironment());
+	}
 
 }

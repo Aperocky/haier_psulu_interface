@@ -1,4 +1,4 @@
-package model.gamedata.game;
+package model.gamedata.game.gamestats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,21 +6,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import frontend.model.canvas.layers.concrete.obstaclelayer.ObstacleMaster;
 import javafx.geometry.Point2D;
 import model.gamedata.game.param.ParamIO;
-import util.ObservableBase;
-import util.Observer;
 
-/**
- * GameStats is observed by Front end in order to properly update the value of
- * risk budget, surfacing budget, current position and planned paths.
- * 
- * @author Feng
- *
- */
-public class GameStats extends ObservableBase<GameStats> implements Observer<ObstacleMaster> {
-
+public class PathStats {
+	
 	private ParamIO paramIO;
 	private List<Point2D> plannedPath;
 	private List<Point2D> executedPath;
@@ -28,22 +18,16 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	private Point2D startPosition;
 	private Point2D currentPosition;
 	private Point2D finalDestination;
-	private double totalRiskBudget;
-	private double currentRiskBudget;
-	private double currentSurfacingBudget;
-
-	public GameStats() {
-		super();
+	
+	public PathStats() {
 		paramIO = new ParamIO();
 		plannedPath = new ArrayList<>();
 		executedPath = new ArrayList<>();
 		obstacles = new ArrayList<>();
-
 	}
-
+	
 	public void setObstacles(List<List<Point2D>> obstacles) {
 		this.obstacles = obstacles;
-		notifyObservers(this);
 	}
 
 	public Point2D getStartPosition() {
@@ -53,12 +37,10 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	public void setStartPosition(Point2D startPosition) {
 		this.startPosition = startPosition;
 		this.currentPosition = startPosition;
-		notifyObservers(this);
 	}
 
 	public void resetStartPosition() {
 		setCurrentPosition(this.startPosition);
-		notifyObservers(this);
 	}
 
 	public Point2D getCurrentPosition() {
@@ -79,7 +61,6 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 		List<Double> start = Arrays.asList((double) current.getX(), (double) current.getY(), 0d, 0d);
 		raw.put("start_location", start);
 		paramIO.writeTemp(raw);
-		notifyObservers(this);
 	}
 
 	public Point2D getDestination() {
@@ -91,47 +72,17 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 		// destination.getY());
 		finalDestination = destination;
 	}
-
-	public double getTotalRiskBudget() {
-		return totalRiskBudget;
-	}
-
-	public void setTotalRiskBudget(double totalRiskBudget) {
-		this.totalRiskBudget = totalRiskBudget;
-		this.currentRiskBudget = totalRiskBudget;
-		notifyObservers(this);
-	}
-
-	public void resetCurrentRiskBudget() {
-		this.currentRiskBudget = this.totalRiskBudget;
-		notifyObservers(this);
-	}
-
-	public void setCurrentRiskBudget(double riskBudget) {
-		currentRiskBudget = riskBudget;
-		notifyObservers(this);
-	}
-
-	public double getCurrentRiskBudget() {
-		return currentRiskBudget;
-	}
-
-	public double getCurrentSurfacingBudget() {
-		return currentSurfacingBudget;
-	}
-
+	
 	public List<List<Point2D>> getObstacles() {
 		return obstacles;
 	}
 
 	public void setPlannedPath(List<Point2D> plan) {
 		plannedPath = plan;
-		notifyObservers(this);
 	}
 
 	public void setExecutedPath(List<Point2D> executed) {
 		executedPath = executed;
-		notifyObservers(this);
 	}
 
 	public List<Point2D> getPlannedPath() {
@@ -140,14 +91,6 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 
 	public List<Point2D> getExecutedPath() {
 		return Collections.unmodifiableList(executedPath);
-	}
-
-	@Override
-	public void update(ObstacleMaster obstacleMaster) {
-		obstacles.clear();
-		obstacleMaster.forEach(obstacle -> {
-			obstacles.add(obstacle.getVertices());
-		});
 	}
 
 }

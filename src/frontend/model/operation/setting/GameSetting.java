@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.jfoenix.controls.JFXButton;
 
 import javafx.scene.control.TitledPane;
-import model.gamedata.game.GameStats;
+import model.gamedata.game.gamestats.GameStats;
 
 public class GameSetting extends TitledPane{
 	

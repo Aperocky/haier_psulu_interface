@@ -1,18 +1,18 @@
 package frontend.model.operation.control;
 
 public enum ControlType {
-	ChanceConstraint("Risk (%)", "chance_constraint", 0.1d, 0.3d, 10, 30),
-	MaxVelocity("Maximum Velocity", "max_velocity", 0.1d, 0.2d, 10, 20),
+	ChanceConstraint("Risk", "chance_constraint", 0.1d, 0.3d, 25, 75),
+	MaxVelocity("Maximum Lag Length", "max_velocity", 0.1d, 0.2d, 10, 20),
 	WayPoints("Number of Waypoints", "waypoints", 3d, 15d, 3, 15);
 	
 	private String label;
 	private String key;
 	private double minValue;
 	private double maxValue;
-	private double minValueUI;
-	private double maxValueUI;
+	private int minValueUI;
+	private int maxValueUI;
 	
-	private ControlType(String label, String yamlName, double min, double max, double uiMin, double uiMax) {
+	private ControlType(String label, String yamlName, double min, double max, int uiMin, int uiMax) {
 		this.label = label;
 		this.key = yamlName;
 		this.minValue = min;
@@ -37,11 +37,11 @@ public enum ControlType {
 		return this.maxValue;
 	}
 	
-	public double uiMin() {
+	public int uiMin() {
 		return this.minValueUI;
 	}
 	
-	public double uiMax() {
+	public int uiMax() {
 		return this.maxValueUI;
 	}
 
