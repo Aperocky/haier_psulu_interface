@@ -1,7 +1,7 @@
 package frontend.general;
 
 import frontend.model.budget.RiskBudget;
-import frontend.model.canvas.layers.Canvas;
+import frontend.model.canvas.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.notification.ProgressIndicator;
 import frontend.model.notification.gameresult.SuccessMessage;
@@ -27,7 +27,7 @@ public class Simulator extends BorderPane {
 
 	public Simulator(double width, double height) {
 		this.setPrefSize(width, height);
-		canvas = new Canvas(height * 0.9d);
+		canvas = new Canvas(height * 0.75d);
 		controlPanel = new ControlPanel(width * 0.2d, height * 0.9d);
 		riskBudget = new RiskBudget(width, height * 0.1d);
 		menu = new Menu(width * 0.2d, height * 0.4d);
