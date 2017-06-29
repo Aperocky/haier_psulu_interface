@@ -1,10 +1,10 @@
-chance_constraint: 0.2675
+chance_constraint: 0.13542307692307692
 horizon_cost_proportion: 0.99
 coVarX: 0.01
 coVarY: 0.01
 max_velocity: 0.15
 cleanMap: False
-waypoints: 9
+waypoints: 15
 max_control: 0.1
 cleanDist: 0.1
 receding_horizon: True
