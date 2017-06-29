@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import frontend.util.usercontrol.basic.ICloneable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
@@ -44,6 +45,7 @@ public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 		this.setFill(color);
 		this.setStroke(color.darker());
 		this.setStrokeWidth(STROKE_WIDTH);
+		addBorderGlow(this, color);
 	}
 
 	public void addVertex(Point2D vertex) {
@@ -82,5 +84,16 @@ public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 		obs.deleteHandler(userControl.getDeleteHandler());
 		obs.pasteHandler(userControl.getPasteHandler());
 		return obs;
+	}
+	
+	private void addBorderGlow(Node node, Color color) {		 
+		DropShadow borderGlow= new DropShadow();
+		borderGlow.setOffsetY(0f);
+		borderGlow.setOffsetX(0f);
+		borderGlow.setColor(color);
+		borderGlow.setWidth(40);
+		borderGlow.setHeight(40);
+		 
+		node.setEffect(borderGlow);
 	}
 }

@@ -103,6 +103,7 @@ public class SplashScreen extends BorderPane {
 		simulateButton.getStyleClass().add("button-raised");
 		editButton = button("Editor");
 		simulateButton.setDisable(true);
+		editButton.setDisable(true);
 		hbox.getChildren().addAll(editButton, simulateButton);
 
 		vbox.getChildren().addAll(title, idField, datePicker, hbox);
