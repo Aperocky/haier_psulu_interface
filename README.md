@@ -6,13 +6,25 @@ whereas the risk of the robot running into danger accumulates. The goal of this 
 whether it is preferrable to rely on a set of instructions previously set by human, or to completely rely on the robot's internal 
 algorithm to decide next step of action.  
 
+## Dependency
++ [Anaconda 4.4.0 Python 2.7 version](https://www.continuum.io/downloads)
++ PuLP 1.6.5(pip install pulp)
++ [Gurobi Optimizer](http://www.gurobi.com/downloads/gurobi-optimizer)
++ Gurobi academic license key which can be requested [here](https://user.gurobi.com/download/licenses/free-academic)
+
+## Build
+Download and install Anaconda 4.4.0 for Python 2.7. This python package will be used in replacement of the original system python. This package comes with pip which is a python pacakge manager. 
+Use pip to install PuLP, a general mathematics python library. 
+Download and install Gurobi Optimizer. Register a free academic license to activate Gurobi. 
+Run the file in eclipse. 
+
 ## User Interface
-<img src="https://github.com/YuansongFeng/risk_awareness_simulation_javafx/blob/master/screenshots/control.png" width="400">
-<img src="https://github.com/YuansongFeng/risk_awareness_simulation_javafx/blob/master/screenshots/eval.png" width="400">
-<img src="https://github.com/YuansongFeng/risk_awareness_simulation_javafx/blob/master/screenshots/feedback.png" width="400">
+<img src="https://github.com/YuansongFeng/risk_awareness_simulation_javafx/blob/master/screenshots/login.png" width="400">
+<img src="https://github.com/YuansongFeng/risk_awareness_simulation_javafx/blob/master/screenshots/planning.png" width="400">
+<img src="https://github.com/YuansongFeng/risk_awareness_simulation_javafx/blob/master/screenshots/pathshown.png" width="400">
       
 ## Features
-+ Consecutive path planning based on Dijkstra in the maze of dangerous blocks
-+ Incoportate path deviation approximated by a Normal Distribution in executing the path, which mimics the real life error
-+ Use hidden Markov analysis to analyze the participants' choosing behavior in the background
++ Continuous space path planning with receding horizon based on psulu algorithm
++ Support user login and game editing. 
++ Record user actions in the log
 
