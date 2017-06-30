@@ -26,9 +26,9 @@ into
 ```
 try: 
     name, value = line.split()
-values[name] = float(value)
+    values[name] = float(value)
 except ValueError:
-continue
+  	continue
 ```
 This change is to make sure that when some input lines are not name-value pair, the program won't crash. 
 
