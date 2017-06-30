@@ -44,7 +44,7 @@ public class Planner implements IPlanner {
 			@Override
 			protected List<Point2D> call() throws Exception {
 				Runtime r = Runtime.getRuntime();
-				Process p = r.exec("./PuLPpSulu.py", null, new File(parser.getString("psulu_planner")));
+				Process p = r.exec("python ./PuLPpSulu.py", null, new File(parser.getString("psulu_planner")));
 				p.waitFor();
 				// Debug
 				// BufferedReader stdOut = new BufferedReader(new
