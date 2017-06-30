@@ -26,18 +26,18 @@ into
 ```
 try: 
     name, value = line.split()
-	values[name] = float(value)
+values[name] = float(value)
 except ValueError:
-  	continue
+continue
 ```
 This change is to make sure that when some input lines are not name-value pair, the program won't crash. 
 
 Now we are ready to run **HaierPsuluInterface.class** in Eclipse. 
 
 ## User Interface
-<img src="https://github.com/YuansongFeng/haier_psulu_interface/blob/master/screenshots/login.png" width="400">
-<img src="https://github.com/YuansongFeng/haier_psulu_interface/blob/master/screenshots/planning.png" width="400">
-<img src="https://github.com/YuansongFeng/haier_psulu_interface/blob/master/screenshots/pathshown.png" width="400">
+<img src="https://github.com/YuansongFeng/haier_psulu_interface/blob/master/screenshots/login.png" width="400" height="400">
+<img src="https://github.com/YuansongFeng/haier_psulu_interface/blob/master/screenshots/planning.png" width="400" height="500">
+<img src="https://github.com/YuansongFeng/haier_psulu_interface/blob/master/screenshots/pathshown.png" width="400" height="500">
       
 ## Features
 + Continuous space path planning with receding horizon based on psulu algorithm
