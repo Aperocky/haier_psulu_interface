@@ -1,6 +1,5 @@
 environment             : "[./config/newEnvi.yaml]"
-chance_constraint       : 0.03
-margin                  : 0.5
+chance_constraint       : 0.20
 start_location          : [0,0,0,0]
 end_location            : [1,1,0,0]
 waypoints               : 9
