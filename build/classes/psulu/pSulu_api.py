@@ -117,6 +117,7 @@ class pSulu(object):
   def __init__(self, configFile=None):
     self.environment             = None
     self.outFolder               = None
+    self.margin                  = None
     self.start_location          = None
     self.end_location            = None
     self.chance_constraint       = None

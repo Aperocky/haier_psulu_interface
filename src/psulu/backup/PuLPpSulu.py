@@ -28,7 +28,7 @@ import sys, pdb, math
 import yaml as Y
 
 class PathSolver:
-    def __init__(self, u_max, xInit, xT, A, B, horizon, margin=None, poly_nsides=50, horizon_cost=0.5):
+    def __init__(self, u_max, xInit, xT, A, B, horizon, poly_nsides=50, horizon_cost=0.5):
         '''
         Mixed integer programming based path planning
         '''
@@ -69,10 +69,6 @@ class PathSolver:
         self.__A        = A
         self.__B        = B
         self.gap        = None
-        self.margin     = margin
-        if self.margin != None:
-            if self.margin < 0:
-                raise Exception('Margin should be positive')
 
         self.msg        = 1
         self.__nu       = len(self.__B[0])
@@ -131,19 +127,6 @@ class PathSolver:
 
         for x_var, xi in zip(self.x[self.__N].values(), self.xT):
           self.prob.addConstraint(x_var == xi)
-
-        if self.margin != None:
-            # Add the boundary constraints 
-            xmin = min(self.xInit[0], self.xT[0]) - self.margin
-            xmax = max(self.xInit[0], self.xT[0]) + self.margin
-            ymin = min(self.xInit[1], self.xT[1]) - self.margin
-            ymax = max(self.xInit[1], self.xT[1]) + self.margin
-
-            for idx in range(1, self.__N):
-                for x_var, xm in zip(self.x[idx].values(), [xmin, ymin]):
-                    self.prob.addConstraint(x_var >= xm)
-                for x_var, xm in zip(self.x[idx].values(), [xmax, ymax]):
-                    self.prob.addConstraint(x_var <= xm)
 
         # Constraints on intermediate variables
         if self.receding_horizon:
@@ -501,8 +484,8 @@ class PathSolver:
         # Solve the optimization problem
         with tempfile.NamedTemporaryFile() as fp:
           # using temporary file to write log
+          #self.prob.solve(pulp.GUROBI_CMD(msg=self.msg, options={"TimeLimit": 300}))
           self.prob.solve(pulp.GUROBI_CMD(msg=self.msg))
-          #self.prob.solve(pulp.GUROBI_CMD(msg=self.msg))
 
           ## Read log file to get number of nodes explored
           #fp.seek(0)
@@ -642,7 +625,6 @@ class IRA(pSulu):
         u_max     = self.max_velocity
         self.MILP = PathSolver(u_max, self.start_location, self.end_location, \
                                self.__A, self.__B, self.receding_horizon, \
-                               margin=self.margin,
                                poly_nsides=self.horizon_polygon_size, \
                                horizon_cost=self.horizon_cost_proportion)
         self.MILP.addObstacles(self.__N, self.__H, self.__G, self.__zInit)
