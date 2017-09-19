@@ -1,9 +1,9 @@
-environment             : "[./config/newEnvi.yaml]"
-chance_constraint       : 0.03
-margin                  : 0.5
+environment             : "[./config/map1.yaml]"
+chance_constraint       : 0.3 #0.03
+margin                  : 0.01
 start_location          : [0,0,0,0]
 end_location            : [1,1,0,0]
-waypoints               : 9
+waypoints               : 3
 max_velocity            : 0.15
 max_control             : 0.1
 coVarX                  : 0.01

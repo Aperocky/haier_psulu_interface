@@ -8,7 +8,7 @@ import javafx.scene.shape.StrokeLineCap;
 
 public class PathSegment extends Line{
 	public static final Color DEFAULT_COLOR = Color.YELLOWGREEN;
-	public static final double DEFAULT_WIDTH = 5;
+	public static final double DEFAULT_WIDTH = 2;
 	
 	public PathSegment(Point2D a, Point2D b) {
 		super(a.getX(), a.getY(), b.getX(), b.getY());

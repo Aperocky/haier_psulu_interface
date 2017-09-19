@@ -50,6 +50,7 @@ public class SimulateController {
 			gameStats.addObserver(simulator.getLayerMaster().getLayer(layer));
 		}
 		gameStats.addObserver(simulator.getRiskBudget());
+		gameStats.addObserver(simulator.getSurfacingBudget());
 		gameStats.notifyObservers(gameStats);
 
 		// Spinner, GameResultMessage observe StatusManager

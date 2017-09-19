@@ -103,9 +103,9 @@ public class PathLayer extends LayerBase {
 		}
 		PathSegment path = new PathSegment(start, landmark);
 		segments.add(path);
-		Circle startC = new Circle(start.getX(), start.getY(), 5);
+		Circle startC = new Circle(start.getX(), start.getY(), path.getStrokeWidth());
 		startC.setFill(path.getStroke());
-		Circle endC = new Circle(landmark.getX(), landmark.getY(), 5);
+		Circle endC = new Circle(landmark.getX(), landmark.getY(), path.getStrokeWidth());
 		endC.setFill(path.getStroke());
 		getChildren().addAll(path, startC, endC);
 		start = landmark;

@@ -15,13 +15,13 @@ def firstPassCommandLine():
                         help='Number of obstacles', dest='numObst')
     parser.add_argument('-o', type=str, default='./config/newEnvi.yaml',
                         help='Output File name', dest='outFile')
-    parser.add_argument('-maxL', type=int, default=0.05,
+    parser.add_argument('-maxL', type=float, default=0.05,
                         help='Max Length', dest='maxLen')
-    parser.add_argument('-minL', type=int, default=0.05,
+    parser.add_argument('-minL', type=float, default=0.05,
                         help='Min Length', dest='minLen')
-    parser.add_argument('-maxW', type=int, default=0.05,
+    parser.add_argument('-maxW', type=float, default=0.05,
                         help='Max Width', dest='maxWid')
-    parser.add_argument('-minW', type=int, default=0.05,
+    parser.add_argument('-minW', type=float, default=0.05,
                         help='Min Width', dest='minWid')
 
     # Parse input
