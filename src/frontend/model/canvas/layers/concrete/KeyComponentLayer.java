@@ -10,8 +10,8 @@ import model.gamedata.game.gamestats.GameStats;
 
 public class KeyComponentLayer extends LayerBase {
 
-	private static final String GOAL_IMG = "flag.png";
-	private static final String TARGET_IMG = "submarine.png";
+	private static final String GOAL_IMG = "coral.png";
+	private static final String TARGET_IMG = "fish.png";
 	private KeyComponent vehicle;
 	private KeyComponent goal;
 

@@ -1,4 +1,4 @@
-#!/Users/Feng/anaconda2/bin/python
+#!/Users/Feng/anaconda/bin/python
 from __future__ import division
 import socket
 import matplotlib as M

@@ -19,6 +19,7 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 	private Label percent;
 
 	public RiskBudget(double width, double height) {
+		this.setPrefSize(width, height);
 		hbox = new HBox();
 		hbox.setPrefSize(width, height);
 		hbox.setSpacing(SPACING);
@@ -27,7 +28,7 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		progressBar.setColor(Color.web("#C6DAFC"), 0);
 		progressBar.setColor(Color.web("#659BFB"), 1);
 
-		title = new Label("Risk");
+		title = new Label("Total Risk");
 		percent = new Label("");
 
 		hbox.getChildren().addAll(title, progressBar, percent);
@@ -45,9 +46,11 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		progressBar.setProgress(currRatio, 0);
 		progressBar.setProgress(expectedRatio, 1);
 		if (current > 0)
-			percent.setText("" + Math.round(currRatio * 100) + "%");
-		else
-			percent.setText("out");
+			percent.setText("" + (double) Math.round(currRatio * 100) / 10 + "%");
+		else {
+			percent.setText("out"); 
+			percent.setTextFill(Color.RED);
+		}
 	}
 
 }

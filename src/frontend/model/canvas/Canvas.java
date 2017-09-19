@@ -13,11 +13,13 @@ public class Canvas extends Pane{
 	private LayerMaster layerMaster;
 	
 	public Canvas(double size) {
-		layerMaster = new LayerMaster(size - 0.8d * BORDER, size - 0.8d * BORDER);
+		layerMaster = new LayerMaster(size - 2d * BORDER, size - 2d * BORDER);
 		layerMaster.setTranslateX(BORDER);
 		layerMaster.setTranslateY(BORDER);
 		addBorderGlow(this);
 		this.setPrefSize(size, size);
+		this.setMinSize(size, size);
+		this.setMaxSize(size, size);
 		this.setStyle("-fx-background-color: rgb(40, 40, 40)");
 		this.getChildren().add(layerMaster); 
 	}

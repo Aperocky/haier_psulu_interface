@@ -30,7 +30,7 @@ public class ControlSlider extends JFXSlider {
 	public ControlSlider(ControlType type, double width, double height, DoubleProperty boundProperty) {
 		super(type.uiMin(), type.uiMax(), (type.uiMin() + type.uiMax()) / 2);
 		this.setPrefSize(width, height);
-
+		
 		// notify new value after user finishes dragging
 		this.valueChangingProperty().addListener((obs, oldv, newv) -> {
 			if (newv == false) {
@@ -51,7 +51,7 @@ public class ControlSlider extends JFXSlider {
 		double uiRange = type.uiMax() - type.uiMin();
 		double ratio = algoRange / uiRange;
 		
-		return ratio * uiValue;
+		return ratio * (uiValue - type.uiMin()) + type.algoMin();
 	}
 
 }

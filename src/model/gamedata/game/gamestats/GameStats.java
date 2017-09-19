@@ -117,8 +117,13 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	public double getCurrentRiskBudget() {
 		return budgetStats.getCurrentRiskBudget();
 	}
+	
+	public void setCurrentSurfacingBudget(int bgt) {
+		budgetStats.setCurrentSurfacingBudget(bgt);
+		notifyObservers(this);
+	}
 
-	public double getCurrentSurfacingBudget() {
+	public int getCurrentSurfacingBudget() {
 		return budgetStats.getCurrentSurfacingBudget();
 	}
 	

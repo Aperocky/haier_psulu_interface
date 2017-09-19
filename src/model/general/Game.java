@@ -82,6 +82,8 @@ public class Game {
 		Point2D lastStep = executedPath.get(executedPath.size() - 1);
 		environment.getGameStats().setCurrentPosition(lastStep);
 		environment.getGameStats().setCurrentRiskBudget(environment.getGameStats().getExpectedRiskBudget());
+		environment.getGameStats().setCurrentSurfacingBudget(
+				environment.getGameStats().getCurrentSurfacingBudget() - 1);
 		checkSuccess(lastStep);
 	}
 
@@ -105,7 +107,9 @@ public class Game {
 		gameStats.setStartPosition(startP);
 		gameStats.setDestination(endP);
 
-		gameStats.setTotalRiskBudget(0.4d); // TODO: hardcoded risk budget now
+		// Set the real total risk budget, not the UI risk budget
+		gameStats.setTotalRiskBudget(2d); // TODO: hardcoded risk budget
+		gameStats.setCurrentSurfacingBudget(7);
 	}
 
 	private void checkSuccess(Point2D lastStep) {

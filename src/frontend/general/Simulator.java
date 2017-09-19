@@ -1,6 +1,7 @@
 package frontend.general;
 
 import frontend.model.budget.RiskBudget;
+import frontend.model.budget.SurfacingBudget;
 import frontend.model.canvas.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.notification.ProgressIndicator;
@@ -9,27 +10,26 @@ import frontend.model.operation.control.ControlPanel;
 import frontend.model.operation.setting.Menu;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 public class Simulator extends BorderPane {
-//	private static double COLUMN_CONSTRAINT1 = 70;
-//	private static double COLUMN_CONSTRAINT2 = 30;
-//	private static double ROW_CONSTRAINT1 = 30;
-//	private static double ROW_CONSTRAINT2 = 20;
-//	private static double ROW_CONSTRAINT3 = 50;
 
 	private Canvas canvas;
 	private ControlPanel controlPanel;
 	private RiskBudget riskBudget;
+	private SurfacingBudget surfacingBudget;
 	private Menu menu;
     private ProgressIndicator progressIndicator;
     private SuccessMessage successMessage;
 
 	public Simulator(double width, double height) {
 		this.setPrefSize(width, height);
-		canvas = new Canvas(height * 0.75d);
-		controlPanel = new ControlPanel(width * 0.2d, height * 0.9d);
-		riskBudget = new RiskBudget(width, height * 0.1d);
+		canvas = new Canvas(height * 0.85d);
+		controlPanel = new ControlPanel(width * 0.3d, height * 0.9d);
+		riskBudget = new RiskBudget(width * 0.7, height * 0.1d);
+		surfacingBudget = new SurfacingBudget(width * 0.2, height * 0.1d);
 		menu = new Menu(width * 0.2d, height * 0.4d);
 		progressIndicator = new ProgressIndicator();
 		progressIndicator.setMessage("Planning path...");
@@ -67,11 +67,21 @@ public class Simulator extends BorderPane {
 		return riskBudget;
 	}
 	
+	public SurfacingBudget getSurfacingBudget() {
+		return surfacingBudget;
+	}
+	
 	private void fillBorder() {
-		this.setLeft(menu);
+//		this.setLeft(menu);
 		this.setCenter(canvas);
 		this.setRight(controlPanel);
-		this.setTop(riskBudget);
+		
+		HBox hbox = new HBox();
+		hbox.setPrefSize(this.getPrefWidth(), this.getPrefHeight() * 0.1);
+		hbox.setSpacing(50d);
+		hbox.setAlignment(Pos.CENTER);
+		hbox.getChildren().addAll(riskBudget, surfacingBudget);
+		this.setTop(hbox);
 	}
 
 //	private void initializeLayout() {
