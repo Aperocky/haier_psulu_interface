@@ -29,7 +29,7 @@ public class PathStats {
 	public void setObstacles(List<List<Point2D>> obstacles) {
 		this.obstacles = obstacles;
 	}
-
+	
 	public Point2D getStartPosition() {
 		return startPosition;
 	}

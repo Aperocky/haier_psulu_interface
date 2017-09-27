@@ -55,7 +55,7 @@ public class SimulateController {
 
 		// Spinner, GameResultMessage observe StatusManager
 		StatusManager manager = game.getEnvironment().getStatusManager();
-		manager.addObservers(simulator.getProgressIndicator(), simulator.getSuccessMessage(),
+		manager.addObservers(simulator.getProgressIndicator(), simulator.getMessageMaster(),
 				simulator.getControlPanel());
 		manager.notifyObservers(manager);
 

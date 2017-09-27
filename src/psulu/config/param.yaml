@@ -1,11 +1,11 @@
-environment             : "[./config/map1.yaml]"
+environment             : "[./config/map4.yaml]"
 chance_constraint       : 0.3 #0.03
 margin                  : 0.01
 start_location          : [0,0,0,0]
 end_location            : [1,1,0,0]
-waypoints               : 3
-max_velocity            : 0.15
-max_control             : 0.1
+waypoints               : 8
+max_velocity            : 0.03 #.15
+max_control             : 0.98
 coVarX                  : 0.01
 coVarY                  : 0.01
 cleanMap                : False

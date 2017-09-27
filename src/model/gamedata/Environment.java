@@ -42,6 +42,7 @@ public class Environment {
 	}
 	
 	public void setPlannedPath(List<Point2D> plannedPath) {
+		manager.setFeasible(plannedPath.size() != 0);
 		gameStats.setPlannedPath(plannedPath);
 	}
 	

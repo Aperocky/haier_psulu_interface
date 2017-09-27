@@ -64,6 +64,8 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 			this.disable();
 		else 
 			this.enable();
+		if(!status.isFeasible())
+			executeButton.setDisable(true);
 	}
 
 	/**
