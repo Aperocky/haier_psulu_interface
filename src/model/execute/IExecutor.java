@@ -9,7 +9,7 @@ public interface IExecutor {
 	/**
 	 * Set the function which calculates amount of deviation and relevant distribution
 	 */
-	public void setDeviationFunction();
+	public double[] sample(double std);
 
 	/**
 	 * Modify the planned path according to the deviation function stored.

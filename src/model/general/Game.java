@@ -7,6 +7,7 @@ import java.util.Map;
 
 import frontend.model.operation.control.ControlType;
 import javafx.geometry.Point2D;
+import model.execute.CollisionDetector;
 import model.execute.Executor;
 import model.gamedata.Environment;
 import model.gamedata.game.control.ControlProperty;
@@ -29,11 +30,13 @@ public class Game {
 	private Environment environment;
 	private Planner planner;
 	private Executor executor;
+	private CollisionDetector detector;
 
 	public Game() {
 		environment = new Environment();
 		planner = new Planner();
 		executor = new Executor();
+		detector = new CollisionDetector();
 
 		initialize();
 	}
@@ -84,6 +87,7 @@ public class Game {
 		environment.getGameStats().setCurrentRiskBudget(environment.getGameStats().getExpectedRiskBudget());
 		environment.getGameStats().setCurrentSurfacingBudget(
 				environment.getGameStats().getCurrentSurfacingBudget() - 1);
+		checkFailure(lastStep);
 		checkSuccess(lastStep);
 	}
 
@@ -96,7 +100,7 @@ public class Game {
 	}
 
 	private void initialize() {
-		GameStats gameStats = this.getEnvironment().getGameStats();
+		GameStats gameStats = environment.getGameStats();
 		gameStats.setObstacles((new ObstacleFactory().loadObstacles()));
 		ParamIO io = new ParamIO();
 		Map<String, Object> params = (Map<String, Object>) io.loadOriginal();
@@ -111,12 +115,26 @@ public class Game {
 		gameStats.setTotalRiskBudget(2d); // TODO: hardcoded risk budget
 		gameStats.setCurrentSurfacingBudget(7);
 	}
+	
+	private void checkFailure(Point2D lastStep) {
+		List<List<Point2D>> obstacles = environment.getGameStats().getPathStats().getObstacles();
+		System.out.println("LastStep position: " + lastStep.getX() + ", " + lastStep.getY());
+		obstacles.forEach(obstacle -> {
+			System.out.println("New Obstacle");
+			obstacle.forEach(vertice -> {
+				System.out.println("Vertice position: " + vertice.getX() + ", " + vertice.getY());
+			});
+			if(detector.collide(lastStep, obstacle)) {
+				environment.getStatusManager().setFailure(true);
+			}
+		});
+	}
 
 	private void checkSuccess(Point2D lastStep) {
 		Point2D destination = environment.getGameStats().getDestination();
-		if (Math.abs(lastStep.getX() - destination.getX()) <= 0.001d
-				&& Math.abs(lastStep.getY() - destination.getY()) <= 0.001d) {
-			environment.getStatusManager().setSuccess();
+		if (Math.abs(lastStep.getX() - destination.getX()) <= 1d/36d
+				&& Math.abs(lastStep.getY() - destination.getY()) <= 1d/36d) {
+			environment.getStatusManager().setSuccess(true);
 		}
 	}
 

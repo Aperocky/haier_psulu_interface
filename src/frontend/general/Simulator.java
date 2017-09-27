@@ -5,7 +5,7 @@ import frontend.model.budget.SurfacingBudget;
 import frontend.model.canvas.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
 import frontend.model.notification.ProgressIndicator;
-import frontend.model.notification.gameresult.SuccessMessage;
+import frontend.model.notification.gameresult.MessageMaster;
 import frontend.model.operation.control.ControlPanel;
 import frontend.model.operation.setting.Menu;
 import javafx.event.ActionEvent;
@@ -22,7 +22,7 @@ public class Simulator extends BorderPane {
 	private SurfacingBudget surfacingBudget;
 	private Menu menu;
     private ProgressIndicator progressIndicator;
-    private SuccessMessage successMessage;
+    private MessageMaster messageMaster;
 
 	public Simulator(double width, double height) {
 		this.setPrefSize(width, height);
@@ -33,7 +33,7 @@ public class Simulator extends BorderPane {
 		menu = new Menu(width * 0.2d, height * 0.4d);
 		progressIndicator = new ProgressIndicator();
 		progressIndicator.setMessage("Planning path...");
-		successMessage = new SuccessMessage();
+		messageMaster = new MessageMaster();
 		
 		//initializeLayout();
 		fillBorder();
@@ -59,8 +59,8 @@ public class Simulator extends BorderPane {
 		return progressIndicator;
 	}
 	
-	public SuccessMessage getSuccessMessage() {
-		return successMessage;
+	public MessageMaster getMessageMaster() {
+		return messageMaster;
 	}
 	
 	public RiskBudget getRiskBudget() {
@@ -83,15 +83,5 @@ public class Simulator extends BorderPane {
 		hbox.getChildren().addAll(riskBudget, surfacingBudget);
 		this.setTop(hbox);
 	}
-
-//	private void initializeLayout() {
-//		GridPaneInitializer initializer = new GridPaneInitializer(this);
-//		initializer.columnRatios(COLUMN_CONSTRAINT1, COLUMN_CONSTRAINT2).rowRatios(ROW_CONSTRAINT1, ROW_CONSTRAINT2, ROW_CONSTRAINT3).build();
-//	}
-
-//	private void fillGrid() {
-//		this.add(canvas, 0, 1, 1, 2);
-//		this.add(controlPanel, 1, 2);
-//	}
 
 }
