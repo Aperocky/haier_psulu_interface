@@ -19,13 +19,14 @@ public class ControlSliderFactory {
 			slider.valueProperty().addListener((obs, oldValue, newValue) -> {
 				int nv;
 				double ov = newValue.doubleValue();
-				if(ov < 6)
-					nv = 4;
-				else if(ov >= 6 && ov < 10)
-					nv = 8;
-				else 
-					nv = 12;
-			    slider.setValue(nv);
+//				if(ov < 6)
+//					nv = 4;
+//				else if(ov >= 6 && ov < 10)
+//					nv = 8;
+//				else 
+//					nv = 12;
+//			    slider.setValue(nv);
+			    slider.setValue((int)ov);
 			});
 		}
 		

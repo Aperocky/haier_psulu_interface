@@ -4,7 +4,7 @@ margin                  : 0.01
 start_location          : [0,0,0,0]
 end_location            : [1,1,0,0]
 waypoints               : 8
-max_velocity            : 0.03 #.15
+max_velocity            : 0.06 #.15
 max_control             : 0.98
 coVarX                  : 0.01
 coVarY                  : 0.01
