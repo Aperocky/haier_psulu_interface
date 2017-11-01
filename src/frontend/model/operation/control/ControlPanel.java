@@ -45,8 +45,9 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 			min.setFont(new Font(10));
 			Label max = new Label(""+type.uiMax());
 			max.setFont(new Font(10));
-			Label label = initLabel(type.label());
+			Label label = new Label(type.label());
 			ControlSlider slider = sliderFactory.getSlider(type, controlProperty.getControlProperty(type));
+			connectSliderToLabel(slider, label);
 			hbox.getChildren().addAll(min, slider, max);
 			vbox.getChildren().addAll(label, hbox);
 			sliderMaster.add(slider);
@@ -96,9 +97,10 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 		executeButton.setDisable(false);
 	}
 	
-	private Label initLabel(String name) {
-		Label label = new Label(name);
-		return label;
+	private void connectSliderToLabel(ControlSlider slider, Label label) {
+		slider.valueProperty().addListener((obs, oldv, newv) -> {
+			label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+		});
 	}
 
 }

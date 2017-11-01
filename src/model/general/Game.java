@@ -112,18 +112,18 @@ public class Game {
 		gameStats.setDestination(endP);
 
 		// Set the real total risk budget, not the UI risk budget
-		gameStats.setTotalRiskBudget(2d); // TODO: hardcoded risk budget
-		gameStats.setCurrentSurfacingBudget(7);
+		gameStats.setTotalRiskBudget(2.1d); // TODO: hardcoded risk budget
+		gameStats.setCurrentSurfacingBudget(6);
 	}
 	
 	private void checkFailure(Point2D lastStep) {
 		List<List<Point2D>> obstacles = environment.getGameStats().getPathStats().getObstacles();
-		System.out.println("LastStep position: " + lastStep.getX() + ", " + lastStep.getY());
+//		System.out.println("LastStep position: " + lastStep.getX() + ", " + lastStep.getY());
 		obstacles.forEach(obstacle -> {
-			System.out.println("New Obstacle");
-			obstacle.forEach(vertice -> {
-				System.out.println("Vertice position: " + vertice.getX() + ", " + vertice.getY());
-			});
+//			System.out.println("New Obstacle");
+//			obstacle.forEach(vertice -> {
+//				System.out.println("Vertice position: " + vertice.getX() + ", " + vertice.getY());
+//			});
 			if(detector.collide(lastStep, obstacle)) {
 				environment.getStatusManager().setFailure(true);
 			}

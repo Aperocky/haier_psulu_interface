@@ -1,9 +1,7 @@
 package frontend.model.operation.control;
 
-import com.jfoenix.controls.JFXSlider;
-
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.scene.control.Slider;
 
 /**
  * Customized Slider that fits a specific {@code ControlType} Always gives a
@@ -13,8 +11,8 @@ import javafx.beans.property.DoubleProperty;
  * @author Feng
  *
  */
-public class ControlSlider extends JFXSlider {
-
+public class ControlSlider extends Slider {
+	private ControlType type;
 	/**
 	 * 
 	 * @param type
@@ -29,6 +27,7 @@ public class ControlSlider extends JFXSlider {
 	 */
 	public ControlSlider(ControlType type, double width, double height, DoubleProperty boundProperty) {
 		super(type.uiMin(), type.uiMax(), (type.uiMin() + type.uiMax()) / 2);
+		this.type = type;
 		this.setPrefSize(width, height);
 		
 		// notify new value after user finishes dragging
@@ -44,6 +43,10 @@ public class ControlSlider extends JFXSlider {
 				boundProperty.set(uiToAlgo(type, newv.doubleValue()));
 			}
 		});
+	}
+	
+	public ControlType getType() {
+		return type;
 	}
 
 	private double uiToAlgo(ControlType type, double uiValue) {
