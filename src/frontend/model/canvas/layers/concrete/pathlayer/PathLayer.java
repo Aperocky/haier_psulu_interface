@@ -10,6 +10,10 @@ import frontend.model.unit.path.PathSegment;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.gamedata.game.gamestats.GameStats;
@@ -42,10 +46,17 @@ public class PathLayer extends LayerBase {
 	@Override
 	public void update(GameStats game) {
 		this.clear();
-//		if (game.isExecuting())
-//			game.getExecutedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
-//		else
-		game.getPlannedPath().stream().forEach(landmark -> addLandmark(transform(landmark)));
+		List<Point2D> path = game.getPlannedPath();
+		if(path.size() == 0)
+			return;
+		path.stream().forEach(landmark -> addLandmark(transform(landmark)));
+		// Mark deviation circle
+	    Point2D first = path.get(0);
+	    Point2D last = path.get(path.size()-1);
+	    double oriR = length(last, first) / 10d * 3;
+	    Point2D radi = new Point2D(oriR, oriR);
+	    Point2D transR = transform(radi);
+		addDeviationRange(transform(last), transR.getX());
 	}
 
 	public void setStart(Point2D start) {
@@ -109,6 +120,28 @@ public class PathLayer extends LayerBase {
 		endC.setFill(path.getStroke());
 		getChildren().addAll(path, startC, endC);
 		start = landmark;
+	}
+	
+	private void addDeviationRange(Point2D last, double radius) {
+		Circle range = new Circle(last.getX(), last.getY(), radius);
+		RadialGradient gradient = new RadialGradient(
+				0,
+	            .1,
+	            last.getX(),
+	            last.getY(),
+	            radius,
+	            false,
+	            CycleMethod.NO_CYCLE,
+	            new Stop(0, Color.YELLOW),
+	            new Stop(1, Color.TRANSPARENT));		
+		range.setFill(gradient);
+		range.setOpacity(0.3d);
+		getChildren().add(range);
+	}
+	
+	private double length(Point2D a, Point2D b) {
+		return Math.pow((a.getX() - b.getX()) * (a.getX() - b.getX()) + (a.getY() - b.getY()) * (a.getY() - b.getY()),
+				1 / 2d);
 	}
 
 }

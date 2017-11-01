@@ -99,7 +99,10 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	
 	private void connectSliderToLabel(ControlSlider slider, Label label) {
 		slider.valueProperty().addListener((obs, oldv, newv) -> {
-			label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+			if(slider.getType().equals(ControlType.ChanceConstraint))
+				label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+			else if(slider.getType().equals(ControlType.WayPoints))
+				label.setText(slider.getType().label() + " : " + newv.intValue());
 		});
 	}
 
