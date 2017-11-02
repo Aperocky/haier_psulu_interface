@@ -2,6 +2,7 @@ package model.general;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +80,8 @@ public class Game {
 	 */
 	public void execute() {
 		List<Point2D> plannedPath = environment.getGameStats().getPlannedPath();
+		if(plannedPath.size() == 0)
+			return;
 		environment.getGameStats().setPlannedPath(new ArrayList<>());
 		List<Point2D> executedPath = executor.getExecutedPath(plannedPath);
 		environment.setExecutedPath(executedPath);
@@ -124,8 +127,16 @@ public class Game {
 //			obstacle.forEach(vertice -> {
 //				System.out.println("Vertice position: " + vertice.getX() + ", " + vertice.getY());
 //			});
-			if(detector.collide(lastStep, obstacle)) {
-				environment.getStatusManager().setFailure(true);
+			double delta = 0.01d;
+			Point2D lastNW = new Point2D(lastStep.getX()-delta, lastStep.getY()+delta);
+			Point2D lastNE = new Point2D(lastStep.getX()+delta, lastStep.getY()+delta);
+			Point2D lastSW = new Point2D(lastStep.getX()-delta, lastStep.getY()-delta);
+			Point2D lastSE = new Point2D(lastStep.getX()+delta, lastStep.getY()-delta);
+			List<Point2D> detects = Arrays.asList(lastNW, lastNE, lastSW, lastSE, lastStep);
+			for(Point2D detect : detects) {
+				if(detector.collide(detect, obstacle)) {
+					environment.getStatusManager().setFailure(true);
+				}
 			}
 		});
 	}

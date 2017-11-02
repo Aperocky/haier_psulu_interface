@@ -31,7 +31,6 @@ public class SplashScreen extends BorderPane {
 	private VBox vbox;
 	private Label title;
 	private JFXTextField idField;
-	private JFXDatePicker datePicker;
 	private JFXButton simulateButton;
 	private JFXButton editButton;
 
@@ -85,17 +84,6 @@ public class SplashScreen extends BorderPane {
 
 		});
 
-		datePicker = new JFXDatePicker();
-		//datePicker.setId("date-picker");
-		datePicker.setMaxWidth(DEFAULT_WIDTH * 0.6d);
-		datePicker.setPromptText(DATE_TEXTFIELD);
-		datePicker.valueProperty().addListener((o, oldVal, newVal) -> {
-			if (newVal != null) {
-				userStats.setDate(newVal);
-			}
-		});
-		
-
 		HBox hbox = new HBox();
 		hbox.setSpacing(SPACING);
 		hbox.setAlignment(Pos.CENTER);
@@ -106,7 +94,7 @@ public class SplashScreen extends BorderPane {
 		editButton.setDisable(true);
 		hbox.getChildren().addAll(editButton, simulateButton);
 
-		vbox.getChildren().addAll(title, idField, datePicker, hbox);
+		vbox.getChildren().addAll(title, idField, hbox);
 	}
 
 	private JFXButton button(String label) {
