@@ -25,6 +25,7 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	private ControlSliderFactory sliderFactory;
 	private VBox vbox;
 	private JFXButton executeButton;
+	private JFXButton repeatButton;
 	private List<ControlSlider> sliderMaster; 
 
 	public ControlPanel(double width, double height) {
@@ -52,11 +53,18 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 			vbox.getChildren().addAll(label, hbox);
 			sliderMaster.add(slider);
 		}
-
 		executeButton = new JFXButton("Execute");
 		executeButton.setPrefSize(80, 20);
-		vbox.getChildren().add(executeButton);
+		repeatButton = new JFXButton("Repeat");
+		repeatButton.setPrefSize(80,  20);
+		HBox hbox = new HBox();
+		hbox.setSpacing(HEIGHT);
+		hbox.setAlignment(Pos.CENTER);
+		hbox.getChildren().addAll(repeatButton, executeButton);
+		vbox.getChildren().add(hbox);
 		this.getChildren().add(vbox);
+		
+		setUpRepeatButton();
 	}
 	
 	@Override
@@ -90,16 +98,31 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	public void disable() {
 		sliderMaster.forEach(slider -> slider.setDisable(true));
 		executeButton.setDisable(true);
+		repeatButton.setDisable(true);
 	}
 	
 	public void enable() {
 		sliderMaster.forEach(slider -> slider.setDisable(false));
 		executeButton.setDisable(false);
+		repeatButton.setDisable(false);
 	}
 	
 	private void connectSliderToLabel(ControlSlider slider, Label label) {
 		slider.valueProperty().addListener((obs, oldv, newv) -> {
-			label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+			if(slider.getType().equals(ControlType.ChanceConstraint))
+				label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+			else if(slider.getType().equals(ControlType.WayPoints))
+				label.setText(slider.getType().label() + " : " + newv.intValue());
+		});
+	}
+	
+	private void setUpRepeatButton() {
+		repeatButton.setOnAction(evt -> {
+			for(ControlSlider slider : sliderMaster) {
+				if(slider.getType().equals(ControlType.WayPoints)){
+					slider.setValue(slider.getValue()+0.1);
+				}
+			}
 		});
 	}
 

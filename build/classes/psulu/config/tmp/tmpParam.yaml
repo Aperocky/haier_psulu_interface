@@ -1,17 +1,17 @@
-chance_constraint: 0.4765625
+chance_constraint: 0.40031249999999996
 margin: 0.01
 horizon_cost_proportion: 0.99
 coVarX: 0.01
 coVarY: 0.01
-max_velocity: 0.07
+max_velocity: 0.06
 cleanMap: False
-waypoints: 12
+waypoints: 8
 max_control: 0.98
 cleanDist: 0.1
 receding_horizon: True
 start_location: 
-- 0.7047107212223715
-- 0.8279715042923036
+- 0.18272608774851185
+- 0.24797353613082362
 - 0.0
 - 0.0
 environment: '[./config/map4.yaml]'

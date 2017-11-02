@@ -28,7 +28,7 @@ public abstract class LayerBase extends JFXMasonryPane implements ILayer {
 		Point2D resized = transformer.transformTo(1, 1, this.getPrefWidth(), this.getPrefHeight(), point);
 		return transformer.verticalFlip(resized, this.getPrefHeight());
 	}
-
+	
 	@Override
 	public void activate() {
 		keyboardControl.activate();

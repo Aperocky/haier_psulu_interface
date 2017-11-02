@@ -48,7 +48,7 @@ public class Executor implements IExecutor {
 		// Sample a deviation amount for the last step
 		// small step: 0.1d; medium step: 0.2d; big step: 0.3d
 		double length = length(plannedLast, executedPath.get(0));
-		double std = 1d / 88d * (length - 0.1d) / 0.08d;
+		double std = length / 10d;
 		double[] deviation = sample(std);
 		Point2D executedLast = new Point2D(plannedLast.getX() + deviation[0], plannedLast.getY() + deviation[1]);
 		executedPath.add(executedLast);
