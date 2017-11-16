@@ -82,14 +82,17 @@ public class Game {
 		List<Point2D> plannedPath = environment.getGameStats().getPlannedPath();
 		if(plannedPath.size() == 0)
 			return;
-		environment.getGameStats().setPlannedPath(new ArrayList<>());
+		GameStats gameStats = environment.getGameStats();
+		gameStats.setPlannedPath(new ArrayList<>());
+		gameStats.setPrevPlannedPath(new ArrayList<>());
+		gameStats.setPlannedPosition(plannedPath.get(plannedPath.size()-1));
 		List<Point2D> executedPath = executor.getExecutedPath(plannedPath);
 		environment.setExecutedPath(executedPath);
 		Point2D lastStep = executedPath.get(executedPath.size() - 1);
-		environment.getGameStats().setCurrentPosition(lastStep);
-		environment.getGameStats().setCurrentRiskBudget(environment.getGameStats().getExpectedRiskBudget());
-		environment.getGameStats().setCurrentSurfacingBudget(
-				environment.getGameStats().getCurrentSurfacingBudget() - 1);
+		gameStats.setCurrentPosition(lastStep);
+		gameStats.setCurrentRiskBudget(environment.getGameStats().getExpectedRiskBudget());
+		gameStats.setCurrentSurfacingBudget(
+				gameStats.getCurrentSurfacingBudget() - 1);
 		checkFailure(lastStep);
 		checkSuccess(lastStep);
 	}
@@ -121,12 +124,7 @@ public class Game {
 	
 	private void checkFailure(Point2D lastStep) {
 		List<List<Point2D>> obstacles = environment.getGameStats().getPathStats().getObstacles();
-//		System.out.println("LastStep position: " + lastStep.getX() + ", " + lastStep.getY());
 		obstacles.forEach(obstacle -> {
-//			System.out.println("New Obstacle");
-//			obstacle.forEach(vertice -> {
-//				System.out.println("Vertice position: " + vertice.getX() + ", " + vertice.getY());
-//			});
 			double delta = 0.01d;
 			Point2D lastNW = new Point2D(lastStep.getX()-delta, lastStep.getY()+delta);
 			Point2D lastNE = new Point2D(lastStep.getX()+delta, lastStep.getY()+delta);

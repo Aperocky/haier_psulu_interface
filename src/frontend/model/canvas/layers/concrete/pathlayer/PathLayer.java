@@ -6,6 +6,7 @@ import java.util.List;
 
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
+import frontend.model.unit.keycomponent.KeyComponent;
 import frontend.model.unit.path.PathSegment;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
@@ -46,10 +47,24 @@ public class PathLayer extends LayerBase {
 	@Override
 	public void update(GameStats game) {
 		this.clear();
+		// Draw previously planned position
+		Point2D plannedLastStep = game.getPlannedPosition();
+		if(plannedLastStep != null)
+			addPlannedPosition(transform(plannedLastStep));
+		
+		// Draw previously planned path
+		List<Point2D> prevPath = game.getPrevPlannedPath();
+		List<Point2D> transformedPrev = new ArrayList<>();
+		if(prevPath != null && prevPath.size() != 0)
+			prevPath.forEach(point -> transformedPrev.add(transform(point)));
+		drawPrevPath(transformedPrev);
+		
+		// Draw planning path
 		List<Point2D> path = game.getPlannedPath();
 		if(path.size() == 0)
 			return;
 		path.stream().forEach(landmark -> addLandmark(transform(landmark)));
+		
 		// Mark deviation circle
 	    Point2D first = path.get(0);
 	    Point2D last = path.get(path.size()-1);
@@ -137,6 +152,27 @@ public class PathLayer extends LayerBase {
 		range.setFill(gradient);
 		range.setOpacity(0.3d);
 		getChildren().add(range);
+	}
+	
+	private void drawPrevPath(List<Point2D> prevPath) {
+		if(prevPath.size() == 0)
+			return;
+		Point2D start = prevPath.get(0);
+		for(int i = 1; i < prevPath.size(); i++) {
+			Point2D next = prevPath.get(i);
+			PathSegment path = new PathSegment(start, next);
+			path.setStroke(Color.GRAY);
+			getChildren().add(path);
+			start = next;
+		}
+	}
+	
+	private void addPlannedPosition(Point2D plannedPos) {
+		if(plannedPos == null)
+			return;
+		Circle pos = new Circle(plannedPos.getX(), plannedPos.getY(), KeyComponent.DEFAULT_SIZE/3);
+		pos.setFill(Color.GRAY);
+		getChildren().add(pos);
 	}
 	
 	private double length(Point2D a, Point2D b) {

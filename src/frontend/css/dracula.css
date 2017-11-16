@@ -3,9 +3,9 @@
 	-fx-font-family: "Comic Sans MS";
 	-fx-text-fill: #E9BD19;
 	-fx-border-radius: 3px;
-	-fx-base: rgb(50, 50, 50);
-	-fx-background: rgb(50, 50, 50);
-	-fx-control-inner-background: rgb(50, 50, 50);
+	-fx-base: rgb(40, 40, 40);
+	-fx-background: rgb(0, 40, 40);
+	-fx-control-inner-background: rgb(0, 40, 40);
 	-fx-color: rgb(255, 255, 255);
 }
 

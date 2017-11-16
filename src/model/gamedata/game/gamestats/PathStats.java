@@ -13,11 +13,13 @@ public class PathStats {
 	
 	private ParamIO paramIO;
 	private List<Point2D> plannedPath;
+	private List<Point2D> prevPlannedPath;
 	private List<Point2D> executedPath;
 	private List<List<Point2D>> obstacles;
 	private Point2D startPosition;
 	private Point2D currentPosition;
 	private Point2D finalDestination;
+	private Point2D plannedPosition;
 	
 	public PathStats() {
 		paramIO = new ParamIO();
@@ -32,6 +34,14 @@ public class PathStats {
 	
 	public Point2D getStartPosition() {
 		return startPosition;
+	}
+	
+	public Point2D getPlannedPosition() {
+		return plannedPosition;
+	}
+
+	public void setPlannedPosition(Point2D plannedPosition) {
+		this.plannedPosition = plannedPosition;
 	}
 
 	public void setStartPosition(Point2D startPosition) {
@@ -83,6 +93,14 @@ public class PathStats {
 
 	public void setExecutedPath(List<Point2D> executed) {
 		executedPath = executed;
+	}
+	
+	public List<Point2D> getPrevPlannedPath() {
+		return prevPlannedPath;
+	}
+
+	public void setPrevPlannedPath(List<Point2D> prevPlannedPath) {
+		this.prevPlannedPath = prevPlannedPath;
 	}
 
 	public List<Point2D> getPlannedPath() {

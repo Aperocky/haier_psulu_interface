@@ -1,10 +1,7 @@
 package frontend.model.splashscreen;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXButton.ButtonType;
-import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.gamedata.user.UserStats;
@@ -26,7 +22,6 @@ public class SplashScreen extends BorderPane {
 	private static final double DEFAULT_HEIGHT = 400d;
 	private static final String TITLE = "Haier/p-sulu interface";
 	private static final String ID_TEXTFIELD = "Participant ID: ";
-	private static final String DATE_TEXTFIELD = "Experiment Date: ";
 	private static final double SPACING = 30;
 	private VBox vbox;
 	private Label title;
