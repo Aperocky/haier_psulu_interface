@@ -59,6 +59,15 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 	public Point2D getFinalDestination() {
 		return pathStats.getFinalDestination();
 	}
+	
+	public void setPlannedPosition(Point2D plannedPosition){
+		pathStats.setPlannedPosition(plannedPosition);
+		notifyObservers(this);
+	}
+	
+	public Point2D getPlannedPosition() {
+		return pathStats.getPlannedPosition();
+	}
 
 	public void setCurrentPosition(Point2D current) {
 		pathStats.setCurrentPosition(current);
@@ -75,6 +84,14 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 
 	public List<List<Point2D>> getObstacles() {
 		return pathStats.getObstacles();
+	}
+	
+	public void setPrevPlannedPath(List<Point2D> prevPlan) {
+		pathStats.setPrevPlannedPath(prevPlan);
+	}
+	
+	public List<Point2D> getPrevPlannedPath() {
+		return pathStats.getPrevPlannedPath();
 	}
 
 	public void setPlannedPath(List<Point2D> plan) {

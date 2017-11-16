@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 
 public class KeyComponent extends DraggableImageView {
 
-	private static final double DEFAULT_SIZE = 15d;
+	public static final double DEFAULT_SIZE = 30d;
 
 	public KeyComponent(String image) {
 

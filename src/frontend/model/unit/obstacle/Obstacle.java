@@ -45,7 +45,7 @@ public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 		this.setFill(color);
 		this.setStroke(color.darker());
 		this.setStrokeWidth(STROKE_WIDTH);
-		addBorderGlow(this, color);
+//		addBorderGlow(this, color);
 	}
 
 	public void addVertex(Point2D vertex) {

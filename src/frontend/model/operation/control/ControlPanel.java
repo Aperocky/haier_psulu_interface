@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXButton;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -53,15 +54,12 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 			vbox.getChildren().addAll(label, hbox);
 			sliderMaster.add(slider);
 		}
-		executeButton = new JFXButton("Execute");
-		executeButton.setPrefSize(80, 20);
 		repeatButton = new JFXButton("Repeat");
 		repeatButton.setPrefSize(80,  20);
-		HBox hbox = new HBox();
-		hbox.setSpacing(HEIGHT);
-		hbox.setAlignment(Pos.CENTER);
-		hbox.getChildren().addAll(repeatButton, executeButton);
-		vbox.getChildren().add(hbox);
+		executeButton = new JFXButton("Execute");
+		executeButton.setPrefSize(80, 20);
+		executeButton.setTranslateY(100);
+		vbox.getChildren().addAll(repeatButton, executeButton);
 		this.getChildren().add(vbox);
 		
 		setUpRepeatButton();
