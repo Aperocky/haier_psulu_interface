@@ -31,7 +31,7 @@ def getRand(minval=0, maxval=1):
     return random.uniform(minval, maxval)
 
 def main(args):
-    unit = 1/10
+    unit = 1/12
     # Parameters
     w    = args.width
     h    = args.height

@@ -31,13 +31,13 @@ def getRand(minval=0, maxval=1):
     return random.uniform(minval, maxval)
 
 def main(args):
+    unit = 1/12
     # Parameters
     w    = args.width
     h    = args.height
     inF  = args.inFile
     outF = args.outFile
 
-    unit = 1/36
     # Creating the obstacles
     obst = {}
     obst['environment'] = {}
@@ -57,7 +57,7 @@ def main(args):
                     rect = np.array([[0,0], [w,0], [w,h], [0,h]])
                     # Translate obstacle to the right column and row
                     dispX = unit * col
-                    dispY = 1-unit * row
+                    dispY = 1-unit * row - unit
                     rect = rect + np.array([dispX, dispY])
                     # Compile the corners into the dictionary
                     cObst['corners'] = rect.tolist()

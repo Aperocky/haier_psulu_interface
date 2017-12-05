@@ -31,18 +31,18 @@ public class ControlSlider extends Slider {
 		this.setPrefSize(width, height);
 		
 		// notify new value after user finishes dragging
-		this.valueChangingProperty().addListener((obs, oldv, newv) -> {
-			if (newv == false) {
-				boundProperty.set(uiToAlgo(type, this.getValue()));
-			}
-		});
-
-		// notify new value after user clicks on slider
-		this.valueProperty().addListener((obs, oldv, newv) -> {
-			if (!this.isValueChanging()) {
-				boundProperty.set(uiToAlgo(type, newv.doubleValue()));
-			}
-		});
+//		this.valueChangingProperty().addListener((obs, oldv, newv) -> {
+//			if (newv == false) {
+//				boundProperty.set(uiToAlgo(type, this.getValue()));
+//			}
+//		});
+//
+//		// notify new value after user clicks on slider
+//		this.valueProperty().addListener((obs, oldv, newv) -> {
+//			if (!this.isValueChanging()) {
+//				boundProperty.set(uiToAlgo(type, newv.doubleValue()));
+//			}
+//		});
 	}
 	
 	public ControlType getType() {
@@ -53,7 +53,6 @@ public class ControlSlider extends Slider {
 		double algoRange = type.algoMax() - type.algoMin();
 		double uiRange = type.uiMax() - type.uiMin();
 		double ratio = algoRange / uiRange;
-		
 		return ratio * (uiValue - type.uiMin()) + type.algoMin();
 	}
 

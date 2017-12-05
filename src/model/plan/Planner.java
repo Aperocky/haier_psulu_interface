@@ -31,11 +31,10 @@ public class Planner implements IPlanner {
 	public Planner() {
 		yamlIO = new YamlIO();
 		parser = new ResourceParser("path");
-
 	}
 
 	/**
-	 * Return the list of points that represents the way points of the path.
+	 * Return the list of points that represents the way points of the PLANNED path.
 	 * Coordinates for the points are normalized, although potentially they can
 	 * go outside of 0 or 1.
 	 */
@@ -59,7 +58,7 @@ public class Planner implements IPlanner {
 				 System.out.println(s);
 				 }
 				ArrayList<ArrayList<String>> raw = (ArrayList<ArrayList<String>>) yamlIO
-						.loadArray(parser.getString("psulu_output"));
+						.loadArray(parser.getString("psulu_output_plan"));
 				List<Point2D> vertices = new ArrayList<>();
 				for (ArrayList<String> v : raw) {
 					double x = Double.valueOf(v.get(0));
