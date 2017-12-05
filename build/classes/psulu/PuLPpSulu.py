@@ -1,4 +1,4 @@
-#!/Users/Feng/anaconda/bin/python
+#!/usr/local/opt/anaconda/bin//python
 from __future__ import division
 import socket
 import matplotlib as M
@@ -1106,6 +1106,7 @@ def firstPassCommandLine():
 
 def main(inp, out):
     # Create IRA instance and solve it
+    np.random.seed(0)
     itrRA = IRA(inp)
     itrRA.solve()
     if itrRA.isFeasible():

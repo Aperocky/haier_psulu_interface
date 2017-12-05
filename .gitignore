@@ -1,0 +1,4 @@
+build/
+src/psulu/*.pyc
+src/psulu/output/*.png
+src/psulu/output/*
