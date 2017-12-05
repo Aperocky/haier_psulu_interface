@@ -120,7 +120,7 @@ public class Game {
 		gameStats.setDestination(endP);
 
 		// Set the real total risk budget, not the UI risk budget
-		gameStats.setTotalRiskBudget(2.1d); // TODO: hardcoded risk budget
+		gameStats.setTotalRiskBudget(2d); // TODO: hardcoded risk budget 2.1d
 		gameStats.setCurrentSurfacingBudget(6);
 	}
 	

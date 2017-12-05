@@ -50,7 +50,10 @@ public class PathLayer extends LayerBase {
 		transformAndDrawPath(game.getCompletePath(), Color.GRAY, 1d);
 		
 		// Draw last step planned path
-		transformAndDrawPath(game.getLastStepPlannedPath(), Color.YELLOW, 0.3d);
+		List<Point2D> last_path = game.getLastStepPlannedPath();
+		transformAndDrawPath(last_path, Color.YELLOW, 0.3d);
+		if(last_path != null && last_path.size() > 0)
+			transformAndDrawPoint(last_path.get(last_path.size()-1), Color.YELLOWGREEN, 1d);
 		
 		// Draw previously planned path
 		transformAndDrawPath(game.getPrevPlannedPath(), Color.GRAY, 1d);
@@ -64,7 +67,7 @@ public class PathLayer extends LayerBase {
 		// Mark deviation circle
 	    Point2D first = path.get(0);
 	    Point2D last = path.get(path.size()-1);
-	    double oriR = length(last, first) / 10d * 3;
+	    double oriR = length(last, first) / 10d * 2;
 	    Point2D radi = new Point2D(oriR, oriR);
 	    Point2D transR = transform(radi);
 		addDeviationRange(transform(last), transR.getX());
@@ -162,6 +165,16 @@ public class PathLayer extends LayerBase {
 			getChildren().add(seg);
 			start = next;
 		}
+	}
+	
+	private void transformAndDrawPoint(Point2D point, Color color, double transparency) {
+		if(point == null)
+			return;
+		Point2D transP = transform(point);
+		Circle dot = new Circle(transP.getX(), transP.getY(), PathSegment.DEFAULT_WIDTH*1.5d);
+		dot.setFill(color);
+		dot.setOpacity(transparency);
+		getChildren().add(dot);
 	}
 
 	private double length(Point2D a, Point2D b) {

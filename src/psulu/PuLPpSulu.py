@@ -1053,7 +1053,11 @@ class IRA(pSulu):
             x = np.array(xi).reshape(len(xi), 1)
 
         u = np.array(ui).reshape(len(ui), 1)
-        nextX = np.dot(A, x) + np.dot(B, u) + np.random.rand(4, 1)*self.coVarX
+        noise = np.zeros((4,1))
+        for i in range(4):
+            noise[i] = np.random.normal(0, self.coVarX)
+
+        nextX = np.dot(A, x) + np.dot(B, u) + noise
         return nextX.tolist()
 
     def writeOutput(self, outF):
@@ -1104,8 +1108,14 @@ def main(inp, out):
     # Create IRA instance and solve it
     itrRA = IRA(inp)
     itrRA.solve()
-    itrRA.plot('output_plot')
-    itrRA.writeOutput(out)
+    if itrRA.isFeasible():
+        itrRA.plot('output_plot')
+        itrRA.writeOutput(out)
+    else:
+        wp = []
+        Y.dump(wp, open(itrRA.outFolder + '/' + out, 'w'))
+        Y.dump(wp, open(itrRA.outFolder + '/' + out + '.real', 'w'))
+
     return itrRA.isFeasible()
         
 if __name__ == '__main__':

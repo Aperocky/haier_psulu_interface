@@ -27,7 +27,7 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	private VBox vbox;
 	private JFXButton executeButton;
 	private JFXButton planButton;
-	private List<ControlSlider> sliderMaster; 
+	public List<ControlSlider> sliderMaster; 
 
 	public ControlPanel(double width, double height) {
 		this.setPrefSize(width, height);
@@ -107,17 +107,19 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	
 	private void connectSliderToLabel(ControlSlider slider, Label label) {
 		slider.valueProperty().addListener((obs, oldv, newv) -> {
-			if(slider.getType().equals(ControlType.ChanceConstraint))
-				label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+			if(slider.getType().equals(ControlType.ChanceConstraint)){
+				double steprisk =  (int)(newv.doubleValue()*10) / 10d;
+				label.setText(slider.getType().label() + " : " + steprisk +"%");
+			    // If step risk is smaller than the minimum feasible solution, warn user
+			}
 			else if(slider.getType().equals(ControlType.WayPoints))
 				label.setText(slider.getType().label() + " : " + newv.intValue());
 		});
+		slider.setValue((slider.getType().uiMax() + slider.getType().uiMin()) / 2);
 	}
 	
 	private void setUpPlanButton() {
 		planButton.setOnAction(evt -> {
-//			controlProperty.getControlProperty(ControlType.ChanceConstraint)
-//					.set(uiToAlgo(ControlType.ChanceConstraint, sliderMaster.get(0).getValue()));
 			for(ControlSlider slider : sliderMaster) {
 				ControlType type = slider.getType();
 				double value = slider.getValue();
@@ -125,7 +127,7 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 				if(type.equals(ControlType.ChanceConstraint)){
 					double currValue = controlProperty.getControlProperty(ControlType.ChanceConstraint).doubleValue();
 					if(uiToAlgo(ControlType.ChanceConstraint, value) == currValue)
-						value = value * 0.000001;
+						value = value * 1.000001;
 				}
 				controlProperty.getControlProperty(type).set(uiToAlgo(type, value));
 			}

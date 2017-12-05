@@ -1044,13 +1044,43 @@ class IRA(pSulu):
     def isFeasible(self):
         return self.feasible
 
+    def getNextWP(self, xi, ui):
+        A = np.array(self.__A)
+        B = np.array(self.__B)
+        if len(xi) == 2:
+            x = np.array(xi + [0, 0]).reshape(len(xi) + 2, 1)
+        else:
+            x = np.array(xi).reshape(len(xi), 1)
+
+        u = np.array(ui).reshape(len(ui), 1)
+        noise = np.zeros((4,1))
+        for i in range(4):
+            noise[i] = np.random.normal(0, self.coVarX)
+
+        nextX = np.dot(A, x) + np.dot(B, u) + noise
+        return nextX.tolist()
+
     def writeOutput(self, outF):
+
         # Write the waypoints to a file
         wp = self.MILP.getWayPoints()
+        up = self.MILP.getUPoints()
+
         # Remove the last way point which is the destination in case of receding horizon
         if self.receding_horizon:
             wp = wp[:-1]
+
+        # Get real state vector
+        length = len(wp)-1
+        newwp = [wp[0]]
+        prevx = wp[0]
+        for u in up[:length]:
+           newx = self.getNextWP(prevx, u)
+           newwp.append([newx[0][0], newx[1][0]])
+           prevx = newx
+
         Y.dump(wp, open(self.outFolder + '/' + outF, 'w'))
+        Y.dump(newwp, open(self.outFolder + '/' + outF + '.real', 'w'))
         return
 
 def firstPassCommandLine():
@@ -1078,8 +1108,14 @@ def main(inp, out):
     # Create IRA instance and solve it
     itrRA = IRA(inp)
     itrRA.solve()
-    itrRA.plot('output_plot')
-    itrRA.writeOutput(out)
+    if itrRA.isFeasible():
+        itrRA.plot('output_plot')
+        itrRA.writeOutput(out)
+    else:
+        wp = []
+        Y.dump(wp, open(itrRA.outFolder + '/' + out, 'w'))
+        Y.dump(wp, open(itrRA.outFolder + '/' + out + '.real', 'w'))
+
     return itrRA.isFeasible()
         
 if __name__ == '__main__':

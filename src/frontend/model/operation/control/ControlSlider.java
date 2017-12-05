@@ -29,7 +29,6 @@ public class ControlSlider extends Slider {
 		super(type.uiMin(), type.uiMax(), (type.uiMin() + type.uiMax()) / 2);
 		this.type = type;
 		this.setPrefSize(width, height);
-		
 		// notify new value after user finishes dragging
 //		this.valueChangingProperty().addListener((obs, oldv, newv) -> {
 //			if (newv == false) {
