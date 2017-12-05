@@ -100,17 +100,20 @@ class PathSolver:
 
         if self.receding_horizon:
             # Define the distance between the last time step and goal
-            self.d = pulp.LpVariable("d", lowBound=0)
+            self.dlast = pulp.LpVariable("dlast", lowBound=0)
+            self.d = pulp.LpVariable.dicts("d", range(self.__N-1), lowBound=0)
         else:
-            self.d = 0
+            self.dlast = 0
 
         return
 
     def __addObjective(self):
         # Problem Objective
         # self.d == 0 when recending horizon is off
-        self.prob += ((1-self.horizon_cost)*pulp.lpSum([[self.absu[i][j] for i in range(self.__N)] \
-					           for j in range(self.__nu)])) + (self.horizon_cost*self.d)
+        if not self.receding_horizon:
+            self.prob += pulp.lpSum([[self.absu[i][j] for i in range(self.__N)] for j in range(self.__nu)]) + self.dlast
+        else:
+            self.prob += (1-self.horizon_cost)*pulp.lpSum([self.d[i] for i in range(self.__N-1)]) + self.horizon_cost*self.dlast
         return
 
     def addAllZConstraints(self):
@@ -167,7 +170,20 @@ class PathSolver:
         # Add the constraint for the elastic circle around the polygon
         if self.receding_horizon:
             # Lower bound on the horizon radius
-            self.prob.addConstraint(self.d >= 0)
+            self.prob.addConstraint(self.dlast >= 0)
+
+            # Constraints the distrance between adjacent points
+            for kk in range(1, self.__N):
+                currx = self.x[kk].values()
+                prevx = self.x[kk-1].values()
+                for side in range(self.poly_nsides):
+                    # parameters that determine the side of the polygon
+                    line_angle = [math.cos(2*side*math.pi/self.poly_nsides), \
+                                            math.sin(2*side*math.pi/self.poly_nsides)]
+
+                    # Add constraints between the last step and the goal point
+                    # This ensures that the goal is within the horizon of the last step
+                    self.prob.addConstraint(pulp.lpSum([m*(x1-x2) for m, x1, x2 in zip(line_angle, currx, prevx)]) <= self.d[kk-1])
 
             xlaststep = self.x[self.__N-1].values()
             xgoal    = self.x[self.__N].values()
@@ -178,7 +194,7 @@ class PathSolver:
 
                 # Add constraints between the last step and the goal point
                 # This ensures that the goal is within the horizon of the last step
-                self.prob.addConstraint(pulp.lpSum([m*(x1-x2) for m, x1, x2 in zip(line_angle, xgoal, xlaststep)]) <= self.d)
+                self.prob.addConstraint(pulp.lpSum([m*(x1-x2) for m, x1, x2 in zip(line_angle, xgoal, xlaststep)]) <= self.dlast)
 
         # \sum_{i} z_{i} == dim(z_{i}) - 1 constraint
         for k in range(self.__N): 
@@ -501,8 +517,7 @@ class PathSolver:
         # Solve the optimization problem
         with tempfile.NamedTemporaryFile() as fp:
           # using temporary file to write log
-          self.prob.solve(pulp.GUROBI_CMD(msg=self.msg))
-          #self.prob.solve(pulp.GUROBI_CMD(msg=self.msg))
+          self.prob.solve(pulp.GUROBI_CMD(msg=self.msg, options={}))
 
           ## Read log file to get number of nodes explored
           #fp.seek(0)
@@ -583,7 +598,7 @@ class PathSolver:
         return (self.activePtsIdx, self.activeObstIdx)
 
     def getHorizonRadius(self):
-        return pulp.value(self.d)
+        return pulp.value(self.dlast)
 
     def getObjective(self):
         return pulp.value(self.prob.objective)
@@ -1029,13 +1044,43 @@ class IRA(pSulu):
     def isFeasible(self):
         return self.feasible
 
+    def getNextWP(self, xi, ui):
+        A = np.array(self.__A)
+        B = np.array(self.__B)
+        if len(xi) == 2:
+            x = np.array(xi + [0, 0]).reshape(len(xi) + 2, 1)
+        else:
+            x = np.array(xi).reshape(len(xi), 1)
+
+        u = np.array(ui).reshape(len(ui), 1)
+        noise = np.zeros((4,1))
+        for i in range(4):
+            noise[i] = np.random.normal(0, self.coVarX)
+
+        nextX = np.dot(A, x) + np.dot(B, u) + noise
+        return nextX.tolist()
+
     def writeOutput(self, outF):
+
         # Write the waypoints to a file
         wp = self.MILP.getWayPoints()
+        up = self.MILP.getUPoints()
+
         # Remove the last way point which is the destination in case of receding horizon
         if self.receding_horizon:
             wp = wp[:-1]
+
+        # Get real state vector
+        length = len(wp)-1
+        newwp = [wp[0]]
+        prevx = wp[0]
+        for u in up[:length]:
+           newx = self.getNextWP(prevx, u)
+           newwp.append([newx[0][0], newx[1][0]])
+           prevx = newx
+
         Y.dump(wp, open(self.outFolder + '/' + outF, 'w'))
+        Y.dump(newwp, open(self.outFolder + '/' + outF + '.real', 'w'))
         return
 
 def firstPassCommandLine():
@@ -1063,8 +1108,14 @@ def main(inp, out):
     # Create IRA instance and solve it
     itrRA = IRA(inp)
     itrRA.solve()
-    itrRA.plot('output_plot')
-    itrRA.writeOutput(out)
+    if itrRA.isFeasible():
+        itrRA.plot('output_plot')
+        itrRA.writeOutput(out)
+    else:
+        wp = []
+        Y.dump(wp, open(itrRA.outFolder + '/' + out, 'w'))
+        Y.dump(wp, open(itrRA.outFolder + '/' + out + '.real', 'w'))
+
     return itrRA.isFeasible()
         
 if __name__ == '__main__':

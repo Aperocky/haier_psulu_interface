@@ -6,7 +6,6 @@ import java.util.List;
 
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
-import frontend.model.unit.keycomponent.KeyComponent;
 import frontend.model.unit.path.PathSegment;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
@@ -47,17 +46,17 @@ public class PathLayer extends LayerBase {
 	@Override
 	public void update(GameStats game) {
 		this.clear();
-		// Draw previously planned position
-		Point2D plannedLastStep = game.getPlannedPosition();
-		if(plannedLastStep != null)
-			addPlannedPosition(transform(plannedLastStep));
+		// Draw complete historical path
+		transformAndDrawPath(game.getCompletePath(), Color.GRAY, 1d);
+		
+		// Draw last step planned path
+		List<Point2D> last_path = game.getLastStepPlannedPath();
+		transformAndDrawPath(last_path, Color.YELLOW, 0.3d);
+		if(last_path != null && last_path.size() > 0)
+			transformAndDrawPoint(last_path.get(last_path.size()-1), Color.YELLOWGREEN, 1d);
 		
 		// Draw previously planned path
-		List<Point2D> prevPath = game.getPrevPlannedPath();
-		List<Point2D> transformedPrev = new ArrayList<>();
-		if(prevPath != null && prevPath.size() != 0)
-			prevPath.forEach(point -> transformedPrev.add(transform(point)));
-		drawPrevPath(transformedPrev);
+		transformAndDrawPath(game.getPrevPlannedPath(), Color.GRAY, 1d);
 		
 		// Draw planning path
 		List<Point2D> path = game.getPlannedPath();
@@ -68,7 +67,7 @@ public class PathLayer extends LayerBase {
 		// Mark deviation circle
 	    Point2D first = path.get(0);
 	    Point2D last = path.get(path.size()-1);
-	    double oriR = length(last, first) / 10d * 3;
+	    double oriR = length(last, first) / 10d * 2;
 	    Point2D radi = new Point2D(oriR, oriR);
 	    Point2D transR = transform(radi);
 		addDeviationRange(transform(last), transR.getX());
@@ -154,27 +153,30 @@ public class PathLayer extends LayerBase {
 		getChildren().add(range);
 	}
 	
-	private void drawPrevPath(List<Point2D> prevPath) {
-		if(prevPath.size() == 0)
+	private void transformAndDrawPath(List<Point2D> path, Color color, double transparency) {
+		if(path == null || path.size() == 0)
 			return;
-		Point2D start = prevPath.get(0);
-		for(int i = 1; i < prevPath.size(); i++) {
-			Point2D next = prevPath.get(i);
-			PathSegment path = new PathSegment(start, next);
-			path.setStroke(Color.GRAY);
-			getChildren().add(path);
+		Point2D start = transform(path.get(0));
+		for(int i = 1; i < path.size(); i++) {
+			Point2D next = transform(path.get(i));
+			PathSegment seg = new PathSegment(start, next);
+			seg.setOpacity(transparency);
+			seg.setStroke(color);
+			getChildren().add(seg);
 			start = next;
 		}
 	}
 	
-	private void addPlannedPosition(Point2D plannedPos) {
-		if(plannedPos == null)
+	private void transformAndDrawPoint(Point2D point, Color color, double transparency) {
+		if(point == null)
 			return;
-		Circle pos = new Circle(plannedPos.getX(), plannedPos.getY(), KeyComponent.DEFAULT_SIZE/3);
-		pos.setFill(Color.GRAY);
-		getChildren().add(pos);
+		Point2D transP = transform(point);
+		Circle dot = new Circle(transP.getX(), transP.getY(), PathSegment.DEFAULT_WIDTH*1.5d);
+		dot.setFill(color);
+		dot.setOpacity(transparency);
+		getChildren().add(dot);
 	}
-	
+
 	private double length(Point2D a, Point2D b) {
 		return Math.pow((a.getX() - b.getX()) * (a.getX() - b.getX()) + (a.getY() - b.getY()) * (a.getY() - b.getY()),
 				1 / 2d);

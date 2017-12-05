@@ -152,7 +152,24 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 		budgetStats.setExpectedRiskBudget(expectedRiskBudget);
 		notifyObservers(this);
 	}
+	
+	public List<Point2D> getCompletePath() {
+		return pathStats.getCompletePath();
+	}
+	
+	public void addToCompletePath(List<Point2D> currentExecutedPath) {
+		pathStats.addToCompletePath(currentExecutedPath);
+		notifyObservers(this);
+	}
 
+	public List<Point2D> getLastStepPlannedPath() {
+		return pathStats.getLastStepPlannedPath();
+	}
+
+	public void setLastStepPlannedPath(List<Point2D> lastStepPlannedPath) {
+		pathStats.setLastStepPlannedPath(lastStepPlannedPath);
+	}
+	
 	@Override
 	public void update(ObstacleMaster obstacleMaster) {
 		pathStats.getObstacles().clear();

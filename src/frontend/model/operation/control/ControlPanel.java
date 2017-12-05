@@ -26,8 +26,8 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	private ControlSliderFactory sliderFactory;
 	private VBox vbox;
 	private JFXButton executeButton;
-	private JFXButton repeatButton;
-	private List<ControlSlider> sliderMaster; 
+	private JFXButton planButton;
+	public List<ControlSlider> sliderMaster; 
 
 	public ControlPanel(double width, double height) {
 		this.setPrefSize(width, height);
@@ -54,15 +54,15 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 			vbox.getChildren().addAll(label, hbox);
 			sliderMaster.add(slider);
 		}
-		repeatButton = new JFXButton("Repeat");
-		repeatButton.setPrefSize(80,  20);
+		planButton = new JFXButton("Plan");
+		planButton.setPrefSize(80,  20);
 		executeButton = new JFXButton("Execute");
 		executeButton.setPrefSize(80, 20);
 		executeButton.setTranslateY(100);
-		vbox.getChildren().addAll(repeatButton, executeButton);
+		vbox.getChildren().addAll(planButton, executeButton);
 		this.getChildren().add(vbox);
 		
-		setUpRepeatButton();
+		setUpPlanButton();
 	}
 	
 	@Override
@@ -96,32 +96,49 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 	public void disable() {
 		sliderMaster.forEach(slider -> slider.setDisable(true));
 		executeButton.setDisable(true);
-		repeatButton.setDisable(true);
+		planButton.setDisable(true);
 	}
 	
 	public void enable() {
 		sliderMaster.forEach(slider -> slider.setDisable(false));
 		executeButton.setDisable(false);
-		repeatButton.setDisable(false);
+		planButton.setDisable(false);
 	}
 	
 	private void connectSliderToLabel(ControlSlider slider, Label label) {
 		slider.valueProperty().addListener((obs, oldv, newv) -> {
-			if(slider.getType().equals(ControlType.ChanceConstraint))
-				label.setText(slider.getType().label() + " : " + (int)(newv.doubleValue()*10) / 10d);
+			if(slider.getType().equals(ControlType.ChanceConstraint)){
+				double steprisk =  (int)(newv.doubleValue()*10) / 10d;
+				label.setText(slider.getType().label() + " : " + steprisk +"%");
+			    // If step risk is smaller than the minimum feasible solution, warn user
+			}
 			else if(slider.getType().equals(ControlType.WayPoints))
 				label.setText(slider.getType().label() + " : " + newv.intValue());
 		});
+		slider.setValue((slider.getType().uiMax() + slider.getType().uiMin()) / 2);
 	}
 	
-	private void setUpRepeatButton() {
-		repeatButton.setOnAction(evt -> {
+	private void setUpPlanButton() {
+		planButton.setOnAction(evt -> {
 			for(ControlSlider slider : sliderMaster) {
-				if(slider.getType().equals(ControlType.WayPoints)){
-					slider.setValue(slider.getValue()+0.1);
+				ControlType type = slider.getType();
+				double value = slider.getValue();
+				// Hacky way to make sure even if the value is the same, planner will plan again
+				if(type.equals(ControlType.ChanceConstraint)){
+					double currValue = controlProperty.getControlProperty(ControlType.ChanceConstraint).doubleValue();
+					if(uiToAlgo(ControlType.ChanceConstraint, value) == currValue)
+						value = value * 1.000001;
 				}
+				controlProperty.getControlProperty(type).set(uiToAlgo(type, value));
 			}
 		});
+	}
+	
+	private double uiToAlgo(ControlType type, double uiValue) {
+		double algoRange = type.algoMax() - type.algoMin();
+		double uiRange = type.uiMax() - type.uiMin();
+		double ratio = algoRange / uiRange;
+		return ratio * (uiValue - type.uiMin()) + type.algoMin();
 	}
 
 }

@@ -61,8 +61,6 @@ public class Game {
 	 * Plan and store the planned path into environment.Note that the planned
 	 * path here is not adapted to the canvas size yet
 	 * 
-	 * @param riskBudget
-	 * @param horizonRadius
 	 */
 	public void plan() {
 		try {
@@ -76,25 +74,29 @@ public class Game {
 	}
 
 	/**
-	 * Store a pre-calculated execution time path
+	 * Load the executed path from pSulu and update the game status
 	 */
 	public void execute() {
-		List<Point2D> plannedPath = environment.getGameStats().getPlannedPath();
-		if(plannedPath.size() == 0)
-			return;
-		GameStats gameStats = environment.getGameStats();
-		gameStats.setPlannedPath(new ArrayList<>());
-		gameStats.setPrevPlannedPath(new ArrayList<>());
-		gameStats.setPlannedPosition(plannedPath.get(plannedPath.size()-1));
-		List<Point2D> executedPath = executor.getExecutedPath(plannedPath);
-		environment.setExecutedPath(executedPath);
-		Point2D lastStep = executedPath.get(executedPath.size() - 1);
-		gameStats.setCurrentPosition(lastStep);
-		gameStats.setCurrentRiskBudget(environment.getGameStats().getExpectedRiskBudget());
-		gameStats.setCurrentSurfacingBudget(
-				gameStats.getCurrentSurfacingBudget() - 1);
-		checkFailure(lastStep);
-		checkSuccess(lastStep);
+		try {
+			executor.execute(executedPath -> {
+				environment.setExecutedPath(executedPath);
+				GameStats gameStats = environment.getGameStats();
+				gameStats.addToCompletePath(executedPath);
+				gameStats.setCurrentPosition(executedPath.get(executedPath.size()-1));
+				// Check for success and failure
+				checkFailure(executedPath.get(executedPath.size() - 1));
+				checkSuccess(executedPath.get(executedPath.size() - 1));
+			});
+			GameStats gameStats = environment.getGameStats();
+			gameStats.setLastStepPlannedPath(gameStats.getPlannedPath());
+			gameStats.setPlannedPath(new ArrayList<>());
+			gameStats.setPrevPlannedPath(new ArrayList<>());
+			gameStats.setCurrentRiskBudget(gameStats.getExpectedRiskBudget());
+			gameStats.setCurrentSurfacingBudget(
+					gameStats.getCurrentSurfacingBudget() - 1);
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -118,7 +120,7 @@ public class Game {
 		gameStats.setDestination(endP);
 
 		// Set the real total risk budget, not the UI risk budget
-		gameStats.setTotalRiskBudget(2.1d); // TODO: hardcoded risk budget
+		gameStats.setTotalRiskBudget(2d); // TODO: hardcoded risk budget 2.1d
 		gameStats.setCurrentSurfacingBudget(6);
 	}
 	

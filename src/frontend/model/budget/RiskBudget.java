@@ -53,7 +53,7 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		vbox.getChildren().addAll(progressBar, axis);
 		vbox.setTranslateY(20d);
 
-		title = new Label("Total Risk");
+		title = new Label("Risk Budget");
 		percent = new Label("");
 
 		hbox.getChildren().addAll(title, vbox, percent);

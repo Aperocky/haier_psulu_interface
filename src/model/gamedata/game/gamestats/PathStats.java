@@ -15,6 +15,10 @@ public class PathStats {
 	private List<Point2D> plannedPath;
 	private List<Point2D> prevPlannedPath;
 	private List<Point2D> executedPath;
+	// All historical executed paths to current position
+	private List<Point2D> completePath;
+	// Planned path for the previous step
+	private List<Point2D> lastStepPlannedPath;
 	private List<List<Point2D>> obstacles;
 	private Point2D startPosition;
 	private Point2D currentPosition;
@@ -25,6 +29,7 @@ public class PathStats {
 		paramIO = new ParamIO();
 		plannedPath = new ArrayList<>();
 		executedPath = new ArrayList<>();
+		completePath = new ArrayList<>();
 		obstacles = new ArrayList<>();
 	}
 	
@@ -103,12 +108,28 @@ public class PathStats {
 		this.prevPlannedPath = prevPlannedPath;
 	}
 
+	public List<Point2D> getLastStepPlannedPath() {
+		return lastStepPlannedPath;
+	}
+
+	public void setLastStepPlannedPath(List<Point2D> lastStepPlannedPath) {
+		this.lastStepPlannedPath = lastStepPlannedPath;
+	}
+
 	public List<Point2D> getPlannedPath() {
 		return Collections.unmodifiableList(plannedPath);
 	}
 
 	public List<Point2D> getExecutedPath() {
 		return Collections.unmodifiableList(executedPath);
+	}
+	
+	public List<Point2D> getCompletePath() {
+		return Collections.unmodifiableList(completePath);
+	}
+	
+	public void addToCompletePath(List<Point2D> currentExecutedPath) {
+		currentExecutedPath.forEach(point -> completePath.add(point));
 	}
 
 }

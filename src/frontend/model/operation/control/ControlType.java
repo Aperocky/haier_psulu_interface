@@ -1,9 +1,9 @@
 package frontend.model.operation.control;
 
 public enum ControlType {
-	ChanceConstraint("Step Risk(%)", "chance_constraint", 0d, 0.42d, 0, 2),
+	ChanceConstraint("Step Risk", "chance_constraint", 0d, 0.4d, 0, 2),
 	// MaxVelocity("Max Leg Length(mile)", "max_velocity", 0.05d, 0.2d, 5, 20);
-	WayPoints("Waypoints per Leg", "waypoints", 2, 12, 1, 12);  //4-8-12
+	WayPoints("Waypoints per Step", "waypoints", 2, 12, 1, 12);  //4-8-12
 	
 	private String label;
 	private String key;
