@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -46,7 +47,9 @@ public class Planner implements IPlanner {
 			protected List<Point2D> call() throws Exception {
 				Runtime r = Runtime.getRuntime();
 				// This only works on Feng's computer!
+
 				Process p = r.exec("./PuLPpSulu.py", null, new File(parser.getString("psulu_planner")));
+				
 				// Use this for other Windows machine after adding Anaconda's python to system Path variable
 				// Process p = r.exec("python ./PuLPpSulu.py", null, new File(parser.getString("psulu_planner")));
 				p.waitFor();
