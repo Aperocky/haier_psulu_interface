@@ -8,12 +8,12 @@ def test(fName, risk):
    return
 
 if __name__ == "__main__":
-   templateF = '/Users/Feng/Desktop/test1.yaml'
+   templateF = '/Users/subrahma/proj/haier_psulu_interface/src/psulu/config/tmp/test1.yaml'
    template = yaml.load(open(templateF, 'r'))
-   for risk in np.linspace(0.1, 0.35, 20):
+   for wp in np.linspace(0.1, 0.35, 20):
       with tempfile.NamedTemporaryFile() as fp:
          print(fp.name)
-         template['chance_constraint'] = risk
+         template['chance_constraint'] = wp
          yaml.dump(template, fp)
-         test(fp.name, risk)
+         test(fp.name, wp)
 
