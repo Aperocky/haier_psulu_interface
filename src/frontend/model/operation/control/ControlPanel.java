@@ -59,6 +59,7 @@ public class ControlPanel extends Pane implements Observer<StatusManager>{
 		executeButton = new JFXButton("Execute");
 		executeButton.setPrefSize(80, 20);
 		executeButton.setTranslateY(100);
+		executeButton.setDisable(true);
 		vbox.getChildren().addAll(planButton, executeButton);
 		this.getChildren().add(vbox);
 		

@@ -6,13 +6,15 @@ public class StatusManager extends ObservableBase<StatusManager>{
 	private boolean executing;
 	private boolean planning;
 	
+	// feasible indicates whether the current plan is feasible
 	private boolean feasible;
+	private boolean message;
 	
 	private boolean success;
 	private boolean failure;
 	
 	public StatusManager() {
-		feasible = true;
+		feasible = false;
 	}
 	
 	// TODO: check if planning
@@ -23,6 +25,18 @@ public class StatusManager extends ObservableBase<StatusManager>{
 	
 	public boolean isExecuting() {
 		return executing;
+	}
+	
+	public void setMessageOn() {
+		message = true;
+	}
+	
+	public void setMessageOff() {
+		message = false;
+	}
+	
+	public boolean isMessageOn() {
+		return message;
 	}
 	
 	// TODO: check if executing

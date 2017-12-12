@@ -64,10 +64,13 @@ public class Game {
 	 */
 	public void plan() {
 		try {
+			environment.getStatusManager().setMessageOn();
 			planner.plan(plannedPath -> {
 				environment.setPlannedPath(plannedPath);
 				environment.setPlanning(false);
+				environment.getStatusManager().setMessageOff();
 			});
+			
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -87,9 +90,9 @@ public class Game {
 				checkFailure(executedPath.get(executedPath.size() - 1));
 				checkSuccess(executedPath.get(executedPath.size() - 1));
 			});
+			environment.setPlannedPath(new ArrayList<>());
 			GameStats gameStats = environment.getGameStats();
 			gameStats.setLastStepPlannedPath(gameStats.getPlannedPath());
-			gameStats.setPlannedPath(new ArrayList<>());
 			gameStats.setPrevPlannedPath(new ArrayList<>());
 			gameStats.setCurrentRiskBudget(gameStats.getExpectedRiskBudget());
 			gameStats.setCurrentSurfacingBudget(
