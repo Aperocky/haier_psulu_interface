@@ -1,4 +1,4 @@
-chance_constraint: 0.2
+chance_constraint: 0.0
 margin: 0.01
 horizon_cost_proportion: 0.99
 coVarX: 0.01

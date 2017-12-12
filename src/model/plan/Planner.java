@@ -47,7 +47,6 @@ public class Planner implements IPlanner {
 			protected List<Point2D> call() throws Exception {
 				Runtime r = Runtime.getRuntime();
 				// This only works on Feng's computer!
-
 				Process p = r.exec("./PuLPpSulu.py", null, new File(parser.getString("psulu_planner")));
 				
 				// Use this for other Windows machine after adding Anaconda's python to system Path variable
