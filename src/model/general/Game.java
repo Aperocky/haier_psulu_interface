@@ -7,7 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import frontend.model.operation.control.ControlType;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
 import model.execute.CollisionDetector;
 import model.execute.Executor;
 import model.gamedata.Environment;
@@ -107,7 +113,7 @@ public class Game {
 	 * OR path calculated on the fly
 	 */
 	public void executeStep() {
-
+		
 	}
 
 	private void initialize() {
