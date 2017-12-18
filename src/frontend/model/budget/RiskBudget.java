@@ -34,7 +34,7 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		progressBar = new MixedProgressBar(width * 0.7d, HEIGHT, 2);
 		progressBar.setColor(Color.web("#C6DAFC"), 0);
 		progressBar.setColor(Color.web("#659BFB"), 1);
-		NumberAxis axis = new NumberAxis(-10, 0, 1);
+		NumberAxis axis = new NumberAxis(-80, 0, 10);
 		axis.setMaxSize(width * 0.68d, HEIGHT);
 		axis.setTranslateX(width * 0.01d);
 		axis.setTranslateY(-5);
@@ -71,7 +71,7 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		progressBar.setProgress(currRatio, 0);
 		progressBar.setProgress(expectedRatio, 1);
 		if (current > 0)
-			percent.setText("" + (double) Math.round(currRatio * 100) / 10 + "%");
+			percent.setText("" + (double) Math.round(currRatio * 100) / 1.25 + "%");
 		else {
 			percent.setText("out"); 
 			percent.setTextFill(Color.RED);
