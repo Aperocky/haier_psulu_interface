@@ -91,7 +91,10 @@ public class Game {
 				environment.setExecutedPath(executedPath);
 				GameStats gameStats = environment.getGameStats();
 				gameStats.addToCompletePath(executedPath);
+				
+				// Use Animation
 				gameStats.setCurrentPosition(executedPath.get(executedPath.size()-1));
+				
 				// Check for success and failure
 				checkFailure(executedPath.get(executedPath.size() - 1));
 				checkSuccess(executedPath.get(executedPath.size() - 1));
