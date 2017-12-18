@@ -35,5 +35,4 @@ public class LayerMaster extends StackPane {
 	public ILayer getLayer(LayerType type) {
 		return layers.stream().filter(layer -> layer.getType().equals(type)).findFirst().orElse(null);
 	}
-
 }
