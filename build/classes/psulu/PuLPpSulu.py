@@ -639,7 +639,7 @@ class IRA(pSulu):
           self.clean(self.maxCovar + self.cleanDist)
 
         # pSulu Parameters
-        self.alpha  = 0.2
+        self.alpha  = 0.1
  
         # Obstacles related variables
         self.__H      = self.obstMap.obstNormal
@@ -779,8 +779,7 @@ class IRA(pSulu):
           # Solve the optimization with new delta
           oldJ = J
           self.M = self.transformDelta()
-          #self.feasible = self.MILP.solve(self.M)
-          self.feasible = self.MILP.solve()
+          self.feasible = self.MILP.solve(self.M)
 
           if self.nNodes == None:
             self.nNodes = self.MILP.exploreNodes
@@ -968,6 +967,7 @@ class IRA(pSulu):
             ax.scatter(self.end_location[0], self.end_location[1], c='g')
 
         if fname != None:
+          plt.title('Number of way points: %d'%self.__N)
           plt.savefig(self.outFolder + '/' + str(fname) + '.png')
           plt.close('all')
 
