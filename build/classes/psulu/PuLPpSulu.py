@@ -213,7 +213,6 @@ class PathSolver:
                 pass
  
             if (stepnum < 1) or (stepnum > self.__N + 1):
-                print(stepnum)
                 raise Exception('Step number in initialization outside range')
 
             if (cside < 0) or (cside > 3):
@@ -350,12 +349,12 @@ class PathSolver:
 
         return zsol
 
-    def __addObstPt(self, idx, delta):
+    def __addObstPt(self, zidx, xidx, delta):
         '''
         Adds obstacle constraint for each way point
         '''
-        z = self.z[idx]
-        x = self.x[idx+1].values()[:2]
+        z = self.z[zidx]
+        x = self.x[xidx].values()[:2]
 
         # H*x[k+1] - M*z[k] <= G 
         nConstraint = 0
@@ -364,11 +363,11 @@ class PathSolver:
             for m, h, g, zi in zip(mDelta, Hi, Gi, Zi.values()):
 
                 # For each hyperplane of the obstacle
-                if (str('constraint%d_%d'%(nConstraint, idx)) in self.prob.constraints): 
+                if (str('constraint%d_%d_%d'%(nConstraint, zidx, xidx)) in self.prob.constraints): 
 		    # if key already exists (http://www.coin-or.org/PuLP/pulp.html)
                     # it still needs to be updated 
 		    # (that's what were doing -- overwriting the old key with the new data, so
-                    del self.prob.constraints[str('constraint%d_%d'%(nConstraint, idx))] 
+                    del self.prob.constraints['constraint%d_%d_%d'%(nConstraint, zidx, xidx)] 
 		    # delete the old key first, then add the new one below
                     # this gets rid of the pulp 
                     # "('Warning: overlapping constraint names:', 'constraint43_19')" 
@@ -376,9 +375,8 @@ class PathSolver:
                     # (http://pulp.readthedocs.org/en/latest/user-guide/troubleshooting.html)
 
                 self.prob.addConstraint((pulp.lpSum([((-hi)*xi) for hi, xi in zip(h,x)]) \
-                                         - self.__M*zi + m + g) <= 0,
-                                         name='constraint%d_%d'%(nConstraint, idx))
-
+                                             - self.__M*zi + m + g) <= 0,
+                                             name='constraint%d_%d_%d'%(nConstraint, zidx, xidx))
 
                 # Used for naming the constraints to replace on recursive calls with delta
                 nConstraint = nConstraint + 1
@@ -397,9 +395,19 @@ class PathSolver:
         if delta is None:
             delta = np.zeros((self.__N, self.__H.shape[0], self.__H.shape[1]))
 
-        for k in range(self.__N): 
+
+        # Initial state constraint
+        zeroDelta = np.zeros((self.__H.shape[0], self.__H.shape[1]))
+        self.__addObstPt(0, 0, zeroDelta)
+
+        for k in range(self.__N-1): 
             # Adding constraints on the obstacle for each point
-            self.__addObstPt(k, delta[k])
+            self.__addObstPt(k, k+1, delta[k])
+            self.__addObstPt(k+1, k+1, delta[k])
+
+        if (not self.receding_horizon):
+            # Last step 
+            self.__addObstPt(self.__N-1, self.__N, delta[self.__N-1])
 
     def activeObstWayPt(self, x, mDelta, Hi, Gi, Zi):
         '''
@@ -512,7 +520,8 @@ class PathSolver:
         Solves and extracts the output variables into xVal and yVal
         '''
         # Modify the constraints with new delta
-        self.__addObstConstraint(mdelta)
+        if mdelta != None:
+          self.__addObstConstraint(mdelta)
 
         # Solve the optimization problem
         with tempfile.NamedTemporaryFile() as fp:
@@ -630,7 +639,7 @@ class IRA(pSulu):
           self.clean(self.maxCovar + self.cleanDist)
 
         # pSulu Parameters
-        self.alpha  = 0.2
+        self.alpha  = 0.1
  
         # Obstacles related variables
         self.__H      = self.obstMap.obstNormal
@@ -958,6 +967,7 @@ class IRA(pSulu):
             ax.scatter(self.end_location[0], self.end_location[1], c='g')
 
         if fname != None:
+          plt.title('Number of way points: %d'%self.__N)
           plt.savefig(self.outFolder + '/' + str(fname) + '.png')
           plt.close('all')
 
