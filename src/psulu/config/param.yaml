@@ -6,8 +6,8 @@ end_location            : [1,1,0,0]
 waypoints               : 8
 max_velocity            : 0.06 #.15
 max_control             : 0.98
-coVarX                  : 0.01
-coVarY                  : 0.01
+coVarX                  : 0.0001
+coVarY                  : 0.0001
 cleanMap                : False
 cleanDist               : 0.1
 receding_horizon        : True

@@ -6,7 +6,10 @@ import java.util.List;
 
 import frontend.model.canvas.layers.base.LayerBase;
 import frontend.model.canvas.layers.base.LayerType;
+import frontend.model.unit.keycomponent.KeyComponent;
 import frontend.model.unit.path.PathSegment;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -16,6 +19,9 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
 import model.gamedata.game.gamestats.GameStats;
 
 public class PathLayer extends LayerBase {
@@ -45,7 +51,7 @@ public class PathLayer extends LayerBase {
 
 	@Override
 	public void update(GameStats game) {
-		this.clear();
+		this.clear();		
 		// Draw complete historical path
 		transformAndDrawPath(game.getCompletePath(), Color.GRAY, 1d);
 		

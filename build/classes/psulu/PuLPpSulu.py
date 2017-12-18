@@ -395,7 +395,6 @@ class PathSolver:
         if delta is None:
             delta = np.zeros((self.__N, self.__H.shape[0], self.__H.shape[1]))
 
-
         # Initial state constraint
         zeroDelta = np.zeros((self.__H.shape[0], self.__H.shape[1]))
         self.__addObstPt(0, 0, zeroDelta)
@@ -421,18 +420,34 @@ class PathSolver:
                 return True
      
         return False
-    
+
     def getActiveBoundaries(self):
+        '''
+        Looks at both the active edges 
+        chooses the one that is closest as the active edges
+        Because now each z corresponds to 2 state vectors
+        '''
+        active_boundaries = [[None for i in range(self.__nObst)]\
+                                for j in range(self.__N)]
+
+        active_dist = self.measureDist()
+        for t_i in range(self.__N):
+          for obs_j in range(self.__nObst):
+              active_boundaries[t_i][obs_j] = np.argmax(active_dist[:, t_i, obs_j])
+
+        return active_boundaries
+
+    def __getActiveBoundaries(self, flag=0):
         '''
         Check the active boundaries at each time point for each obstacle
         '''
-        active_boundaries = [[False for i in range(self.__nObst)]\
+        active_boundaries = [[None for i in range(self.__nObst)]\
                                 for j in range(self.__N)]
 
-        for t_i in range(self.__N):
+        for t_i in range(self.__N-flag):
             for obs_j in range(self.__nObst):
                 for dobs_k in range(self.__dObst):
-                    if pulp.value(self.z[t_i][obs_j][dobs_k]) < 1:
+                    if pulp.value(self.z[t_i + flag][obs_j][dobs_k]) < 1:
                         
                         ## debug
                         # print 'Z: ' +  str(self.z[t_i][obs_j][dobs_k])
@@ -443,7 +458,39 @@ class PathSolver:
 
                         active_boundaries[t_i][obs_j] = dobs_k
                         break
-        return active_boundaries
+
+        return np.array(active_boundaries)
+
+    def measureDist(self):
+        '''
+        Adds obstacle constraints based on the H and G matrix to all points
+        '''
+        active_distance = [[[None for i in range(self.__nObst)]\
+                                    for j in range(self.__N)] for k in range(self.__dObst)]
+
+        # Initial point
+        zeroDelta = np.zeros((self.__H.shape[0], self.__H.shape[1]))
+
+        for k in range(self.__N): 
+            self.__measureDist(k+1, active_distance)
+            #self.__measureDist(k+1, k+1, active_distance[1])
+
+        return np.array(active_distance)
+
+    def __measureDist(self, xidx, dist):
+        '''
+        Adds obstacle constraint for each way point
+        '''
+        x = self.x[xidx].values()[:2]
+
+        # H*x[k+1] - M*z[k] - G 
+        nConstraint = 0
+        for j, (Hi, Gi) in enumerate(zip(self.__H, self.__G)):
+            # For each obstacle
+            for n, (h, g) in enumerate(zip(Hi, Gi)):
+               dist[n][xidx-1][j] = np.sum([((-hi)*pulp.value(xi)) for hi, xi in zip(h,x)]) + g
+
+        return
 
     def activewayPoint(self, idx, delta, mask=None):
         '''
@@ -639,7 +686,7 @@ class IRA(pSulu):
           self.clean(self.maxCovar + self.cleanDist)
 
         # pSulu Parameters
-        self.alpha  = 0.1
+        self.alpha  = 0.01
  
         # Obstacles related variables
         self.__H      = self.obstMap.obstNormal
@@ -967,7 +1014,6 @@ class IRA(pSulu):
             ax.scatter(self.end_location[0], self.end_location[1], c='g')
 
         if fname != None:
-          plt.title('Number of way points: %d'%self.__N)
           plt.savefig(self.outFolder + '/' + str(fname) + '.png')
           plt.close('all')
 

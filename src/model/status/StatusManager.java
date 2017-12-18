@@ -15,6 +15,7 @@ public class StatusManager extends ObservableBase<StatusManager>{
 	
 	public StatusManager() {
 		feasible = false;
+		message = false;
 	}
 	
 	// TODO: check if planning

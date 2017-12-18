@@ -32,7 +32,7 @@ public class MessageMaster implements Observer<StatusManager>{
 			success.show();
 		else if(status.isFailure())
 			failure.show();
-		if(!status.isPlanning() && !status.isFeasible())
+		if(!status.isPlanning() && !status.isFeasible() && status.isMessageOn())
 			infeasible.show();
 	}
 	

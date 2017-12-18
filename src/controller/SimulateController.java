@@ -2,6 +2,7 @@ package controller;
 
 import frontend.general.Simulator;
 import frontend.model.canvas.layers.base.LayerType;
+import frontend.model.canvas.layers.concrete.KeyComponentLayer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.gamedata.game.gamestats.GameStats;
@@ -58,6 +59,9 @@ public class SimulateController {
 		manager.addObservers(simulator.getProgressIndicator(), simulator.getMessageMaster(),
 				simulator.getControlPanel());
 		manager.notifyObservers(manager);
+		
+		KeyComponentLayer goalLayer = (KeyComponentLayer) simulator.getLayerMaster().getLayer(LayerType.KeyComponentLayer);
+		goalLayer.setStatusManager(manager);
 
 		simulator.setOnExecute(evt -> game.execute());
 
