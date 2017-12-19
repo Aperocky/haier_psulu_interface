@@ -14,7 +14,7 @@ import matplotlib.patches as patches
 from scipy import ndimage, misc, stats
 from pSulu_api import pSulu
 
-import re
+import re, csv
 import tempfile
 import math, os
 import mpmath as mp
@@ -187,7 +187,7 @@ class PathSolver:
 
             xlaststep = self.x[self.__N-1].values()
             xgoal    = self.x[self.__N].values()
-            for side in range(self.poly_nsides):
+            for side in range(1000):
                 # parameters that determine the side of the polygon
                 line_angle = [math.cos(2*side*math.pi/self.poly_nsides), \
                                         math.sin(2*side*math.pi/self.poly_nsides)]
@@ -832,26 +832,44 @@ class IRA(pSulu):
       '''
       newDelta       = [[None for x in range(self.__H.shape[0])] for y in range(self.__N)]
       usedDelta      = [[None for x in range(self.__H.shape[0])] for y in range(self.__N)]
+      activeDelta    = [[None for x in range(self.__H.shape[0])] for y in range(self.__N)]
       deltaResidual  = 0
       nActive        = self.__H.shape[0] * self.__N
  
       # find active constraints
       activeBoundaries = self.MILP.getActiveBoundaries() ## need to do
       waypoints        = self.MILP.getWayPoints()
+
+      # Determine used risk to find the active constraints
       for iTime in range(self.__N):
         # For each obstacle
         wp = waypoints[iTime+1]
         for cObst in range(self.__nObst):
+ 
+          # find the equation of the active constraint
+          activeIdx = activeBoundaries[iTime][cObst]
+          activeH = self.__H[cObst][activeIdx]
+          activeG = self.__G[cObst][activeIdx]
+
+          usedRisk = self.evaluateRisk(iTime, activeH, activeG)
+          usedDelta[iTime][cObst] = usedRisk
+
+      propDelta = np.array(usedDelta)/np.sum(usedDelta)
+      activeFlag = propDelta > 0.1
+
+      for iTime in range(self.__N):
+        # For each obstacle
+        wp = waypoints[iTime+1]
+        for cObst in range(self.__nObst):
+ 
           # find the equation of the active constraint
           activeIdx = activeBoundaries[iTime][cObst]
           activeH = self.__H[cObst][activeIdx]
           activeG = self.__G[cObst][activeIdx]
 
           # redistribute when risk used is less than allocated, recalculate risk
-          realG = np.dot(activeH,wp) - M[iTime][cObst][activeIdx] 
-          if(np.abs(realG - activeG) > 0.001):
+          if not activeFlag[iTime][cObst]:
             usedRisk = self.evaluateRisk(iTime, activeH, activeG)
-            usedDelta[iTime][cObst] = usedRisk
             newDelta[iTime][cObst] = (self.__delta[iTime][cObst] * self.alpha + \
                                        (1-self.alpha)*usedRisk)
             deltaResidual = deltaResidual + (self.__delta[iTime][cObst] - \
@@ -859,6 +877,26 @@ class IRA(pSulu):
             nActive = nActive - 1
 
       return (nActive, deltaResidual, newDelta)
+
+    def __deltaToDistance(self, idelta, H, idx):
+        '''
+        Computes the mdelta for each points
+        '''        
+        coVarMat = self.__coVarMat[idx][:2,:2]
+        mdelta = []
+        for delta, iH in zip(idelta, H): 
+            cM = []
+            for h in iH:
+                coVar = np.sqrt(np.dot(h, np.dot(coVarMat, np.transpose(h))))
+                all_zeros = not np.any(coVar)
+                if not all_zeros:
+                    cM.append(stats.norm.isf(delta, 0, coVar))
+                else:
+                    cM.append(0)
+
+            mdelta.append(cM)
+
+        return mdelta
 
     def evaluateRisk(self, iTime, activeH, activeG):
         '''
@@ -873,7 +911,7 @@ class IRA(pSulu):
             return 0
         
         # find affine transform param
-        h_P_h = np.dot(activeH,np.dot(P,activeH))
+        h_P_h = np.dot(activeH, np.dot(P, activeH))
         safety_margin = np.dot(activeH,wp) - activeG
               
         # print 'safety ' + str(safety_margin)
@@ -976,21 +1014,6 @@ class IRA(pSulu):
         plt.ylabel("Objective Function value")
         plt.xlabel("IRA iteration")
         plt.show()
-
-    def __deltaToDistance(self, idelta, H, idx):
-        '''
-        Computes the mdelta for each points
-        '''        
-        coVarMat = self.__coVarMat[idx][:2,:2]
-        mdelta = []
-        for delta, iH in zip(idelta, H): 
-            cM = []
-            for h in iH:
-                cM.append(stats.norm.isf(delta, 0, \
-				np.sqrt(np.dot(h, np.dot(coVarMat, np.transpose(h))))))
-            mdelta.append(cM)
-
-        return mdelta
 
     def __deltaGToDistance(self, delta, H):
         '''
