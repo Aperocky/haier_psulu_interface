@@ -3,49 +3,50 @@ package model.general;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.layout.Pane;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class animatortest extends Application{
-	
-	public animatortest() {
-		
-	}
-	
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		Pane pane = new Pane();
-		pane.setPrefSize(500, 500);
-		
-		final Rectangle rectPath = new Rectangle (0, 0, 40, 40);
-		rectPath.setArcHeight(10);
-		rectPath.setArcWidth(10);
-		rectPath.setFill(Color.ORANGE);
-		Path path = new Path();
-		path.getElements().add(new MoveTo(20,20));
-		path.getElements().add(new CubicCurveTo(380, 0, 380, 120, 200, 120));
-		path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
-		PathTransition pathTransition = new PathTransition();
-		pathTransition.setDuration(Duration.millis(4000));
-		pathTransition.setPath(path);
-		pathTransition.setNode(rectPath);
-		pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-		pathTransition.setCycleCount(Timeline.INDEFINITE);
-		pathTransition.setAutoReverse(true);
-		pathTransition.play();
-		
-		pane.getChildren().add(rectPath);
-		
-	}
+public class AnimatorTest extends Application {
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+  @Override
+  public void start(final Stage stage) throws Exception {
+    final Group group = new Group();
+    final Scene scene = new Scene(group, 600, 400, Color.GHOSTWHITE);
+    stage.setScene(scene);
+    stage.setTitle("JavaFX 2 Animations");
+    stage.show();
+    final Circle circle = new Circle(20, 20, 15);
+    circle.setFill(Color.DARKRED);
 
+    final Path path = new Path();
+    path.getElements().add(new MoveTo(20, 20));
+    path.getElements().add(new CubicCurveTo(30, 10, 380, 120, 200, 120));
+    path.getElements().add(new CubicCurveTo(200, 1120, 110, 240, 380, 240));
+    path.setOpacity(0);
+
+    group.getChildren().add(path);
+    group.getChildren().add(circle);
+    final PathTransition pathTransition = new PathTransition();
+
+    pathTransition.setDuration(Duration.seconds(8.0));
+    pathTransition.setDelay(Duration.seconds(.5));
+    pathTransition.setPath(path);
+    pathTransition.setNode(circle);
+    pathTransition
+        .setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+    pathTransition.setCycleCount(Timeline.INDEFINITE);
+//    pathTransition.setAutoReverse(true);
+    pathTransition.play();
+  }
+
+  public static void main(String[] arguments) {
+    Application.launch(arguments);
+  }
 }

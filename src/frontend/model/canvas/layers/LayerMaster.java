@@ -16,8 +16,8 @@ public class LayerMaster extends StackPane {
 
 	public LayerMaster(double width, double height) {
 		ObstacleLayer obstacleLayer = new ObstacleLayer(width, height);
-		PathLayer pathLayer = new PathLayer(width, height);
 		KeyComponentLayer goalLayer = new KeyComponentLayer(width, height);
+		PathLayer pathLayer = new PathLayer(width, height);
 		layers = new ArrayList<>();
 		layers.add(pathLayer);
 		layers.add(obstacleLayer);
@@ -35,5 +35,4 @@ public class LayerMaster extends StackPane {
 	public ILayer getLayer(LayerType type) {
 		return layers.stream().filter(layer -> layer.getType().equals(type)).findFirst().orElse(null);
 	}
-
 }

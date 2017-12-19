@@ -44,6 +44,7 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 
 	public void setStartPosition(Point2D startPosition) {
 		pathStats.setStartPosition(startPosition);
+		pathStats.setCurrentPosition(startPosition);
 		notifyObservers(this);
 	}
 

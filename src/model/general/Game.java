@@ -88,10 +88,14 @@ public class Game {
 	public void execute() {
 		try {
 			executor.execute(executedPath -> {
+				environment.getStatusManager().setExecuting(true);
 				environment.setExecutedPath(executedPath);
+				environment.getStatusManager().setExecuting(false);
+				
 				GameStats gameStats = environment.getGameStats();
 				gameStats.addToCompletePath(executedPath);
 				gameStats.setCurrentPosition(executedPath.get(executedPath.size()-1));
+				
 				// Check for success and failure
 				checkFailure(executedPath.get(executedPath.size() - 1));
 				checkSuccess(executedPath.get(executedPath.size() - 1));
@@ -127,7 +131,7 @@ public class Game {
 		Point2D endP = new Point2D(Double.valueOf(end.get(0)), Double.valueOf(end.get(1)));
 		gameStats.setStartPosition(startP);
 		gameStats.setDestination(endP);
-
+		
 		// Set the real total risk budget, not the UI risk budget
 		gameStats.setTotalRiskBudget(0.8d); // TODO: hardcoded risk budget 2d
 		gameStats.setCurrentSurfacingBudget(6);
