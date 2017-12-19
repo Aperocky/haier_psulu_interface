@@ -58,14 +58,17 @@ def main(args):
 
        # Get a random rotation
        angle = np.pi*getRand()
+       angle = 0
        rotationMat = np.array([[math.cos(angle), -math.sin(angle)], \
 			       [math.sin(angle),  math.cos(angle)]]).T
        offset = np.array([width/2, length/2])
        rotatedRect = np.dot(rectTemplate - offset, rotationMat) + offset
 
        # Get random displacement
-       dispW = getRand(0, 1)
-       dispL = getRand(0, 1)
+       #dispW = getRand(0, 1)
+       #dispL = getRand(0, 1)
+       dispW = 0.15
+       dispL = 0.15
        rotatedRect = rotatedRect + np.array([dispW, dispL])
 
        # Compile the corners into the dictionary
