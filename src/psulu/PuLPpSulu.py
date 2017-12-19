@@ -855,7 +855,7 @@ class IRA(pSulu):
           usedDelta[iTime][cObst] = usedRisk
 
       propDelta = np.array(usedDelta)/np.sum(usedDelta)
-      activeFlag = propDelta > 0.2
+      activeFlag = propDelta > 0.1
 
       for iTime in range(self.__N):
         # For each obstacle
