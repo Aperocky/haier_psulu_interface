@@ -1,4 +1,5 @@
 environment             : "[./config/small_map2.yaml]"
+#environment             : "[./config/newEnvi.yaml]"
 chance_constraint       : 0.2 #0.03
 margin                  : 0.1
 start_location          : [0,0,0,0]
