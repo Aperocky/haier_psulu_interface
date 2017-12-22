@@ -1,17 +1,31 @@
+<<<<<<< HEAD
 chance_constraint: 0.15468765468749998
 margin: 0.01
+=======
+chance_constraint: 0.2
+margin: 0.1
+>>>>>>> 5cc07863da0a7d40ce7c8bad33dc134fd531fd47
 horizon_cost_proportion: 0.99
 coVarX: 0.0001
 coVarY: 0.0001
 max_velocity: 0.06
 cleanMap: False
+<<<<<<< HEAD
 waypoints: 6
+=======
+waypoints: 12
+>>>>>>> 5cc07863da0a7d40ce7c8bad33dc134fd531fd47
 max_control: 0.98
 cleanDist: 0.1
 receding_horizon: True
 start_location: 
+<<<<<<< HEAD
 - 0.4090903180895704
 - 0.24182030005262298
+=======
+- 1.0006327004273172
+- 0.9998220171717277
+>>>>>>> 5cc07863da0a7d40ce7c8bad33dc134fd531fd47
 - 0.0
 - 0.0
 environment: '[./config/small_map2.yaml]'
