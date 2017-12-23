@@ -1,6 +1,7 @@
 package frontend.general;
 
 import frontend.model.budget.RiskBudget;
+import frontend.model.budget.ScheduleRiskBudget;
 import frontend.model.budget.SurfacingBudget;
 import frontend.model.canvas.Canvas;
 import frontend.model.canvas.layers.LayerMaster;
@@ -19,6 +20,7 @@ public class Simulator extends BorderPane {
 	private Canvas canvas;
 	private ControlPanel controlPanel;
 	private RiskBudget riskBudget;
+	private ScheduleRiskBudget scheduleBudget;
 	private SurfacingBudget surfacingBudget;
 	private Menu menu;
     private ProgressIndicator progressIndicator;
@@ -28,8 +30,9 @@ public class Simulator extends BorderPane {
 		this.setPrefSize(width, height);
 		canvas = new Canvas(height * 0.85d);
 		controlPanel = new ControlPanel(width * 0.3d, height * 0.9d);
-		riskBudget = new RiskBudget(width * 0.7, height * 0.1d);
-		surfacingBudget = new SurfacingBudget(width * 0.2, height * 0.1d);
+		riskBudget = new RiskBudget(width * 0.4d, height * 0.1d);
+		scheduleBudget = new ScheduleRiskBudget(width * 0.4d, height * 0.1d);
+		surfacingBudget = new SurfacingBudget(width * 0.2d, height * 0.1d);
 		menu = new Menu(width * 0.2d, height * 0.4d);
 		progressIndicator = new ProgressIndicator();
 		progressIndicator.setMessage("Planning path...");
@@ -67,6 +70,10 @@ public class Simulator extends BorderPane {
 		return riskBudget;
 	}
 	
+	public ScheduleRiskBudget getScheduleRiskBudget() {
+		return scheduleBudget;
+	}
+	
 	public SurfacingBudget getSurfacingBudget() {
 		return surfacingBudget;
 	}
@@ -78,9 +85,9 @@ public class Simulator extends BorderPane {
 		
 		HBox hbox = new HBox();
 		hbox.setPrefSize(this.getPrefWidth(), this.getPrefHeight() * 0.1);
-		hbox.setSpacing(50d);
+		hbox.setSpacing(20d);
 		hbox.setAlignment(Pos.CENTER);
-		hbox.getChildren().addAll(riskBudget, surfacingBudget);
+		hbox.getChildren().addAll(riskBudget, scheduleBudget, surfacingBudget);
 		this.setTop(hbox);
 	}
 

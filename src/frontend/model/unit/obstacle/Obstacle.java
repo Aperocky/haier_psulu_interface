@@ -15,7 +15,7 @@ import javafx.scene.shape.Polygon;
 public class Obstacle extends Polygon implements ICloneable<Obstacle> {
 	public static final Color DEFAULT_COLOR = Color.RED;
 	public static final double DEFAULT_OPACITY = 0.6d;
-	public static final double STROKE_WIDTH = 3d;
+	public static final double STROKE_WIDTH = 1d;
 	private ObstacleUserControl userControl;
 	
 	private List<Point2D> vertices;

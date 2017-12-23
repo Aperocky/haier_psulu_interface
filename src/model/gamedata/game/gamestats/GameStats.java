@@ -154,6 +154,15 @@ public class GameStats extends ObservableBase<GameStats> implements Observer<Obs
 		notifyObservers(this);
 	}
 	
+	public void setCurrentScheduleRisk(double scheduleRisk) {
+		budgetStats.setCurrentScheduleRisk(scheduleRisk);
+		notifyObservers(this);
+	}
+	
+	public double getCurrentScheduleRisk() {
+		return budgetStats.getCurrentScheduleRisk();
+	}
+	
 	public List<Point2D> getCompletePath() {
 		return pathStats.getCompletePath();
 	}

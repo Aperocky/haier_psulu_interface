@@ -14,7 +14,7 @@ import matplotlib.patches as patches
 from scipy import ndimage, misc, stats
 from pSulu_api import pSulu
 
-import re, csv
+import re
 import tempfile
 import math, os
 import mpmath as mp
@@ -187,7 +187,7 @@ class PathSolver:
 
             xlaststep = self.x[self.__N-1].values()
             xgoal    = self.x[self.__N].values()
-            for side in range(1000):
+            for side in range(500):
                 # parameters that determine the side of the polygon
                 line_angle = [math.cos(2*side*math.pi/self.poly_nsides), \
                                         math.sin(2*side*math.pi/self.poly_nsides)]
@@ -197,35 +197,10 @@ class PathSolver:
                 self.prob.addConstraint(pulp.lpSum([m*(x1-x2) for m, x1, x2 in zip(line_angle, xgoal, xlaststep)]) <= self.dlast)
 
         # \sum_{i} z_{i} == dim(z_{i}) - 1 constraint
-        for k in range(self.__N): 
+        for k in range(self.__N-self.receding_horizon): 
             for i in range(self.__nObst):
               self.prob.addConstraint(pulp.lpSum([self.z[k][i][j] for j in range(self.__dObst)]) == \
                                        self.__dObst-1, name='z_%d_%d'%(k, i))
-
-	# Initialize z variables
-        for k in range(len(zInit)):
-            stepnum  = zInit[k]['stepnum']
-            obstnum  = zInit[k]['obstnum']
-            cside    = zInit[k]['side']
-            try:
-                obstname = zInit[k]['obstname']
-            except:
-                pass
- 
-            if (stepnum < 1) or (stepnum > self.__N + 1):
-                raise Exception('Step number in initialization outside range')
-
-            if (cside < 0) or (cside > 3):
-                raise Exception('Number of sides should be in the range [0, 3]')
-           
-            # Initialize them to satify basic constraint \sum(z[timestep][obst]) = 1
-            sides = range(self.__dObst)
-            sides.remove(cside)
-            for i in sides:
-                self.prob.addConstraint(self.z[stepnum][obstnum][i] == 1)
-
-            # Fix the side of the obstacle using z
-            self.prob.addConstraint(self.z[stepnum][obstnum][cside] == 0)
 
     def getUPoints(self):
         # Get the solution for the control inputs
@@ -324,25 +299,31 @@ class PathSolver:
         self.prob.writeLP(name + '.lp')
         return
 
-    def __addObstConstraint(self, delta=None):
+    def __addObstConstraint(self, mdelta=None):
         '''
         Adds obstacle constraints based on the H and G matrix to all points
         '''
-        if delta is None:
-            delta = np.zeros((self.__N, self.__H.shape[0], self.__H.shape[1]))
+        if mdelta is None:
+            num = self.__N - self.receding_horizon - 1
+            mdelta = np.zeros((num, self.__H.shape[0], self.__H.shape[1]))
+            if self.receding_horizon:
+                mdelta = [mdelta, np.zeros((num-1, self.__H.shape[0], self.__H.shape[1]))]
 
         # Initial state constraint
         zeroDelta = np.zeros((self.__H.shape[0], self.__H.shape[1]))
         self.__addObstPt(0, 0, zeroDelta)
 
-        for k in range(self.__N-1): 
+        for k in range(self.__N-2-self.receding_horizon): 
             # Adding constraints on the obstacle for each point
-            self.__addObstPt(k, k+1, delta[k])
-            self.__addObstPt(k+1, k+1, delta[k])
+            self.__addObstPt(k, k+1, mdelta[0][k])
+            self.__addObstPt(k+1, k+1, mdelta[1][k])
 
-        if (not self.receding_horizon):
-            # Last step 
-            self.__addObstPt(self.__N-1, self.__N, delta[self.__N-1])
+        # Last step 
+        self.__addObstPt(self.__N-2-self.receding_horizon, \
+                         self.__N-1-self.receding_horizon, \
+                         mdelta[0][self.__N-2-self.receding_horizon])
+
+        return
 
     def activeObstWayPt(self, x, mDelta, Hi, Gi, Zi):
         '''
@@ -357,33 +338,35 @@ class PathSolver:
      
         return False
 
+    #def getActiveBoundaries(self):
+    #    '''
+    #    Looks at both the active edges 
+    #    chooses the one that is closest as the active edges
+    #    Because now each z corresponds to 2 state vectors
+    #    '''
+    #    active_boundaries = [[None for i in range(self.__nObst)]\
+    #                            for j in range(self.__N)]
+
+    #    active_dist = self.measureDist()
+    #    for t_i in range(self.__N):
+    #      for obs_j in range(self.__nObst):
+    #          idx = np.where(active_dist[:, t_i, obs_j] < 0)[0]
+    #          active_boundaries[t_i][obs_j] = idx[np.argmax(active_dist[idx, t_i, obs_j])]
+
+    #    return active_boundaries
+
     def getActiveBoundaries(self):
-        '''
-        Looks at both the active edges 
-        chooses the one that is closest as the active edges
-        Because now each z corresponds to 2 state vectors
-        '''
-        active_boundaries = [[None for i in range(self.__nObst)]\
-                                for j in range(self.__N)]
-
-        active_dist = self.measureDist()
-        for t_i in range(self.__N):
-          for obs_j in range(self.__nObst):
-              active_boundaries[t_i][obs_j] = np.argmin(active_dist[:, t_i, obs_j])
-
-        return active_boundaries
-
-    def __getActiveBoundaries(self, flag=0):
         '''
         Check the active boundaries at each time point for each obstacle
         '''
+        num = self.__N-1-self.receding_horizon
         active_boundaries = [[None for i in range(self.__nObst)]\
-                                for j in range(self.__N)]
+                                for j in range(num)]
 
-        for t_i in range(self.__N-flag):
+        for t_i in range(num):
             for obs_j in range(self.__nObst):
                 for dobs_k in range(self.__dObst):
-                    if pulp.value(self.z[t_i + flag][obs_j][dobs_k]) < 1:
+                    if pulp.value(self.z[t_i][obs_j][dobs_k]) < 1:
                         
                         ## debug
                         # print 'Z: ' +  str(self.z[t_i][obs_j][dobs_k])
@@ -453,30 +436,6 @@ class PathSolver:
 
         return None
 
-    def findActivePoints(self, mdelta, mask=None):
-        
-        '''
-        Finds the active way points after each MILP run
-        '''
-        if mdelta is None:
-            mdelta = np.zeros((self.__N-1, self.__H.shape[0], self.__H.shape[1]))
-
-        if mask is None:
-            mask = [[False for i in range(self.__nObst)] for j in range(self.__N-1)]
-
-        activePoints = []
-        activePtsIdx = []
-        activeObstIdx = []
-        for k, cdelta, cmask in zip(range(self.__N-1), mdelta, mask):
-            h = self.activewayPoint(k, cdelta, cmask) #
-            if h  is not None:
-                cWayPoint = self.wayPoint[k+1]
-                activePoints.append(cWayPoint)
-                activePtsIdx.append(k)
-                activeObstIdx.append(h)
-            
-        return (activePoints, activePtsIdx, activeObstIdx)
-
     def addObstacles(self, N, H, G, zInit=[]):
         '''
         Adds obstacles with H and G. This function initiates all the constraints for optimization
@@ -492,7 +451,8 @@ class PathSolver:
         self.__dObst  = self.__G[0].shape[0]
         
         # z variable dim (nPoints x nObst)
-        self.z = pulp.LpVariable.dicts("z", (range(self.__N), range(self.__nObst), \
+        num = self.__N - self.receding_horizon
+        self.z = pulp.LpVariable.dicts("z", (range(num), range(self.__nObst), \
 					range(self.__dObst)), 0, 1, pulp.LpInteger)
         self.__addObjective()
         self.__addVarConstraint(zInit)
@@ -539,13 +499,9 @@ class PathSolver:
               self.wayPoint.append([pulp.value(self.x[i][0]), pulp.value(self.x[i][1])])  
 
            self.__zVal = []
-           for i in range(self.__N):
+           for i in range(self.__N-self.receding_horizon):
               self.__zVal.append([[pulp.value(self.z[i][j][k]) for k in range(self.__dObst)] \
 				       for j in range(self.__nObst)])
-
-           # Find the active points in the optimized way points
-           (self.activePoints, self.activePtsIdx, self.activeObstIdx) = \
-								self.findActivePoints(mdelta)
 
            self._sol = {}
            for var in self.prob._variables:
@@ -597,7 +553,7 @@ class PathSolver:
 
 class IRA(pSulu):
     '''
-    Iterative Risk Allocation 
+    Iterative Risk Allocaion 
     '''
     def __init__(self, configFile):
         '''
@@ -622,7 +578,7 @@ class IRA(pSulu):
           self.clean(self.maxCovar + self.cleanDist)
 
         # pSulu Parameters
-        self.alpha  = 0.1
+        self.alpha  = 0.8
  
         # Obstacles related variables
         self.__H      = self.obstMap.obstNormal
@@ -699,8 +655,6 @@ class IRA(pSulu):
         P0[1,1] = 0 #self.coVarY
         P0[2,2] = 0
         P0[3,3] = 0
-
-        #Qstate = np.eye(int(len(self.__A[0])/2))*0.002
         Qstate = np.eye(int(len(self.__A[0])/2))
         Qstate[0, 0] = self.coVarX
         Qstate[1, 1] = self.coVarY
@@ -766,12 +720,9 @@ class IRA(pSulu):
           # Solve the optimization with new delta
           oldJ = J
           self.M = self.transformDelta()
-
-          # Fix nan's to zero
-          self.M = np.array(self.M)
-          self.M = np.nan_to_num(self.M)
-          self.M = self.M.tolist()
-
+          if self.receding_horizon:
+              M_ = self.transformDelta(1)
+              self.M = [self.M, M_]
           self.feasible = self.MILP.solve(self.M)
 
           if self.nNodes == None:
@@ -797,10 +748,10 @@ class IRA(pSulu):
           if self.receding_horizon:
             self.horizon_radius = self.MILP.getHorizonRadius()
 
-          #self.plot()
+          #self.plot(str(itr) + '.png')
           print("Objective Function Value: %f"%J)
 
-          if (abs((oldJ - J)/oldJ) < 0.01):
+          if (abs((oldJ - J)/oldJ) < 0.001):
             break 
           else:
             # Compute Residue for the delta
@@ -821,7 +772,6 @@ class IRA(pSulu):
            _newDelta_ = self.__delta[iTime][cObst] + riskInc
 
            # Clips the delta between 0 to 0.5 for theoretical guarantees
-           # Has no effect; is redundant
            newDelta[iTime][cObst] = max(0, min(_newDelta_, 0.5))
 
       return newDelta
@@ -830,46 +780,47 @@ class IRA(pSulu):
       '''
       Computes the Delta Residue to redistribute
       '''
-      newDelta       = [[None for x in range(self.__H.shape[0])] for y in range(self.__N)]
-      usedDelta      = [[None for x in range(self.__H.shape[0])] for y in range(self.__N)]
-      activeDelta    = [[None for x in range(self.__H.shape[0])] for y in range(self.__N)]
-      deltaResidual  = 0
-      nActive        = self.__H.shape[0] * self.__N
+      num = self.__N-1-self.receding_horizon
+      newDelta      = [[None for x in range(self.__H.shape[0])] for y in range(num)]
+      usedDelta     = [[None for x in range(self.__H.shape[0])] for y in range(num)]
+      deltaResidual = 0
+      nActive       = self.__H.shape[0] * num
  
       # find active constraints
       activeBoundaries = self.MILP.getActiveBoundaries() ## need to do
       waypoints        = self.MILP.getWayPoints()
-
-      # Determine used risk to find the active constraints
-      for iTime in range(self.__N):
+      
+      # For each way point
+      for iTime in range(num):
         # For each obstacle
-        wp = waypoints[iTime+1]
         for cObst in range(self.__nObst):
- 
           # find the equation of the active constraint
           activeIdx = activeBoundaries[iTime][cObst]
           activeH = self.__H[cObst][activeIdx]
           activeG = self.__G[cObst][activeIdx]
-
-          usedRisk = self.evaluateRisk(iTime, activeH, activeG)
-          usedDelta[iTime][cObst] = usedRisk
-
-      propDelta = np.array(usedDelta)/np.sum(usedDelta)
-      activeFlag = propDelta > 0.1
-
-      for iTime in range(self.__N):
-        # For each obstacle
-        wp = waypoints[iTime+1]
-        for cObst in range(self.__nObst):
- 
-          # find the equation of the active constraint
-          activeIdx = activeBoundaries[iTime][cObst]
-          activeH = self.__H[cObst][activeIdx]
-          activeG = self.__G[cObst][activeIdx]
-
+   
           # redistribute when risk used is less than allocated, recalculate risk
-          if not activeFlag[iTime][cObst]:
-            usedRisk = self.evaluateRisk(iTime, activeH, activeG)
+          if not self.receding_horizon:
+            wp = waypoints[iTime+1]
+            realGap = np.dot(activeH,wp) - M[iTime][cObst][activeIdx] - activeG
+            timestep = iTime
+          else:
+            # Check the gap for both terminal ends of the edge
+            wp1 = waypoints[iTime+1]
+            realGap1 = abs(np.dot(activeH,wp1) - M[0][iTime][cObst][activeIdx] - activeG)
+            if iTime != 0:
+                wp2 = waypoints[iTime]
+                realGap2 = abs(np.dot(activeH,wp2) - M[1][iTime-1][cObst][activeIdx] - activeG)
+                timesteps = [iTime, iTime-1]
+                gaps = [realGap1, realGap2]
+                timestep = timesteps[np.argmin(gaps)]
+                realGap = np.min(gaps)
+            else:
+                timestep = iTime
+                realGap = realGap1
+            
+          if (abs(realGap) > 0.001):
+            usedRisk = self.evaluateRisk(timestep, activeH, activeG)
             newDelta[iTime][cObst] = (self.__delta[iTime][cObst] * self.alpha + \
                                        (1-self.alpha)*usedRisk)
             deltaResidual = deltaResidual + (self.__delta[iTime][cObst] - \
@@ -877,26 +828,6 @@ class IRA(pSulu):
             nActive = nActive - 1
 
       return (nActive, deltaResidual, newDelta)
-
-    def __deltaToDistance(self, idelta, H, idx):
-        '''
-        Computes the mdelta for each points
-        '''        
-        coVarMat = self.__coVarMat[idx][:2,:2]
-        mdelta = []
-        for delta, iH in zip(idelta, H): 
-            cM = []
-            for h in iH:
-                coVar = np.sqrt(np.dot(h, np.dot(coVarMat, np.transpose(h))))
-                all_zeros = not np.any(coVar)
-                if not all_zeros:
-                    cM.append(stats.norm.isf(delta, 0, coVar))
-                else:
-                    cM.append(0)
-
-            mdelta.append(cM)
-
-        return mdelta
 
     def evaluateRisk(self, iTime, activeH, activeG):
         '''
@@ -906,17 +837,16 @@ class IRA(pSulu):
         wp = self.MILP.wayPoint[iTime+1][:2]
         P  = self.__coVarMat[iTime][:2,:2]
 
-        all_zeros = not np.any(P)
-        if all_zeros:
-            return 0
-        
         # find affine transform param
-        h_P_h = np.dot(activeH, np.dot(P, activeH))
+        h_P_h = np.dot(activeH,np.dot(P,activeH))        
         safety_margin = np.dot(activeH,wp) - activeG
+
+        if np.all(np.array(P) == 0):
+            return 0
               
         # print 'safety ' + str(safety_margin)
         # print 'hPh ' + str(h_P_h)
-        return stats.norm.sf(safety_margin, 0, np.sqrt(h_P_h))
+        return stats.norm.sf(safety_margin,0,np.sqrt(h_P_h))
 
     def plotObst(self):
         '''
@@ -1015,6 +945,25 @@ class IRA(pSulu):
         plt.xlabel("IRA iteration")
         plt.show()
 
+    def __deltaToDistance(self, idelta, H, idx):
+        '''
+        Computes the mdelta for each points
+        '''        
+        coVarMat = self.__coVarMat[idx+1][:2,:2]
+        mdelta = []
+        for delta, iH in zip(idelta, H): 
+            cM = []
+            for h in iH:
+              if not np.all(coVarMat == 0):
+                cM.append(stats.norm.isf(delta, 0, \
+				np.sqrt(np.dot(h, np.dot(coVarMat, np.transpose(h))))))
+              else:
+                cM.append(0)
+
+            mdelta.append(cM)
+
+        return mdelta
+
     def __deltaGToDistance(self, delta, H):
         '''
         Computes the mdelta for each points
@@ -1031,14 +980,14 @@ class IRA(pSulu):
 
         return mdelta
 
-    def transformDelta(self):
+    def transformDelta(self, offset=0):
         '''
         Computes the m(\delta) 
         '''
+        assert offset <= 1, "Only single offset is logical"
         M = []
         H = self.__H
-        for idx in range(self.__N):        
-            idelta = self.__delta[idx]
+        for idx, idelta in enumerate(self.__delta[offset:]):        
             m = self.__deltaToDistance(idelta, H, idx)
             M.append(m)
 
@@ -1048,8 +997,9 @@ class IRA(pSulu):
         '''
         Delta is the risk factor corresponding to each individual point
         '''
-        delta = np.ones((self.__N, self.__H.shape[0])) 
-        delta = delta * (self.chance_constraint/(self.__N*self.__H.shape[0]))
+        num = self.__N - self.receding_horizon - 1
+        delta = np.ones((num, self.__H.shape[0])) 
+        delta = delta * self.chance_constraint/(num*self.__H.shape[0])
         return delta
 
     def computeCov(self):
@@ -1060,7 +1010,8 @@ class IRA(pSulu):
         Q = self.__Q
         coVarMat = [self.__P0]
         for idx in range(self.__N):
-            coVarMat.append(np.dot(A, np.dot(coVarMat[idx], np.transpose(A))) + Q)
+            cvM = np.dot(A, np.dot(coVarMat[idx], np.transpose(A))) + Q
+            coVarMat.append(cvM)
 
         return coVarMat
 

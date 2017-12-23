@@ -1,11 +1,11 @@
-environment             : "[./config/small_map2.yaml]"
+environment             : "[./config/map2.yaml]"
 #environment             : "[./config/newEnvi.yaml]"
 chance_constraint       : 0.2 #0.03
 margin                  : 0.1
 start_location          : [0,0,0,0]
 end_location            : [1,1,0,0]
-waypoints               : 12
-max_velocity            : 0.06 #.15
+waypoints               : 6
+max_velocity            : 0.06 #.06
 max_control             : 0.98
 coVarX                  : 0.0001
 coVarY                  : 0.0001

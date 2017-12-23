@@ -6,6 +6,8 @@ public class BudgetStats {
 	private double currentRiskBudget;
 	private double expectedRiskBudget;
 	private int currentSurfacingBudget;
+	
+	private double currentScheduleRisk;
 
 	public BudgetStats() {
 
@@ -48,5 +50,14 @@ public class BudgetStats {
 	public int getCurrentSurfacingBudget() {
 		return currentSurfacingBudget;
 	}
+
+	public double getCurrentScheduleRisk() {
+		return currentScheduleRisk;
+	}
+
+	public void setCurrentScheduleRisk(double currentScheduleRisk) {
+		this.currentScheduleRisk = currentScheduleRisk;
+	}
+	
 
 }

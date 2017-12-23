@@ -73,6 +73,10 @@ public class Game {
 			environment.getStatusManager().setMessageOn();
 			planner.plan(plannedPath -> {
 				environment.setPlannedPath(plannedPath);
+//				Point2D a = plannedPath.get(3);
+//				Point2D b = plannedPath.get(4);
+//				double d = (a.getX() - b.getX()) * (a.getX() - b.getX()) + (a.getY() - b.getY()) * (a.getY() - b.getY());
+//				System.out.println("Distance between 3 and 4 is " + Math.sqrt(d));
 				environment.setPlanning(false);
 				environment.getStatusManager().setMessageOff();
 			});
@@ -91,33 +95,14 @@ public class Game {
 				environment.getStatusManager().setExecuting(true);
 				environment.setExecutedPath(executedPath);
 				environment.getStatusManager().setExecuting(false);
-				
-				GameStats gameStats = environment.getGameStats();
-				gameStats.addToCompletePath(executedPath);
-				gameStats.setCurrentPosition(executedPath.get(executedPath.size()-1));
-				
 				// Check for success and failure
 				checkFailure(executedPath.get(executedPath.size() - 1));
 				checkSuccess(executedPath.get(executedPath.size() - 1));
 			});
-			environment.setPlannedPath(new ArrayList<>());
-			GameStats gameStats = environment.getGameStats();
-			gameStats.setLastStepPlannedPath(gameStats.getPlannedPath());
-			gameStats.setPrevPlannedPath(new ArrayList<>());
-			gameStats.setCurrentRiskBudget(gameStats.getExpectedRiskBudget());
-			gameStats.setCurrentSurfacingBudget(
-					gameStats.getCurrentSurfacingBudget() - 1);
+			
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Execute next step of the path based on the pre-calculated execution path
-	 * OR path calculated on the fly
-	 */
-	public void executeStep() {
-		
 	}
 
 	private void initialize() {
@@ -133,7 +118,7 @@ public class Game {
 		gameStats.setDestination(endP);
 		
 		// Set the real total risk budget, not the UI risk budget
-		gameStats.setTotalRiskBudget(0.8d); // TODO: hardcoded risk budget 2d
+		gameStats.setTotalRiskBudget(0.1d); // TODO: hardcoded risk budget 2d
 		gameStats.setCurrentSurfacingBudget(6);
 	}
 	
@@ -159,6 +144,16 @@ public class Game {
 		if (Math.abs(lastStep.getX() - destination.getX()) <= 1d/36d
 				&& Math.abs(lastStep.getY() - destination.getY()) <= 1d/36d) {
 			environment.getStatusManager().setSuccess(true);
+//			List<Point2D> completePath = environment.getGameStats().getCompletePath();
+//			double distance = 0;
+//			for(int i=1; i < completePath.size(); i++) {
+//				Point2D prev = completePath.get(i-1);
+//				Point2D curr = completePath.get(i);
+//				double d = (prev.getX()-curr.getX()) * (prev.getX()-curr.getX())
+//						  +(prev.getY()-curr.getY()) * (prev.getY()-curr.getY());
+//				distance += Math.sqrt(d);
+//			}
+//			System.out.println("Total Distance Travelled: " + distance);
 		}
 	}
 

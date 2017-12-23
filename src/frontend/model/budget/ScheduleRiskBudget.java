@@ -13,7 +13,7 @@ import javafx.util.StringConverter;
 import model.gamedata.game.gamestats.GameStats;
 import util.Observer;
 
-public class RiskBudget extends StackPane implements Observer<GameStats> {
+public class ScheduleRiskBudget extends StackPane implements Observer<GameStats> {
 
 	private static final double SPACING = 10d;
 	private static final double HEIGHT = 25d;
@@ -22,7 +22,7 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 	private Label title;
 	private Label percent;
 
-	public RiskBudget(double width, double height) {
+	public ScheduleRiskBudget(double width, double height) {
 		this.setPrefSize(width, height);
 		hbox = new HBox();
 		hbox.setPrefSize(width, height);
@@ -33,10 +33,9 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		VBox vbox = new VBox();
 		vbox.setSpacing(0);
 		vbox.setAlignment(Pos.CENTER);
-		progressBar = new MixedProgressBar(width * 0.5d, HEIGHT, 2);
-		progressBar.setColor(Color.web("#C6DAFC"), 0);
-		progressBar.setColor(Color.web("#659BFB"), 1);
-		NumberAxis axis = new NumberAxis(-10, 0, 2);
+		progressBar = new MixedProgressBar(width * 0.5d, HEIGHT, 1);
+		progressBar.setColor(Color.web("#82CF72"), 0);
+		NumberAxis axis = new NumberAxis(-100, 0, 20);
 		axis.setMaxSize(width * 0.48d, HEIGHT);
 		axis.setTranslateX(width * 0.01d);
 		axis.setTranslateY(-5);
@@ -55,10 +54,8 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 		vbox.getChildren().addAll(progressBar, axis);
 		vbox.setTranslateY(15d);
 
-		title = new Label("Collision");
-		title.setPrefWidth(50);
+		title = new Label("Schedule");
 		percent = new Label("");
-		percent.setPrefWidth(50);
 		
 		hbox.getChildren().addAll(title, vbox, percent);
 
@@ -67,19 +64,11 @@ public class RiskBudget extends StackPane implements Observer<GameStats> {
 
 	@Override
 	public void update(GameStats stats) {
-		double total = stats.getTotalRiskBudget();
-		double current = stats.getCurrentRiskBudget();
-		double expected = stats.getExpectedRiskBudget();
-		double currRatio = current / total;
-		double expectedRatio = expected / total;
-		progressBar.setProgress(currRatio, 0);
-		progressBar.setProgress(expectedRatio, 1);
-		if (current > 0)
-			percent.setText("" + (double) Math.round(currRatio * 100) / 10 + "%");
-		else {
-			percent.setText("out"); 
-			percent.setTextFill(Color.RED);
-		}
+		double current = 1 - stats.getCurrentScheduleRisk();
+		System.out.println("ScheduleRiskBudget line 70: current schedule risk: " + current);
+		progressBar.setProgress(current, 0);
+		percent.setText("" + (double) Math.round(current * 100) + "%");
 	}
 
 }
+
