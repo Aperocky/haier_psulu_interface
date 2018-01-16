@@ -1089,7 +1089,7 @@ def firstPassCommandLine():
 
 def main(inp, out):
     # Create IRA instance and solve it
-    np.random.seed(0)
+    # np.random.seed(0)
     itrRA = IRA(inp)
     itrRA.solve()
     if itrRA.isFeasible():

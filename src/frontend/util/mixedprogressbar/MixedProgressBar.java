@@ -10,6 +10,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Multiple Progress Bar layered on top of each other
+ * @author Feng
+ *
+ */
 public class MixedProgressBar extends Pane {
 
 	private static final double PADDING = 6d;
@@ -41,12 +46,14 @@ public class MixedProgressBar extends Pane {
 				rect.setLayoutX(layoutX);
 				rect.setWidth(w);
 			});
+			// Backward progress bar has initial width 0
+			if(i == numBars-1)
+				rect.setWidth(0);
 			pane.getChildren().add(rect);
 			panes.add(pane);
 			bars.add(rect);
 			properties.add(property);
 		}
-
 		background.getChildren().addAll(panes);
 		this.getChildren().add(background);
 	}

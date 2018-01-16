@@ -20,7 +20,7 @@ public class Simulator extends BorderPane {
 	private Canvas canvas;
 	private ControlPanel controlPanel;
 	private RiskBudget riskBudget;
-	private ScheduleRiskBudget scheduleBudget;
+//	private ScheduleRiskBudget scheduleBudget;
 	private SurfacingBudget surfacingBudget;
 	private Menu menu;
     private ProgressIndicator progressIndicator;
@@ -30,8 +30,8 @@ public class Simulator extends BorderPane {
 		this.setPrefSize(width, height);
 		canvas = new Canvas(height * 0.85d);
 		controlPanel = new ControlPanel(width * 0.3d, height * 0.9d);
-		riskBudget = new RiskBudget(width * 0.4d, height * 0.1d);
-		scheduleBudget = new ScheduleRiskBudget(width * 0.4d, height * 0.1d);
+		riskBudget = new RiskBudget(width * 0.8d, height * 0.1d);
+//		scheduleBudget = new ScheduleRiskBudget(width * 0.4d, height * 0.1d);
 		surfacingBudget = new SurfacingBudget(width * 0.2d, height * 0.1d);
 		menu = new Menu(width * 0.2d, height * 0.4d);
 		progressIndicator = new ProgressIndicator();
@@ -70,9 +70,9 @@ public class Simulator extends BorderPane {
 		return riskBudget;
 	}
 	
-	public ScheduleRiskBudget getScheduleRiskBudget() {
-		return scheduleBudget;
-	}
+//	public ScheduleRiskBudget getScheduleRiskBudget() {
+//		return scheduleBudget;
+//	}
 	
 	public SurfacingBudget getSurfacingBudget() {
 		return surfacingBudget;
@@ -87,7 +87,7 @@ public class Simulator extends BorderPane {
 		hbox.setPrefSize(this.getPrefWidth(), this.getPrefHeight() * 0.1);
 		hbox.setSpacing(20d);
 		hbox.setAlignment(Pos.CENTER);
-		hbox.getChildren().addAll(riskBudget, scheduleBudget, surfacingBudget);
+		hbox.getChildren().addAll(riskBudget, surfacingBudget);
 		this.setTop(hbox);
 	}
 
