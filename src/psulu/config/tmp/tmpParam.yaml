@@ -1,19 +1,19 @@
-chance_constraint: 0.01875001875
+chance_constraint: 0.01515625
 margin: 0.1
 horizon_cost_proportion: 0.99
 coVarX: 0.0001
 coVarY: 0.0001
 max_velocity: 0.06
 cleanMap: False
-waypoints: 10
+waypoints: 12
 max_control: 0.98
 cleanDist: 0.1
 receding_horizon: True
 start_location: 
-- 0.9995212403550087
-- 0.9999208162071245
-- 0.0
-- 0.0
+- 0
+- 0
+- 0
+- 0
 environment: '[./config/map2.yaml]'
 outFolder: '[./output/]'
 horizon_polygon_size: 50
