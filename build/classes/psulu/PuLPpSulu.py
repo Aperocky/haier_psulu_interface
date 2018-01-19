@@ -1038,7 +1038,7 @@ class IRA(pSulu):
         u = np.array(ui).reshape(len(ui), 1)
         noise = np.zeros((4,1))
         for i in range(4):
-            noise[i] = np.random.normal(0, self.coVarX)
+            noise[i] = np.random.normal(0, np.sqrt(self.coVarX))
 
         nextX = np.dot(A, x) + np.dot(B, u) + noise
         return nextX.tolist()
