@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import model.gamedata.user.UserStats;
+import model.gamedata.Environment;
 import util.ResourceParser;
 
 public class SplashScreen extends BorderPane {
@@ -29,13 +29,13 @@ public class SplashScreen extends BorderPane {
 	private JFXButton simulateButton;
 	private JFXButton editButton;
 
-	public SplashScreen(UserStats userStats) {
+	public SplashScreen(Environment environment) {
 		this.setPrefSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		vbox = new VBox();
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setSpacing(SPACING);
 
-		fillContents(userStats);
+		fillContents(environment);
 		this.setCenter(vbox);
 	}
 
@@ -55,7 +55,7 @@ public class SplashScreen extends BorderPane {
 		editButton.setOnAction(editHandler);
 	}
 
-	private void fillContents(UserStats userStats) {
+	private void fillContents(Environment environment) {
 		title = new Label(TITLE);
 		title.setFont(new Font("Lucida Sans Unicode", 18));
 		title.setTranslateY(-20);
@@ -72,7 +72,7 @@ public class SplashScreen extends BorderPane {
 			// validator.validate();
 			simulateButton.setDisable(false);
 			try {
-				userStats.setId(Integer.valueOf(newVal.toString()));
+				environment.setUID(Integer.valueOf(newVal.toString()));
 			} catch (NumberFormatException e) {
 				simulateButton.setDisable(true);
 			}

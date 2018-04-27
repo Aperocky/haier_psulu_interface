@@ -7,13 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import frontend.model.operation.control.ControlType;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.util.Duration;
 import model.execute.CollisionDetector;
 import model.execute.Executor;
 import model.gamedata.Environment;
@@ -64,7 +58,7 @@ public class Game {
 	}
 
 	/**
-	 * Plan and store the planned path into environment.Note that the planned
+	 * Plan and store the planned path into environment. Note that the planned
 	 * path here is not adapted to the canvas size yet
 	 * 
 	 */
@@ -73,12 +67,9 @@ public class Game {
 			environment.getStatusManager().setMessageOn();
 			planner.plan(plannedPath -> {
 				environment.setPlannedPath(plannedPath);
-//				Point2D a = plannedPath.get(3);
-//				Point2D b = plannedPath.get(4);
-//				double d = (a.getX() - b.getX()) * (a.getX() - b.getX()) + (a.getY() - b.getY()) * (a.getY() - b.getY());
-//				System.out.println("Distance between 3 and 4 is " + Math.sqrt(d));
 				environment.setPlanning(false);
 				environment.getStatusManager().setMessageOff();
+				environment.log(controlProperty);
 			});
 			
 		} catch (IOException | InterruptedException e) {
@@ -95,6 +86,7 @@ public class Game {
 				environment.getStatusManager().setExecuting(true);
 				environment.setExecutedPath(executedPath);
 				environment.getStatusManager().setExecuting(false);
+				environment.log(controlProperty);
 				// Check for success and failure
 				checkFailure(executedPath.get(executedPath.size() - 1));
 				checkSuccess(executedPath.get(executedPath.size() - 1));
@@ -134,6 +126,7 @@ public class Game {
 			for(Point2D detect : detects) {
 				if(detector.collide(detect, obstacle)) {
 					environment.getStatusManager().setFailure(true);
+					environment.flushOutput();
 				}
 			}
 		});
@@ -144,6 +137,7 @@ public class Game {
 		if (Math.abs(lastStep.getX() - destination.getX()) <= 1d/36d
 				&& Math.abs(lastStep.getY() - destination.getY()) <= 1d/36d) {
 			environment.getStatusManager().setSuccess(true);
+			environment.flushOutput();
 //			List<Point2D> completePath = environment.getGameStats().getCompletePath();
 //			double distance = 0;
 //			for(int i=1; i < completePath.size(); i++) {

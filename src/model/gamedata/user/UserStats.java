@@ -21,5 +21,9 @@ public class UserStats {
 	public void setDate(LocalDate day) {
 		date = day;
 	}
-
+	
+	public int getId() {
+		return userID;
+	}
+ 
 }

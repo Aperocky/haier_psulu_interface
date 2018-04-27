@@ -9,7 +9,7 @@ public class HaierPsuluInterface extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		Controller controller = new Controller();
 		
-		SplashScreen splash = new SplashScreen(controller.getGame().getEnvironment().getUserStats());
+		SplashScreen splash = new SplashScreen(controller.getGame().getEnvironment());
 		splash.setOnSimulate(evt -> controller.launchSimulator());
 		splash.setOnEdit(evt -> controller.launchEditor());
 		
